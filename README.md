@@ -3,6 +3,25 @@
 Implementation of the Claude Design project
 [`Velin Magic.dc.html`](https://claude.ai/design/p/716bba40-38f3-47ea-a709-37c3ba13fd0d?file=Velin+Magic.dc.html).
 
+## Deploy
+
+`main` is wired to Vercel through the GitHub integration, so shipping is just:
+
+```bash
+git push
+```
+
+Every push to `main` builds a production deploy; any other branch gets its own
+preview URL. There is no build step — Vercel serves the repo root as static
+files, with `vercel.json` supplying clean URLs, cache headers for `/assets/`,
+and a few security headers.
+
+- Repo: <https://github.com/friday192002-netizen/velin-magic-site>
+- Vercel project: `velin-magic-site`
+
+Note this is a separate project from the earlier React/Vite `velin-magic` repo
+that serves velin-magic.vercel.app — the two are not connected.
+
 ## Run
 
 ```bash
@@ -18,6 +37,8 @@ Then open <http://localhost:4321>. Any static server works — there is no build
 | `index.html` | The site. Content from the design's `DCLogic.renderVals()` is expanded into static markup. |
 | `styles.css` | All styling. Design tokens live in `:root`. |
 | `main.js` | Nav, scroll-spy, reveals, stat counters, image slots, quote form. |
+| `vercel.json` | Clean URLs, cache and security headers for the deploy. |
+| `.vercelignore` | Keeps the design reference files in git but off the CDN. |
 | `assets/velin-hero.png` | Hero portrait. |
 | `Velin Magic.dc.html` | The imported design source — reference only, not served. |
 | `image-slot.js`, `support.js` | Claude Design runtime the `.dc.html` depends on — reference only. |
