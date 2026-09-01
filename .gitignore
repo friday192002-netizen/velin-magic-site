@@ -1,0 +1,17 @@
+# ── OS / editor ──
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── tooling ──
+node_modules/
+.vercel/
+.env
+.env.*
+
+# ── Claude Design project leftovers ──
+# assets/velin-hero.png is the one the site actually uses; these are the
+# originals and canvas thumbnails it was cut from — ~6 MB of duplicates that
+# nothing links to, so they stay out of the repo and off the CDN.
+uploads/
+screens/

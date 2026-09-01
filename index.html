@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Velin Magic — นักมายากล | The Art of Astonishment</title>
+<meta name="description" content="Velin Magic นักมายากลผู้สร้างความประทับใจด้วยศาสตร์แห่งกลลวงและศิลปะแห่งการเล่าเรื่อง รับแสดงงานเวที มายากลใกล้ชิด งานแต่งงาน และงานองค์กร">
+<meta name="theme-color" content="#0B0807">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Velin Magic — The Art of Astonishment">
+<meta property="og:description" content="เพราะทุกช่วงเวลา คือเวทมนตร์ที่น่าจดจำ">
+<meta property="og:image" content="assets/velin-hero.png">
+<meta property="og:locale" content="th_TH">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Italiana&family=Parisienne&family=IBM+Plex+Sans+Thai:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<a class="skip-link" href="#about">ข้ามไปยังเนื้อหาหลัก</a>
+
+<!-- ═══════════════ icon sprite ═══════════════ -->
+<!-- fill/stroke live on the symbols as presentation attributes: CSS rules written
+     against <symbol> do not reach the shadow tree that <use> clones. -->
+<svg class="sprite" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg"
+     fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <symbol id="i-hat" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M16.2 29.5V13.4c0-1.6 1.3-2.9 2.9-2.9h9.8c1.6 0 2.9 1.3 2.9 2.9v16.1"/>
+    <path d="M16.2 24.6h15.6"/>
+    <path d="M32 29.6c5.2.7 8.7 2.2 8.7 3.9 0 2.4-7.5 4.4-16.7 4.4S7.3 35.9 7.3 33.5c0-1.7 3.5-3.2 8.7-3.9"/>
+  </symbol>
+  <symbol id="i-cards" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="10.5" y="14.5" width="15" height="21.5" rx="2.4" transform="rotate(-13 18 25.2)"/>
+    <rect x="22.5" y="12" width="15" height="21.5" rx="2.4" transform="rotate(11 30 22.7)"/>
+    <path d="M30.2 20.3c1.5 1.6 2.6 2.6 2.6 3.8a1.5 1.5 0 0 1-2.6.9 1.5 1.5 0 0 1-2.6-.9c0-1.2 1.1-2.2 2.6-3.8Z" fill="currentColor" stroke="none"/>
+  </symbol>
+  <symbol id="i-mask" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M9 17.6c0-1.8 1.5-2.9 4.2-2.9 3.9 0 7 1.7 10.8 1.7s6.9-1.7 10.8-1.7c2.7 0 4.2 1.1 4.2 2.9 0 6.6-3.9 15.8-9.6 15.8-3.4 0-4.2-2.7-5.4-2.7s-2 2.7-5.4 2.7C12.9 33.4 9 24.2 9 17.6Z"/>
+    <path d="M14.6 21.4c1-1 2.1-1.5 3.3-1.5s2.3.5 3.3 1.5c-1 1.3-2.1 2-3.3 2s-2.3-.7-3.3-2Z"/>
+    <path d="M26.8 21.4c1-1 2.1-1.5 3.3-1.5s2.3.5 3.3 1.5c-1 1.3-2.1 2-3.3 2s-2.3-.7-3.3-2Z"/>
+  </symbol>
+  <symbol id="i-people" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="24" cy="17.5" r="5.3"/>
+    <path d="M14.4 34.6c0-4.6 4.3-7.6 9.6-7.6s9.6 3 9.6 7.6"/>
+    <circle cx="10.8" cy="20.4" r="3.7"/>
+    <path d="M4 32.6c0-3.4 2.6-5.8 6.1-6"/>
+    <circle cx="37.2" cy="20.4" r="3.7"/>
+    <path d="M44 32.6c0-3.4-2.6-5.8-6.1-6"/>
+  </symbol>
+
+  <symbol id="i-fb" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M14.5 8.2V6.6c0-.8.2-1.2 1.4-1.2h1.6V2.5c-.3 0-1.3-.1-2.4-.1-2.4 0-4.1 1.5-4.1 4.2v1.6H8.3v3.2h2.7V21h3.5v-9.6h2.6l.4-3.2h-3Z"/></symbol>
+  <symbol id="i-ig" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5.2"/><circle cx="12" cy="12" r="4.1"/><circle cx="17.1" cy="6.9" r="1.15" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-yt" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M22.4 7.4a2.9 2.9 0 0 0-2-2C18.6 5 12 5 12 5s-6.6 0-8.4.4a2.9 2.9 0 0 0-2 2A30 30 0 0 0 1.2 12a30 30 0 0 0 .4 4.6 2.9 2.9 0 0 0 2 2C5.4 19 12 19 12 19s6.6 0 8.4-.4a2.9 2.9 0 0 0 2-2 30 30 0 0 0 .4-4.6 30 30 0 0 0-.4-4.6ZM9.9 15.1V8.9L15.2 12l-5.3 3.1Z"/></symbol>
+  <symbol id="i-tt" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M16.3 2h-3.2v13.6a2.75 2.75 0 1 1-2.3-2.71V9.62a6 6 0 1 0 5.5 5.98V8.98a7.3 7.3 0 0 0 4.2 1.34V7.1a4.3 4.3 0 0 1-4.2-4.2V2Z"/></symbol>
+
+  <symbol id="i-phone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5.6 3.5h2.9L10 7.4 8 8.9a11.3 11.3 0 0 0 5.1 5.1l1.5-2 3.9 1.5v2.9a1.6 1.6 0 0 1-1.7 1.6A14.9 14.9 0 0 1 4 5.2a1.6 1.6 0 0 1 1.6-1.7Z"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2.8" y="4.8" width="18.4" height="14.4" rx="2.4"/><path d="m3.6 6.6 8.4 5.9 8.4-5.9"/></symbol>
+  <symbol id="i-line" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10.9c0 4-4 7.3-9 7.3-.8 0-1.6-.1-2.3-.2L5 21l1.1-3.4A7.1 7.1 0 0 1 3 10.9C3 6.9 7 3.6 12 3.6s9 3.3 9 7.3Z"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15m-5.5-5.5L19 12l-5.5 5.5"/></symbol>
+</svg>
+
+<!-- ═══════════════ NAV ═══════════════ -->
+<header class="nav" id="nav">
+  <a class="nav__brand" href="#top" aria-label="Velin Magic — กลับสู่ด้านบน">
+    <span class="nav__mark">VM</span>
+    <span class="nav__word">VELIN MAGIC</span>
+  </a>
+
+  <nav class="nav__links" id="nav-links" aria-label="เมนูหลัก">
+    <a href="#top" class="is-current">HOME</a>
+    <a href="#about">ABOUT</a>
+    <a href="#shows">SHOWS</a>
+    <a href="#portfolio">PORTFOLIO</a>
+    <a href="#gallery">GALLERY</a>
+    <a href="#reviews">REVIEWS</a>
+    <a href="#contact">CONTACT</a>
+  </nav>
+
+  <div class="nav__end">
+    <a href="#contact" class="btn btn--gold nav__cta">BOOK NOW</a>
+    <button class="nav__burger" id="nav-burger" aria-label="เปิดเมนู" aria-expanded="false" aria-controls="nav-links">
+      <span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- ═══════════════ HERO — night world ═══════════════ -->
+<section class="hero" id="top">
+  <div class="hero__scenery" aria-hidden="true">
+    <div class="moon"></div>
+    <div class="silk silk--1"></div>
+    <div class="silk silk--2"></div>
+    <div class="silk silk--3"></div>
+    <div class="silk silk--4"></div>
+    <p class="ghost-type">VELIN<br>MAGIC</p>
+    <span class="spark spark--1"></span>
+    <span class="spark spark--2"></span>
+    <span class="spark spark--3"></span>
+    <span class="spark spark--4"></span>
+  </div>
+
+  <img class="hero__portrait" src="assets/velin-hero.png" alt="Velin นักมายากลในชุดสูทสีน้ำตาลพร้อมนกพิราบขาวและหน้ากากครึ่งใบ" fetchpriority="high" width="880" height="1100">
+
+  <div class="hero__fade" aria-hidden="true"></div>
+
+  <div class="hero__inner">
+    <div class="hero__copy">
+      <p class="hero__eyebrow">THE ART OF ASTONISHMENT</p>
+
+      <h1 class="hero__title">
+        <span class="hero__title-main">VELIN</span>
+        <span class="hero__title-script">Magic</span>
+      </h1>
+
+      <div class="hero__lede">
+        <span class="hero__rule" aria-hidden="true"></span>
+        <p class="hero__tagline">เพราะทุกช่วงเวลา<br>คือเวทมนตร์ที่น่าจดจำ</p>
+        <p class="hero__blurb">Velin Magic นักมายากลผู้สร้างความประทับใจด้วยศาสตร์แห่งกลลวงและศิลปะแห่งการเล่าเรื่อง ผสมผสานความสง่างาม ความลึกลับ และความบันเทิงไว้ในทุกการแสดง</p>
+        <a class="btn btn--ghost" href="#shows">DISCOVER THE MAGIC <span class="btn__star" aria-hidden="true">✦</span></a>
+      </div>
+    </div>
+
+    <div class="hero__cards">
+      <a class="type-card" href="#shows">
+        <svg class="type-card__icon" aria-hidden="true"><use href="#i-hat"/></svg>
+        <span class="type-card__en">STAGE SHOW</span>
+        <span class="type-card__th">การแสดงบนเวที</span>
+        <span class="type-card__more">ดูรายละเอียด <svg class="ico-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></span>
+      </a>
+      <a class="type-card" href="#shows">
+        <svg class="type-card__icon" aria-hidden="true"><use href="#i-cards"/></svg>
+        <span class="type-card__en">CLOSE-UP MAGIC</span>
+        <span class="type-card__th">มายากลใกล้ชิด</span>
+        <span class="type-card__more">ดูรายละเอียด <svg class="ico-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></span>
+      </a>
+      <a class="type-card" href="#shows">
+        <svg class="type-card__icon" aria-hidden="true"><use href="#i-mask"/></svg>
+        <span class="type-card__en">THEMED SHOW</span>
+        <span class="type-card__th">โชว์ตามธีมงาน</span>
+        <span class="type-card__more">ดูรายละเอียด <svg class="ico-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></span>
+      </a>
+      <a class="type-card" href="#shows">
+        <svg class="type-card__icon" aria-hidden="true"><use href="#i-people"/></svg>
+        <span class="type-card__en">SPECIAL EVENTS</span>
+        <span class="type-card__th">งานอีเวนต์ &amp; องค์กร</span>
+        <span class="type-card__more">ดูรายละเอียด <svg class="ico-arrow" aria-hidden="true"><use href="#i-arrow"/></svg></span>
+      </a>
+
+      <div class="stats">
+        <div class="stat">
+          <span class="stat__n" data-count-to="100" data-count-suffix="+">100+</span>
+          <span class="stat__label">SHOWS</span>
+          <span class="stat__star" aria-hidden="true">✦</span>
+        </div>
+        <div class="stat">
+          <span class="stat__n" data-count-to="50" data-count-suffix="+">50+</span>
+          <span class="stat__label">CLIENTS</span>
+          <span class="stat__star" aria-hidden="true">✦</span>
+        </div>
+        <div class="stat">
+          <span class="stat__n" data-count-to="5" data-count-suffix="+">5+</span>
+          <span class="stat__label">YEARS<br>EXPERIENCE</span>
+          <span class="stat__star" aria-hidden="true">✦</span>
+        </div>
+      </div>
+    </div>
+
+    <aside class="hero__side">
+      <div>
+        <p class="micro-label">FOLLOW THE MAGIC</p>
+        <div class="socials">
+          <a href="#top" class="social" aria-label="Facebook"><svg aria-hidden="true"><use href="#i-fb"/></svg></a>
+          <a href="#top" class="social" aria-label="Instagram"><svg aria-hidden="true"><use href="#i-ig"/></svg></a>
+          <a href="#top" class="social" aria-label="YouTube"><svg aria-hidden="true"><use href="#i-yt"/></svg></a>
+          <a href="#top" class="social" aria-label="TikTok"><svg aria-hidden="true"><use href="#i-tt"/></svg></a>
+        </div>
+      </div>
+      <div>
+        <p class="micro-label">CONTACT</p>
+        <div class="mini-contacts">
+          <a href="tel:0912345678"><span class="mini-contacts__icon"><svg aria-hidden="true"><use href="#i-phone"/></svg></span><span>091-234-5678</span></a>
+          <a href="mailto:velinmagic@gmail.com"><span class="mini-contacts__icon"><svg aria-hidden="true"><use href="#i-mail"/></svg></span><span>velinmagic@gmail.com</span></a>
+          <a href="#contact"><span class="mini-contacts__icon"><svg aria-hidden="true"><use href="#i-line"/></svg></span><span>@velinmagic</span></a>
+        </div>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<main>
+
+<!-- ═══════════════ ABOUT — paper ═══════════════ -->
+<section class="about section" id="about">
+  <div class="about__figure reveal">
+    <span class="about__frame" aria-hidden="true"></span>
+    <div class="img-slot about__slot" data-slot="velin-about" data-placeholder="ภาพพอร์ตเทรตของ Velin (แนวตั้ง)"></div>
+  </div>
+
+  <div class="about__body reveal">
+    <p class="eyebrow"><span class="eyebrow__dash" aria-hidden="true"></span>ABOUT THE MAGICIAN</p>
+    <h2 class="h-display">ศิลปะแห่งความ<br>เหนือจินตนาการ</h2>
+
+    <p class="prose prose--lead">Velin เริ่มต้นเส้นทางมายากลตั้งแต่อายุ 14 ปี จากกลไพ่ใบเดียวสู่เวทีระดับประเทศ ตลอด 5 ปีในวงการ เขาออกแบบการแสดงที่ไม่ได้หยุดอยู่แค่ “กลที่ทำให้ทึ่ง” แต่เป็นเรื่องเล่าที่ผู้ชมจดจำได้แม้ผ่านไปหลายปี</p>
+    <p class="prose">ทุกโชว์ถูกออกแบบเฉพาะสำหรับงานของคุณ — ตั้งแต่จังหวะดนตรี บทพูด ไปจนถึงการดึงแขกคนสำคัญขึ้นมาเป็นส่วนหนึ่งของความมหัศจรรย์</p>
+
+    <dl class="credentials">
+      <div class="credential"><dt>BASED IN</dt><dd>กรุงเทพมหานคร</dd></div>
+      <div class="credential"><dt>LANGUAGES</dt><dd>ไทย / English</dd></div>
+      <div class="credential"><dt>SPECIALTY</dt><dd>Dove Act &amp; Storytelling</dd></div>
+      <div class="credential"><dt>AWARD</dt><dd>Thailand Magic Contest 2024</dd></div>
+    </dl>
+  </div>
+</section>
+
+<!-- ═══════════════ SHOWS — paper tint ═══════════════ -->
+<section class="shows section" id="shows">
+  <div class="section__head section__head--split">
+    <div>
+      <p class="eyebrow"><span class="eyebrow__dash" aria-hidden="true"></span>SHOW FORMATS</p>
+      <h2 class="h-display">รูปแบบการแสดง</h2>
+    </div>
+    <p class="section__note">เลือกรูปแบบที่เหมาะกับพื้นที่ จำนวนผู้ชม และบรรยากาศของงาน หรือให้เราออกแบบชุดการแสดงผสมให้โดยเฉพาะ</p>
+  </div>
+
+  <div class="show-grid">
+    <article class="show-card reveal">
+      <div class="img-slot show-card__media" data-slot="velin-s1" data-placeholder="ภาพเวที"></div>
+      <div class="show-card__body">
+        <span class="show-card__icon"><svg aria-hidden="true"><use href="#i-hat"/></svg></span>
+        <p class="show-card__en">STAGE SHOW</p>
+        <h3 class="show-card__th">การแสดงบนเวที</h3>
+        <p class="show-card__desc">โชว์เต็มรูปแบบพร้อมแสง เสียง และนกพิราบ เหมาะกับงานกาลาดินเนอร์และงานเปิดตัว</p>
+        <dl class="spec">
+          <div><dt>ผู้ชม</dt><dd>100 – 1,000+</dd></div>
+          <div><dt>ความยาว</dt><dd>20 – 45 นาที</dd></div>
+        </dl>
+      </div>
+    </article>
+
+    <article class="show-card reveal">
+      <div class="img-slot show-card__media" data-slot="velin-s2" data-placeholder="ภาพกลไพ่"></div>
+      <div class="show-card__body">
+        <span class="show-card__icon"><svg aria-hidden="true"><use href="#i-cards"/></svg></span>
+        <p class="show-card__en">CLOSE-UP MAGIC</p>
+        <h3 class="show-card__th">มายากลใกล้ชิด</h3>
+        <p class="show-card__desc">เดินทักทายทีละโต๊ะ กลเกิดขึ้นในมือของผู้ชมเอง สร้างบทสนทนาและรอยยิ้มทั้งงาน</p>
+        <dl class="spec">
+          <div><dt>ผู้ชม</dt><dd>10 – 200</dd></div>
+          <div><dt>ความยาว</dt><dd>1 – 3 ชั่วโมง</dd></div>
+        </dl>
+      </div>
+    </article>
+
+    <article class="show-card reveal">
+      <div class="img-slot show-card__media" data-slot="velin-s3" data-placeholder="ภาพโชว์ธีม"></div>
+      <div class="show-card__body">
+        <span class="show-card__icon"><svg aria-hidden="true"><use href="#i-mask"/></svg></span>
+        <p class="show-card__en">THEMED SHOW</p>
+        <h3 class="show-card__th">โชว์ตามธีมงาน</h3>
+        <p class="show-card__desc">ออกแบบเรื่องเล่าและกลใหม่ให้เข้ากับธีม แบรนด์ หรือข้อความที่ต้องการสื่อสาร</p>
+        <dl class="spec">
+          <div><dt>ผู้ชม</dt><dd>50 – 500</dd></div>
+          <div><dt>ความยาว</dt><dd>15 – 40 นาที</dd></div>
+        </dl>
+      </div>
+    </article>
+
+    <article class="show-card reveal">
+      <div class="img-slot show-card__media" data-slot="velin-s4" data-placeholder="ภาพงานองค์กร"></div>
+      <div class="show-card__body">
+        <span class="show-card__icon"><svg aria-hidden="true"><use href="#i-people"/></svg></span>
+        <p class="show-card__en">SPECIAL EVENTS</p>
+        <h3 class="show-card__th">งานอีเวนต์ &amp; องค์กร</h3>
+        <p class="show-card__desc">งานแต่งงาน งานเปิดตัวสินค้า และกิจกรรมองค์กร พร้อมทีมงานและระบบครบชุด</p>
+        <dl class="spec">
+          <div><dt>ผู้ชม</dt><dd>ตามงาน</dd></div>
+          <div><dt>ความยาว</dt><dd>ตามงาน</dd></div>
+        </dl>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ═══════════════ PORTFOLIO — paper ═══════════════ -->
+<section class="portfolio section" id="portfolio">
+  <div class="section__head section__head--split">
+    <div>
+      <p class="eyebrow"><span class="eyebrow__dash" aria-hidden="true"></span>SELECTED WORK</p>
+      <h2 class="h-display">ผลงานที่ผ่านมา</h2>
+    </div>
+    <p class="section__years">2022 — 2026</p>
+  </div>
+
+  <ol class="works">
+    <li class="work reveal">
+      <span class="work__idx">01</span>
+      <span class="work__year">2026</span>
+      <h3 class="work__title">Illusion of Light — Solo Show</h3>
+      <span class="work__venue">หอศิลป์กรุงเทพฯ</span>
+      <span class="work__tag">STAGE</span>
+      <svg class="work__arrow" aria-hidden="true"><use href="#i-arrow"/></svg>
+    </li>
+    <li class="work reveal">
+      <span class="work__idx">02</span>
+      <span class="work__year">2025</span>
+      <h3 class="work__title">Gala Dinner — Annual Party</h3>
+      <span class="work__venue">โรงแรมสยาม เคมปินสกี้</span>
+      <span class="work__tag">CORPORATE</span>
+      <svg class="work__arrow" aria-hidden="true"><use href="#i-arrow"/></svg>
+    </li>
+    <li class="work reveal">
+      <span class="work__idx">03</span>
+      <span class="work__year">2025</span>
+      <h3 class="work__title">Wedding of P’Nan &amp; P’Mint</h3>
+      <span class="work__venue">The Sukhothai Bangkok</span>
+      <span class="work__tag">WEDDING</span>
+      <svg class="work__arrow" aria-hidden="true"><use href="#i-arrow"/></svg>
+    </li>
+    <li class="work reveal">
+      <span class="work__idx">04</span>
+      <span class="work__year">2024</span>
+      <h3 class="work__title">Product Launch — Aura Series</h3>
+      <span class="work__venue">ICONSIAM Hall</span>
+      <span class="work__tag">BRAND</span>
+      <svg class="work__arrow" aria-hidden="true"><use href="#i-arrow"/></svg>
+    </li>
+    <li class="work reveal">
+      <span class="work__idx">05</span>
+      <span class="work__year">2024</span>
+      <h3 class="work__title">Magic Night Bangkok</h3>
+      <span class="work__venue">Thonglor Theatre</span>
+      <span class="work__tag">STAGE</span>
+      <svg class="work__arrow" aria-hidden="true"><use href="#i-arrow"/></svg>
+    </li>
+    <li class="work reveal">
+      <span class="work__idx">06</span>
+      <span class="work__year">2023</span>
+      <h3 class="work__title">Close-up Residency</h3>
+      <span class="work__venue">Mandarin Oriental Lounge</span>
+      <span class="work__tag">CLOSE-UP</span>
+      <svg class="work__arrow" aria-hidden="true"><use href="#i-arrow"/></svg>
+    </li>
+  </ol>
+
+  <div class="clients">
+    <p class="clients__label">TRUSTED BY</p>
+    <ul class="clients__list">
+      <li>ICONSIAM</li>
+      <li>Kempinski</li>
+      <li>Mandarin Oriental</li>
+      <li>SCG</li>
+      <li>Central Group</li>
+      <li>AIS</li>
+      <li>Toyota</li>
+      <li>The Sukhothai</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ═══════════════ GALLERY — paper tint ═══════════════ -->
+<section class="gallery section" id="gallery">
+  <div class="section__head section__head--split">
+    <div>
+      <p class="eyebrow"><span class="eyebrow__dash" aria-hidden="true"></span>GALLERY</p>
+      <h2 class="h-display">ภาพบรรยากาศการแสดง</h2>
+    </div>
+    <p class="section__note section__note--right">ลากรูปภาพของคุณลงในช่องเพื่อแทนที่ภาพตัวอย่าง</p>
+  </div>
+
+  <div class="gallery__grid">
+    <div class="img-slot g1" data-slot="velin-g1" data-placeholder="ภาพเวทีใหญ่"></div>
+    <div class="img-slot g2" data-slot="velin-g2" data-placeholder="ภาพ close-up"></div>
+    <div class="img-slot g3" data-slot="velin-g3" data-placeholder="ภาพผู้ชม"></div>
+    <div class="img-slot g4" data-slot="velin-g4" data-placeholder="ภาพงานอีเวนต์"></div>
+    <div class="img-slot g5" data-slot="velin-g5" data-placeholder="ภาพเบื้องหลัง"></div>
+    <div class="img-slot g6" data-slot="velin-g6" data-placeholder="ภาพพอร์ตเทรต"></div>
+    <div class="img-slot g7" data-slot="velin-g7" data-placeholder="ภาพงานแต่งงาน"></div>
+  </div>
+</section>
+
+<!-- ═══════════════ REVIEWS — brown band ═══════════════ -->
+<section class="reviews section" id="reviews">
+  <div class="section__head section__head--center">
+    <p class="eyebrow eyebrow--plain">TESTIMONIALS</p>
+    <h2 class="h-display">เสียงจากผู้จัดงาน</h2>
+  </div>
+
+  <div class="review-grid">
+    <figure class="review reveal">
+      <span class="review__quote" aria-hidden="true">“</span>
+      <blockquote>แขกในงานพูดถึงโชว์ต่ออีกเป็นเดือน จังหวะการเล่าเรื่องกับกลนกพิราบทำให้ทั้งห้องเงียบกริบแล้วปรบมือพร้อมกัน</blockquote>
+      <figcaption>
+        <span class="review__name">คุณนภัสสร ว.</span>
+        <span class="review__role">Event Manager, Kempinski</span>
+      </figcaption>
+    </figure>
+
+    <figure class="review reveal">
+      <span class="review__quote" aria-hidden="true">“</span>
+      <blockquote>ทีมงานมืออาชีพมาก มาถึงก่อนเวลา เช็กระบบเอง และปรับสคริปต์ให้เข้ากับแบรนด์ของเราได้ตรงจุด</blockquote>
+      <figcaption>
+        <span class="review__name">คุณธนดล ศ.</span>
+        <span class="review__role">Marketing Lead, Aura</span>
+      </figcaption>
+    </figure>
+
+    <figure class="review reveal">
+      <span class="review__quote" aria-hidden="true">“</span>
+      <blockquote>เลือก close-up magic ในงานแต่ง แขกทุกโต๊ะสนุกมาก เป็นของขวัญที่ดีที่สุดที่ให้กับงานตัวเอง</blockquote>
+      <figcaption>
+        <span class="review__name">คุณมินทร์ &amp; คุณแนน</span>
+        <span class="review__role">The Sukhothai Bangkok</span>
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ═══════════════ CONTACT — paper ═══════════════ -->
+<section class="contact section" id="contact">
+  <div class="contact__grid">
+    <div class="contact__intro">
+      <p class="eyebrow"><span class="eyebrow__dash" aria-hidden="true"></span>BOOKING</p>
+      <h2 class="h-display">พร้อมเสกความ<br>ทรงจำให้งานคุณ</h2>
+      <p class="prose prose--lead">บอกรายละเอียดงานของคุณ แล้วเราจะออกแบบชุดการแสดงที่เหมาะที่สุด พร้อมใบเสนอราคาภายใน 24 ชั่วโมง</p>
+
+      <div class="contact-list">
+        <a href="tel:0912345678">
+          <span class="contact-list__icon"><svg aria-hidden="true"><use href="#i-phone"/></svg></span>
+          <span class="contact-list__k">PHONE</span>
+          <span class="contact-list__v">091-234-5678</span>
+        </a>
+        <a href="mailto:velinmagic@gmail.com">
+          <span class="contact-list__icon"><svg aria-hidden="true"><use href="#i-mail"/></svg></span>
+          <span class="contact-list__k">EMAIL</span>
+          <span class="contact-list__v">velinmagic@gmail.com</span>
+        </a>
+        <a href="#contact">
+          <span class="contact-list__icon"><svg aria-hidden="true"><use href="#i-line"/></svg></span>
+          <span class="contact-list__k">LINE</span>
+          <span class="contact-list__v">@velinmagic</span>
+        </a>
+        <a href="#contact">
+          <span class="contact-list__icon"><svg aria-hidden="true"><use href="#i-ig"/></svg></span>
+          <span class="contact-list__k">INSTAGRAM</span>
+          <span class="contact-list__v">instagram.com/velinmagic</span>
+        </a>
+      </div>
+    </div>
+
+    <form class="quote" id="quote-form" novalidate>
+      <p class="quote__title">REQUEST A QUOTE</p>
+
+      <div class="quote__row">
+        <label class="field">
+          <span class="field__label">ชื่อผู้ติดต่อ</span>
+          <input type="text" name="name" placeholder="ชื่อ - นามสกุล" autocomplete="name" required>
+          <span class="field__error" data-error></span>
+        </label>
+        <label class="field">
+          <span class="field__label">เบอร์ติดต่อ</span>
+          <input type="tel" name="phone" placeholder="08X-XXX-XXXX" autocomplete="tel" inputmode="tel" required>
+          <span class="field__error" data-error></span>
+        </label>
+        <label class="field">
+          <span class="field__label">วันที่จัดงาน</span>
+          <input type="text" name="date" placeholder="วว / ดด / ปป">
+          <span class="field__error" data-error></span>
+        </label>
+        <label class="field">
+          <span class="field__label">จำนวนผู้ชม</span>
+          <input type="text" name="guests" placeholder="เช่น 150 คน" inputmode="numeric">
+          <span class="field__error" data-error></span>
+        </label>
+      </div>
+
+      <fieldset class="quote__types">
+        <legend class="field__label">รูปแบบการแสดงที่สนใจ</legend>
+        <div class="chips" role="group">
+          <button type="button" class="chip" data-value="การแสดงบนเวที" aria-pressed="false">การแสดงบนเวที</button>
+          <button type="button" class="chip" data-value="มายากลใกล้ชิด" aria-pressed="false">มายากลใกล้ชิด</button>
+          <button type="button" class="chip" data-value="โชว์ตามธีมงาน" aria-pressed="false">โชว์ตามธีมงาน</button>
+          <button type="button" class="chip" data-value="งานอีเวนต์ &amp; องค์กร" aria-pressed="false">งานอีเวนต์ &amp; องค์กร</button>
+        </div>
+        <input type="hidden" name="formats" id="quote-formats">
+      </fieldset>
+
+      <label class="field">
+        <span class="field__label">รายละเอียดเพิ่มเติม</span>
+        <textarea name="details" rows="4" placeholder="สถานที่ ธีมงาน หรือสิ่งที่อยากให้เกิดขึ้นในโชว์"></textarea>
+      </label>
+
+      <button type="submit" class="btn btn--gold btn--block">ส่งคำขอจองการแสดง</button>
+      <p class="quote__status" id="quote-status" role="status" aria-live="polite"></p>
+    </form>
+  </div>
+</section>
+
+</main>
+
+<!-- ═══════════════ FOOTER — night ═══════════════ -->
+<footer class="footer">
+  <div class="footer__top">
+    <a class="footer__brand" href="#top">
+      <span class="footer__mark">VM</span>
+      <span class="footer__word">VELIN MAGIC</span>
+    </a>
+    <div class="socials socials--footer">
+      <a href="#top" class="social" aria-label="Facebook"><svg aria-hidden="true"><use href="#i-fb"/></svg></a>
+      <a href="#top" class="social" aria-label="Instagram"><svg aria-hidden="true"><use href="#i-ig"/></svg></a>
+      <a href="#top" class="social" aria-label="YouTube"><svg aria-hidden="true"><use href="#i-yt"/></svg></a>
+      <a href="#top" class="social" aria-label="TikTok"><svg aria-hidden="true"><use href="#i-tt"/></svg></a>
+    </div>
+  </div>
+  <div class="footer__bottom">
+    <p class="footer__copy">© 2026 Velin Magic — Bangkok, Thailand</p>
+    <nav class="footer__links" aria-label="ลิงก์ท้ายเว็บ">
+      <a href="#about">ABOUT</a>
+      <a href="#shows">SHOWS</a>
+      <a href="#portfolio">PORTFOLIO</a>
+      <a href="#contact">BOOKING</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="main.js" defer></script>
+</body>
+</html>
