@@ -89,7 +89,10 @@
 
 <!-- ═══════════════ HERO — night world ═══════════════ -->
 <section class="hero" id="top">
-  <div class="hero__scenery" aria-hidden="true">
+
+  <!-- stage — the full-screen poster -->
+  <div class="hero__stage">
+    <div class="hero__scenery" aria-hidden="true">
     <div class="moon"></div>
     <div class="silk silk--1"></div>
     <div class="silk silk--2"></div>
@@ -102,16 +105,15 @@
     <span class="spark spark--4"></span>
   </div>
 
-  <picture>
-    <source type="image/webp"
-            srcset="assets/velin-hero@900.webp 900w, assets/velin-hero.webp 1750w"
-            sizes="(max-width: 720px) 100vw, (max-width: 1024px) 74vw, 57.3vw">
-    <img class="hero__portrait" src="assets/velin-hero.png" alt="Velin นักมายากลในชุดสูทสีน้ำตาลพร้อมนกพิราบขาวและหน้ากากครึ่งใบ" fetchpriority="high" width="1750" height="1750">
-  </picture>
+    <picture>
+      <source type="image/webp"
+              srcset="assets/velin-hero@900.webp 900w, assets/velin-hero.webp 1750w"
+              sizes="(max-width: 720px) 100vw, (max-width: 1024px) 74vw, 57.3vw">
+      <img class="hero__portrait" src="assets/velin-hero.png" alt="Velin นักมายากลในชุดสูทสีน้ำตาลพร้อมนกพิราบขาวและหน้ากากครึ่งใบ" fetchpriority="high" width="1750" height="1750">
+    </picture>
 
-  <div class="hero__fade" aria-hidden="true"></div>
+    <div class="hero__fade" aria-hidden="true"></div>
 
-  <div class="hero__inner">
     <div class="hero__copy">
       <p class="hero__eyebrow">THE ART OF ASTONISHMENT</p>
 
@@ -128,7 +130,16 @@
       </div>
     </div>
 
-    <div class="hero__cards">
+    <a class="hero__scroll" href="#about">
+      <span class="hero__scroll-word">SCROLL</span>
+      <span class="hero__scroll-line" aria-hidden="true"></span>
+    </a>
+  </div>
+
+  <!-- deck — show formats, stats, contact rail -->
+  <div class="hero__deck">
+    <div class="hero__deck-inner">
+      <div class="hero__cards">
       <a class="type-card" href="#shows">
         <svg class="type-card__icon" aria-hidden="true"><use href="#i-hat"/></svg>
         <span class="type-card__en">STAGE SHOW</span>
@@ -173,25 +184,26 @@
       </div>
     </div>
 
-    <aside class="hero__side">
-      <div>
-        <p class="micro-label">FOLLOW THE MAGIC</p>
-        <div class="socials">
-          <a href="#top" class="social" aria-label="Facebook"><svg aria-hidden="true"><use href="#i-fb"/></svg></a>
-          <a href="#top" class="social" aria-label="Instagram"><svg aria-hidden="true"><use href="#i-ig"/></svg></a>
-          <a href="#top" class="social" aria-label="YouTube"><svg aria-hidden="true"><use href="#i-yt"/></svg></a>
-          <a href="#top" class="social" aria-label="TikTok"><svg aria-hidden="true"><use href="#i-tt"/></svg></a>
+      <aside class="hero__side">
+        <div>
+          <p class="micro-label">FOLLOW THE MAGIC</p>
+          <div class="socials">
+            <a href="#top" class="social" aria-label="Facebook"><svg aria-hidden="true"><use href="#i-fb"/></svg></a>
+            <a href="#top" class="social" aria-label="Instagram"><svg aria-hidden="true"><use href="#i-ig"/></svg></a>
+            <a href="#top" class="social" aria-label="YouTube"><svg aria-hidden="true"><use href="#i-yt"/></svg></a>
+            <a href="#top" class="social" aria-label="TikTok"><svg aria-hidden="true"><use href="#i-tt"/></svg></a>
+          </div>
         </div>
-      </div>
-      <div>
-        <p class="micro-label">CONTACT</p>
-        <div class="mini-contacts">
-          <a href="tel:0912345678"><span class="mini-contacts__icon"><svg aria-hidden="true"><use href="#i-phone"/></svg></span><span>091-234-5678</span></a>
-          <a href="mailto:velinmagic@gmail.com"><span class="mini-contacts__icon"><svg aria-hidden="true"><use href="#i-mail"/></svg></span><span>velinmagic@gmail.com</span></a>
-          <a href="#contact"><span class="mini-contacts__icon"><svg aria-hidden="true"><use href="#i-line"/></svg></span><span>@velinmagic</span></a>
+        <div>
+          <p class="micro-label">CONTACT</p>
+          <div class="mini-contacts">
+            <a href="tel:0912345678"><span class="mini-contacts__icon"><svg aria-hidden="true"><use href="#i-phone"/></svg></span><span>091-234-5678</span></a>
+            <a href="mailto:velinmagic@gmail.com"><span class="mini-contacts__icon"><svg aria-hidden="true"><use href="#i-mail"/></svg></span><span>velinmagic@gmail.com</span></a>
+            <a href="#contact"><span class="mini-contacts__icon"><svg aria-hidden="true"><use href="#i-line"/></svg></span><span>@velinmagic</span></a>
+          </div>
         </div>
-      </div>
-    </aside>
+      </aside>
+    </div>
   </div>
 </section>
 

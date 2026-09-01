@@ -67,9 +67,19 @@ The `.dc.html` is a fixed 1536 × 884 artboard built from the Claude Design DSL
 (`<sc-for>`, `{{ bindings }}`, `style-hover`, `<image-slot>`). The production
 version keeps the composition but rebuilds it fluidly:
 
-- **Hero** — absolute pixel offsets became percentages, and type uses `clamp()`.
-  Below 1024px the grid collapses to one column and the portrait drops back to a
-  faded backdrop so the copy stays readable.
+- **Hero** — rebuilt as a full-viewport composition in two parts. `.hero__stage`
+  is the poster (scenery, portrait, copy) and `.hero__deck` carries the show
+  formats, stats and contact rail. On desktop the hero is `100svh` with the deck
+  resting on the fold; on phones the stage claims a screen of its own and the
+  deck flows below it.
+
+  Type and spacing are clamped against `svh` as well as `vw`, so a short window
+  scales the composition down rather than pushing the deck past the fold. The
+  portrait is `width: min(58%, 106svh)` for the same reason.
+
+  Phones get a different composition entirely: the wordmark sits in the empty
+  top fifth of the cutout, the magician runs at full opacity bled off both
+  edges, and the copy reads off a bottom scrim.
 - **Icons** — the design used the card-suit characters (♠♣♥♦) and single letters
   for social links. Those are drawn here as a real inline SVG sprite: top hat,
   playing cards, masquerade mask and audience for the show formats, plus proper
