@@ -102,7 +102,12 @@
     <span class="spark spark--4"></span>
   </div>
 
-  <img class="hero__portrait" src="assets/velin-hero.png" alt="Velin นักมายากลในชุดสูทสีน้ำตาลพร้อมนกพิราบขาวและหน้ากากครึ่งใบ" fetchpriority="high" width="880" height="1100">
+  <picture>
+    <source type="image/webp"
+            srcset="assets/velin-hero@900.webp 900w, assets/velin-hero.webp 1750w"
+            sizes="(max-width: 720px) 100vw, (max-width: 1024px) 74vw, 57.3vw">
+    <img class="hero__portrait" src="assets/velin-hero.png" alt="Velin นักมายากลในชุดสูทสีน้ำตาลพร้อมนกพิราบขาวและหน้ากากครึ่งใบ" fetchpriority="high" width="1750" height="1750">
+  </picture>
 
   <div class="hero__fade" aria-hidden="true"></div>
 

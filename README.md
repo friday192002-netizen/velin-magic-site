@@ -39,7 +39,9 @@ Then open <http://localhost:4321>. Any static server works — there is no build
 | `main.js` | Nav, scroll-spy, reveals, stat counters, image slots, quote form. |
 | `vercel.json` | Clean URLs, cache and security headers for the deploy. |
 | `.vercelignore` | Keeps the design reference files in git but off the CDN. |
-| `assets/velin-hero.png` | Hero portrait. |
+| `assets/velin-hero.webp` | Hero portrait, 1750px — 90 KB, what browsers actually load. |
+| `assets/velin-hero@900.webp` | Same at 900px — 43 KB, for 1x desktop and phones. |
+| `assets/velin-hero.png` | 1750px original, 1.73 MB. Kept as the `<picture>` fallback and as the Open Graph image, since some social scrapers still refuse WebP. |
 | `Velin Magic.dc.html` | The imported design source — reference only, not served. |
 | `image-slot.js`, `support.js` | Claude Design runtime the `.dc.html` depends on — reference only. |
 | `screens/`, `uploads/` | Canvas thumbnails and original uploads from the design project. |
@@ -85,6 +87,20 @@ version keeps the composition but rebuilds it fluidly:
 - **Accessibility** — skip link, focus-visible rings, `aria-expanded` on the
   mobile menu, `aria-pressed` chips, keyboard-operable image slots, and a full
   `prefers-reduced-motion` path that disables the float/glow/twinkle animations.
+
+## Hero image
+
+The hero is served through `<picture>`: two WebP sources with `sizes` matching
+the CSS widths (100vw on phones, 74vw to 1024px, 57.3vw above), falling back to
+the PNG. Re-encoded at quality 82 the WebP measures 41.5 dB PSNR against the
+original across opaque pixels — visually identical — with the alpha channel bit
+exact, at 5% of the file size.
+
+To regenerate after replacing the PNG:
+
+```bash
+python -c "from PIL import Image; im=Image.open('assets/velin-hero.png').convert('RGBA'); im.save('assets/velin-hero.webp','WEBP',quality=82,method=6); im.resize((900,900),Image.LANCZOS).save('assets/velin-hero@900.webp','WEBP',quality=82,method=6)"
+```
 
 ## Placeholder content to replace before launch
 

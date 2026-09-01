@@ -15,3 +15,5 @@ node_modules/
 # nothing links to, so they stay out of the repo and off the CDN.
 uploads/
 screens/
+
+.vercel

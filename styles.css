@@ -394,6 +394,10 @@ a { text-decoration: none; color: inherit; transition: color .25s ease; }
 .spark--3 { left: 77%; bottom: 33%; width: 2px; height: 2px; box-shadow: 0 0 10px 3px rgba(243, 220, 187, .45); animation-duration: 8s; animation-delay: 1.6s; }
 .spark--4 { left: 55%; top: 14%; width: 2px; height: 2px; box-shadow: 0 0 9px 3px rgba(255, 240, 220, .4); animation-duration: 9s; animation-delay: 2.4s; }
 
+/* <picture> would otherwise become a stray flex item of .hero; display:contents
+   hands the absolutely-positioned <img> straight back to the hero. */
+.hero > picture { display: contents; }
+
 .hero__portrait {
   position: absolute;
   left: 30.6%; top: -14.7%;
