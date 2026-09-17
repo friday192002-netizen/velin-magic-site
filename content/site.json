@@ -19,6 +19,19 @@
     "facebook": "https://www.facebook.com/profile.php?id=61585347494807",
     "tiktok": "https://www.tiktok.com/@velin.untitledmagic"
   },
+  "channels": {
+    "_help": "การ์ดช่องทางติดต่อและปุ่มลอย (แบบเดียวกับ Untitled Magic) — ลิงก์อ่านจาก contact และ social ด้านบน",
+    "title": "คุยกับเราได้เลย",
+    "lineSub": "แนะนำสำหรับการจอง",
+    "phoneSub": "โทรหาเรา",
+    "badge": "แนะนำ",
+    "followLabel": "ติดตามผลงาน",
+    "names": {
+      "facebook": "Velin UntitledMagic",
+      "instagram": "@untitled.magic",
+      "tiktok": "@velin.untitledmagic"
+    }
+  },
   "video": {
     "youtubeId": "xO9P8aOmR5c",
     "caption": "บันทึกจากผลงานภายใต้ชื่อ Untitled Magic"

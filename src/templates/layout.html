@@ -139,17 +139,34 @@
   </div>
 </footer>
 
-{{#dockDefault}}
-<nav class="dock" aria-label="ติดต่อด่วน" data-dock>
-  <a class="dock-btn dock-line" href="{{site.contact.line}}" target="_blank" rel="noopener" aria-label="คุยทาง LINE"><svg class="icon" aria-hidden="true"><use href="#i-line"/></svg><span>LINE</span></a>
-  <a class="dock-btn" href="tel:{{site.contact.telephone}}" aria-label="โทร {{site.contact.phone}}"><svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg><span>โทร</span></a>
-  <button type="button" class="dock-btn dock-main" data-sheet-open data-fly-target>
-    <svg class="icon" aria-hidden="true"><use href="#i-bag"/></svg>
-    <span data-dock-label>ขอใบเสนอราคา</span>
-    <span class="badge badge-light" data-shortlist-count hidden>0</span>
+{{#fab}}
+<div class="fab" data-fab>
+  <div class="fab-panel" id="fab-panel" role="dialog" aria-labelledby="fab-title" data-fab-panel hidden>
+    <div class="fab-head">
+      <p class="kicker">CONTACT</p>
+      <h2 class="fab-title" id="fab-title">{{site.channels.title}}</h2>
+      <p class="fab-note">{{site.contact.note}}</p>
+    </div>
+    {{{channelsCompact}}}
+    <p class="fab-divider"><span>{{site.channels.followLabel}}</span></p>
+    <div class="fab-socials">{{{fabSocials}}}</div>
+    <div class="fab-foot">
+      <button type="button" class="fab-shortlist" data-sheet-open data-fab-shortlist hidden>
+        <svg class="icon" aria-hidden="true"><use href="#i-bag"/></svg>
+        <span data-fab-summary>โชว์ที่เลือกไว้</span>
+        <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg>
+      </button>
+      <a class="btn btn-gold btn-block" href="/contact/">ขอใบเสนอราคา <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+    </div>
+  </div>
+  <button type="button" class="fab-button" aria-expanded="false" aria-controls="fab-panel" aria-label="ติดต่อเรา" data-fab-toggle data-fly-target>
+    <span class="fab-pulse" aria-hidden="true"></span>
+    <svg class="icon fab-i-chat" aria-hidden="true"><use href="#i-chat"/></svg>
+    <svg class="icon fab-i-close" aria-hidden="true"><use href="#i-close"/></svg>
+    <span class="badge" data-shortlist-count hidden>0</span>
   </button>
-</nav>
-{{/dockDefault}}
+</div>
+{{/fab}}
 
 <div class="sheet-backdrop" data-sheet-backdrop hidden></div>
 <aside class="sheet" data-sheet role="dialog" aria-modal="true" aria-labelledby="sheet-title" hidden>

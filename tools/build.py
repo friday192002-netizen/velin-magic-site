@@ -326,6 +326,42 @@ def build() -> None:
         "photoCount": sum(len(s["photos"]) for s in shows),
     }
 
+    # ── contact channel cards (the Untitled Magic pattern: LINE first and marked
+    #    "แนะนำ", then phone, then socials), reused by the CTA band, the contact
+    #    page and the floating contact button
+    ch = site["channels"]
+    channel_list = [
+        {"key": "line", "href": site["contact"]["line"], "icon": "i-line", "label": site["contact"]["lineName"],
+         "sub": ch["lineSub"], "badge": ch["badge"], "external": True},
+        {"key": "phone", "href": "tel:" + site["contact"]["telephone"], "icon": "i-phone", "label": site["contact"]["phone"],
+         "sub": ch["phoneSub"], "badge": "", "external": False},
+    ]
+    social_list = [
+        {"key": k, "href": site["social"][k], "icon": icon, "label": ch["names"][k], "sub": name, "badge": "", "external": True}
+        for k, icon, name in (("facebook", "i-fb", "Facebook"), ("instagram", "i-ig", "Instagram"), ("tiktok", "i-tt", "TikTok"))
+    ]
+
+    def channel_cards(items: list[dict], cls: str = "") -> str:
+        rows = []
+        for i, c in enumerate(items):
+            ext = ' target="_blank" rel="noopener"' if c["external"] else ""
+            end = (f'<span class="channel-badge">{esc(c["badge"])}</span>' if c["badge"]
+                   else '<svg class="icon channel-go" aria-hidden="true"><use href="#i-arrow"/></svg>')
+            rows.append(
+                f'<li style="--i:{i}"><a class="channel channel-{c["key"]}" href="{esc(c["href"], quote=True)}"{ext}>'
+                f'<span class="channel-icon" aria-hidden="true"><svg class="icon"><use href="#{c["icon"]}"/></svg></span>'
+                f'<span class="channel-text"><b>{esc(c["label"])}</b><small>{esc(c["sub"])}</small></span>{end}</a></li>')
+        return f'<ul class="channels {cls}">{"".join(rows)}</ul>'
+
+    common.update(
+        channelsShort=channel_cards(channel_list),
+        channelsFull=channel_cards(channel_list + social_list),
+        channelsCompact=channel_cards(channel_list, "channels-compact"),
+        fabSocials="".join(
+            f'<a href="{esc(c["href"], quote=True)}" target="_blank" rel="noopener" aria-label="{c["sub"]} {esc(c["label"])}">'
+            f'<svg class="icon" aria-hidden="true"><use href="#{c["icon"]}"/></svg></a>' for c in social_list),
+    )
+
     sitemap: list[str] = []
 
     # ── fragments ────────────────────────────────────────────────
@@ -442,7 +478,7 @@ def build() -> None:
                 "jsonld": jsonld(*(ld or [])), "preload": preload,
             },
             "content": body,
-            "dockDefault": dock == "default",
+            "fab": dock != "none",
         }
         rel = "index.html" if path == "/" else path.strip("/") + "/index.html"
         if path == "/404.html":

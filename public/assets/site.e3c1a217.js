@@ -33,13 +33,41 @@
   addEventListener('scroll', onScroll, { passive: true });
   onScroll();
 
-  // on the home page the hero already carries the main button — the dock arrives once it scrolls away
-  const dock = $('[data-dock]');
+  /* ─────────────────────────── floating contact button (Untitled Magic pattern) */
+
+  const fab = $('[data-fab]');
+  const fabToggle = $('[data-fab-toggle]');
+  const fabPanel = $('[data-fab-panel]');
+  let fabTimer;
+  const setFab = (open, focus = true) => {
+    if (!fab || fab.classList.contains('is-open') === open) return;
+    clearTimeout(fabTimer);
+    fabToggle.setAttribute('aria-expanded', String(open));
+    fabToggle.setAttribute('aria-label', open ? 'ปิดช่องทางติดต่อ' : 'ติดต่อเรา');
+    if (open) {
+      fabPanel.hidden = false;
+      void fabPanel.offsetWidth;
+      fab.classList.add('is-open');
+      if (focus) $('a, button', fabPanel)?.focus({ preventScroll: true });
+    } else {
+      fab.classList.remove('is-open');
+      fabTimer = setTimeout(() => { fabPanel.hidden = true; }, calm.matches ? 0 : 420);
+      if (focus && fab.contains(document.activeElement)) fabToggle.focus({ preventScroll: true });
+    }
+  };
+  fabToggle?.addEventListener('click', () => setFab(!fab.classList.contains('is-open')));
+  fabPanel?.addEventListener('click', (e) => { if (e.target.closest('a, [data-sheet-open]')) setFab(false, false); });
+  document.addEventListener('click', (e) => { if (fab && !fab.contains(e.target)) setFab(false, false); });
+
+  // on the home page the hero already carries the main buttons — the contact button arrives once they scroll away
   const heroActions = $('.hero-actions');
-  if (dock && heroActions && 'IntersectionObserver' in window) {
-    dock.classList.add('is-away');
-    new IntersectionObserver(([en]) => dock.classList.toggle('is-away', en.isIntersecting || en.boundingClientRect.top > 0))
-      .observe(heroActions);
+  if (fab && heroActions && 'IntersectionObserver' in window) {
+    fab.classList.add('is-away');
+    new IntersectionObserver(([en]) => {
+      const away = en.isIntersecting || en.boundingClientRect.top > 0;
+      fab.classList.toggle('is-away', away);
+      if (away) setFab(false, false);
+    }).observe(heroActions);
   }
 
   const menuButton = $('[data-menu-button]');
@@ -48,7 +76,7 @@
     menuButton?.setAttribute('aria-expanded', String(open));
     nav?.classList.toggle('is-open', open);
     body.classList.toggle('menu-open', open);
-    if (open) header?.classList.remove('is-hidden');
+    if (open) { header?.classList.remove('is-hidden'); setFab(false, false); }
   };
   menuButton?.addEventListener('click', () => setMenu(menuButton.getAttribute('aria-expanded') !== 'true'));
   nav?.addEventListener('click', (e) => { if (e.target.closest('a')) setMenu(false); });
@@ -121,7 +149,11 @@
         el.classList.remove('is-bump'); void el.offsetWidth; el.classList.add('is-bump');
       }
     });
-    $$('[data-dock-label]').forEach((el) => { el.textContent = list.length ? 'รายการที่เลือก' : 'ขอใบเสนอราคา'; });
+    const fabShortlist = $('[data-fab-shortlist]');
+    if (fabShortlist) {
+      fabShortlist.hidden = !list.length;
+      $('[data-fab-summary]', fabShortlist).textContent = `โชว์ที่เลือกไว้ ${list.length} รายการ · รวมประมาณ ${baht(summary(list).total)}`;
+    }
     lastCount = list.length;
     renderSheet(list);
     renderPanel(list);
@@ -130,7 +162,7 @@
   /* a small gold dot travels from the button to the bag — the eye learns where choices go */
   const fly = (from) => {
     if (calm.matches || !from || !Element.prototype.animate) return;
-    const target = $$('[data-fly-target]').find((el) => el.getClientRects().length && getComputedStyle(el).visibility !== 'hidden'
+    const target = $$('[data-fly-target]').find((el) => el.getClientRects().length && !el.closest('.is-away') && getComputedStyle(el).visibility !== 'hidden'
       && el.getBoundingClientRect().bottom > 0 && el.getBoundingClientRect().top < innerHeight);
     if (!target) return;
     const a = from.getBoundingClientRect();
@@ -223,8 +255,9 @@
   function openSheet(opener) {
     if (!sheet) return;
     clearTimeout(sheetTimer);
-    sheetOpener = opener || document.activeElement;
+    sheetOpener = opener?.closest('[data-fab]') ? fabToggle : (opener || document.activeElement);
     setMenu(false);
+    setFab(false, false);
     sheet.hidden = false; backdrop.hidden = false;
     sheet.style.transform = '';
     void sheet.offsetWidth;
@@ -293,6 +326,7 @@
   document.addEventListener('keydown', (e) => {
     if (e.key !== 'Escape') return;
     if (sheet && !sheet.hidden) { closeSheet(); return; }
+    if (fab?.classList.contains('is-open')) { setFab(false); return; }
     $$('[data-submenu][aria-expanded="true"]').forEach((b) => { b.setAttribute('aria-expanded', 'false'); b.focus(); });
     if (nav?.classList.contains('is-open')) { setMenu(false); menuButton.focus(); }
   });

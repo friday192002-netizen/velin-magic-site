@@ -147,9 +147,15 @@ the shortlist with an estimated total → short form → generated message →
 **คัดลอกและเปิด LINE**. Nothing is sent to a server. The bag button (header) and
 the dock open the shortlist sheet (bottom sheet on phones, drawer on desktop)
 from any page. The home finder and the run-of-show timelines are shortcuts into
-the same shortlist. Phones get a sticky bottom
-bar (LINE / call / shortlist; on show pages: price / เลือก / bag / LINE; hidden on
-`/contact/`, and on the home page until the hero buttons scroll away).
+the same shortlist.
+
+Contact channels follow the Untitled Magic pattern: big channel cards (LINE
+first, marked "แนะนำ", then phone and socials) built by `channel_cards()` in
+`build.py` from `site.json` → `contact`, `social` and `channels`. They appear in
+the CTA band, on `/contact/`, and in the floating contact button (bottom right,
+every page except `/contact/`; on the home page it appears once the hero buttons
+scroll away). The panel also links to the shortlist and the quote page. Show
+pages on phones add a price dock (price / เลือก / bag) beside that button.
 
 Motion lives in `site.js` and CSS: `[data-reveal]` fades sections in (only when
 JS runs, so content never stays hidden), `[data-count]` counts stats up,
