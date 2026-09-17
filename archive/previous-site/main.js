@@ -351,9 +351,7 @@
 
     syncFormats();
 
-    /* No backend is wired up yet — hand the enquiry to the mail client so
-       nothing the visitor typed is lost. Swap this block for a fetch() to
-       your booking endpoint when one exists. */
+    // Prepare an enquiry locally. The visitor sends it via LINE explicitly.
     var d = new FormData(form);
     var body = [
       'ชื่อผู้ติดต่อ: ' + (d.get('name') || '-'),
@@ -366,12 +364,24 @@
       (d.get('details') || '-')
     ].join('\n');
 
-    window.location.href =
-      'mailto:velinmagic@gmail.com' +
-      '?subject=' + encodeURIComponent('คำขอจองการแสดง — ' + (d.get('name') || '')) +
-      '&body=' + encodeURIComponent(body);
+    var message = document.getElementById('quote-message');
+    message.value = 'สนใจจองการแสดงของ Velin Magic\n\n' + body;
+    document.getElementById('quote-handoff').hidden = false;
+    status.textContent = 'ข้อความพร้อมแล้ว กรุณาคัดลอกและส่งใน LINE — ยังไม่มีการส่งข้อมูล';
+    message.focus();
+    message.select();
+  });
 
-    status.textContent = 'กำลังเปิดอีเมลเพื่อส่งคำขอ — ขอบคุณครับ ✦';
+  document.getElementById('quote-copy').addEventListener('click', function () {
+    var message = document.getElementById('quote-message');
+    function manual() {
+      message.focus(); message.select();
+      status.textContent = 'เลือกข้อความไว้แล้ว กรุณาคัดลอกด้วยตนเอง แล้วนำไปวางใน LINE';
+    }
+    if (!navigator.clipboard) { manual(); return; }
+    navigator.clipboard.writeText(message.value).then(function () {
+      status.textContent = 'คัดลอกแล้ว เปิด LINE แล้ววางข้อความเพื่อส่งให้ Velin';
+    }).catch(manual);
   });
 
   syncFormats();
