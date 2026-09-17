@@ -1,7 +1,8 @@
 # Handoff — Velin Magic site
 
-Last major change: 17 September 2026 — rebuilt around the 171 Magic Club show
-structure with a content/photos/src → public build. Conventions for future work
+Last major change: 17 September 2026 — premium redesign (espresso & champagne
+design system, show finder, run-of-show timelines, shortlist sheet, motion) on
+top of the 171 Magic Club show structure and the content/photos/src → public build. Conventions for future work
 are in [AGENTS.md](../AGENTS.md); this file records *why* things are the way they are.
 
 ## History
@@ -10,7 +11,8 @@ are in [AGENTS.md](../AGENTS.md); this file records *why* things are the way the
 | --- | --- | --- |
 | Sep 1 | Single-page site implemented from the Claude Design artboard; full-screen hero | `archive/previous-site/`, git history |
 | Sep 17 (Codex) | Multi-page editorial redesign, real contact channels and photos | `archive/codex-multipage/`, commit `a4b8fe0` |
-| Sep 17 | This structure: 171-style catalogue, occasion landing pages, shortlist → LINE quote | current |
+| Sep 17 | 171-style catalogue, occasion landing pages, shortlist → LINE quote | commit `a20f34d` (live) |
+| Sep 17 | Premium redesign: new design system, finder, flows, sheet, carousel, motion, mobile-first polish | current |
 
 Untitled Magic, 171 Magic Club and the earlier React `velin-magic` repo are
 separate projects and were only read, never modified.
@@ -27,6 +29,11 @@ separate projects and were only read, never modified.
   personally; other formats are "Velin ร่วมกับทีมผู้เชี่ยวชาญ", and the team is
   confirmed before booking (from Codex's content).
 
+- **Keep the brown-black palette, raise its quality** (owner, Sep 17): the
+  redesign keeps white + brown-black but moves to a tonal espresso scale,
+  champagne gradients, ivory/linen reading sections and Noto Serif Thai
+  headings; the goal is a site a visitor chooses without needing to call first.
+
 ## Content provenance
 
 - Show names, prices, taglines, descriptions, highlights and "เหมาะสำหรับ" lists:
@@ -36,6 +43,9 @@ separate projects and were only read, never modified.
 - "สิ่งที่ควรเตรียม" per show and the Velin performer copy: Codex's content.
 - Show photos: the 57 files from 171 (`assets/shows/`), byte-identical to what
   Codex had imported; cover alt texts from 171.
+- Finder moods, "ทำไมผู้จัดงานเลือกเรา" points and run-of-show flows are new copy
+  built only from facts already on the site (prices, formats, who performs,
+  LINE workflow). Flow order is a suggestion, not a promise of timing.
 - Occasion intros, FAQ answers and the 3-step process are new copy, written to
   avoid unverified claims: no durations, discounts, reviews, awards or client
   names. Travel cost and "เริ่มต้น" wording follow 171's own notes.
@@ -55,6 +65,14 @@ separate projects and were only read, never modified.
   composes a message the visitor copies into LINE; nothing is transmitted or stored.
 - **Grid without orphans:** `show_grid()` in `build.py` picks 2/3/4 columns and
   adds the "ยังไม่แน่ใจ?" help card only when it evens the rows.
+
+- **Why `tools/serve.py`:** on this Windows machine `python -m http.server`
+  (HTTP/1.0, Python 3.14) intermittently cut responses off at 65,280 bytes, so
+  larger pages lost their stylesheet or script. The HTTP/1.1 server fixes that.
+  Vercel is unaffected. `update-site.cmd` and `.claude/launch.json` use it; the
+  launcher also had a broken `toolsuild.py` path (a backspace byte), now fixed.
+- **Motion is progressive:** `.js [data-reveal]` hides content only when JS has
+  run, and `prefers-reduced-motion` turns animation off.
 
 ## Known limitations / next steps
 

@@ -1,10 +1,11 @@
-<section class="page-hero page-hero-night" aria-labelledby="page-title">
+<section class="page-hero about-hero" aria-labelledby="page-title">
+  <div class="page-aura" aria-hidden="true"></div>
   <div class="container">
     {{{crumbs}}}
-    <div class="about-grid">
-      <div class="performer-art">{{{portraitImg}}}</div>
-      <div class="performer-copy">
-        <p class="kicker kicker-gold">THE PERSON BEHIND THE MAGIC</p>
+    <div class="performer-grid">
+      <div class="performer-art" data-reveal><div class="card-float">{{{portraitImg}}}</div></div>
+      <div class="performer-copy" data-reveal>
+        <p class="kicker">THE PERSON BEHIND THE MAGIC</p>
         <p class="serif-quote">{{site.performer.kicker}}</p>
         <h1 id="page-title">{{site.performer.title}}</h1>
         {{{performerParagraphs}}}
@@ -14,9 +15,9 @@
   </div>
 </section>
 
-<section class="section" aria-labelledby="own-title">
+<section class="section section-ivory" aria-labelledby="own-title">
   <div class="container">
-    <div class="section-head section-head-row">
+    <div class="section-head section-head-row" data-reveal>
       <div>
         <p class="kicker">PERFORMED BY VELIN</p>
         <h2 id="own-title">โชว์ที่ Velin แสดงด้วยตัวเอง</h2>
@@ -28,9 +29,19 @@
   </div>
 </section>
 
-<section class="section section-sand" aria-labelledby="process-title">
+<section class="section section-deep why" aria-labelledby="why-title">
   <div class="container">
-    <div class="section-head">
+    <div class="section-head section-head-center" data-reveal>
+      <p class="kicker">WORKING WITH VELIN</p>
+      <h2 id="why-title">สิ่งที่คุณได้เมื่อทำงานกับเรา</h2>
+    </div>
+    <ul class="why-grid">{{{whyHtml}}}</ul>
+  </div>
+</section>
+
+<section class="section section-ivory" aria-labelledby="process-title">
+  <div class="container">
+    <div class="section-head section-head-center" data-reveal>
       <p class="kicker">WORKING TOGETHER</p>
       <h2 id="process-title">ทำงานร่วมกันอย่างไร</h2>
     </div>

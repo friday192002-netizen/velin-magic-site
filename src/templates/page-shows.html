@@ -1,62 +1,78 @@
-<section class="page-hero page-hero-night" aria-labelledby="page-title">
+<section class="page-hero" aria-labelledby="page-title">
+  <div class="page-aura" aria-hidden="true"></div>
   <div class="container">
     {{{crumbs}}}
     <div class="page-hero-grid">
-      <div>
-        <p class="kicker kicker-gold">MAGIC SHOW · DISCOVER THE ART OF MAGIC</p>
+      <div data-reveal>
+        <p class="kicker">MAGIC SHOW · DISCOVER THE ART OF MAGIC</p>
         <h1 id="page-title">รูปแบบการแสดงมายากล</h1>
-        <p class="page-lede">เติมความมหัศจรรย์ให้กับทุกช่วงเวลาของงาน ด้วยการแสดงที่ออกแบบให้เหมาะกับบรรยากาศ ผู้ชม และรูปแบบของงาน ไม่ว่าจะเป็นงานเปิดตัวสินค้า งานเลี้ยงบริษัท งานแต่งงาน อีเวนต์ หรือกิจกรรมสำหรับเด็ก</p>
+        <p class="page-lede">เติมความมหัศจรรย์ให้ทุกช่วงเวลาของงาน ด้วยการแสดงที่ออกแบบให้เหมาะกับบรรยากาศ ผู้ชม และรูปแบบของงาน ตั้งแต่งานเปิดตัวสินค้า งานเลี้ยงบริษัท งานแต่งงาน อีเวนต์ ไปจนถึงกิจกรรมสำหรับเด็ก</p>
       </div>
-      <dl class="hero-stats hero-stats-boxed">{{{statsHtml}}}</dl>
+      <dl class="hero-stats hero-stats-boxed" data-reveal>{{{statsHtml}}}</dl>
     </div>
   </div>
 </section>
 
-<section class="section chooser" aria-labelledby="chooser-title" data-filter-scope>
+<section class="section section-ivory chooser" aria-labelledby="chooser-title" data-filter-scope>
   <div class="container">
-    <div class="chooser-head">
-      <h2 id="chooser-title" class="h-small">เลือกตามลักษณะงาน</h2>
-      <p class="chooser-count" data-filter-count aria-live="polite">ทั้งหมด {{showCount}} รูปแบบการแสดง</p>
+    <div class="chooser-bar" data-sticky-bar>
+      <div class="chooser-head">
+        <h2 id="chooser-title" class="h-small">เลือกตามลักษณะงาน</h2>
+        <p class="chooser-count" data-filter-count aria-live="polite">ทั้งหมด {{showCount}} รูปแบบการแสดง</p>
+      </div>
+      <div class="chips" role="group" aria-label="กรองตามประเภทงาน">{{{chips}}}</div>
     </div>
-    <div class="chips" role="group" aria-label="กรองตามประเภทงาน">{{{chips}}}</div>
     {{{showGrid}}}
   </div>
 </section>
 
-<section class="section section-sand" aria-labelledby="prices-title">
+<section class="section section-linen" aria-labelledby="prices-title">
   <div class="container narrow">
-    <div class="section-head">
+    <div class="section-head section-head-center" data-reveal>
       <p class="kicker">PRICE SUMMARY</p>
       <h2 id="prices-title">ราคาทั้งหมดในที่เดียว</h2>
     </div>
-    <div class="table-wrap">
+    <div class="table-wrap" data-reveal>
       <table class="price-table">
         <caption class="sr">ราคาการแสดงมายากลแต่ละรูปแบบ</caption>
         <thead><tr><th scope="col">รูปแบบการแสดง</th><th scope="col" class="pr-price">ราคา</th><th scope="col"><span class="sr">เลือก</span></th></tr></thead>
         <tbody>{{{priceRows}}}</tbody>
       </table>
     </div>
-    <p class="note">{{site.priceNote}}</p>
+    <p class="note" data-reveal>{{site.priceNote}}</p>
   </div>
 </section>
 
-<section class="section" aria-labelledby="team-title">
-  <div class="container performer-card">
-    <div class="performer-card-art">{{{portraitImg}}}</div>
-    <div>
+<section class="section section-dark" aria-labelledby="flow-title">
+  <div class="container">
+    <div class="section-head section-head-row" data-reveal>
+      <div>
+        <p class="kicker">RUN OF SHOW</p>
+        <h2 id="flow-title">ไอเดียจัดลำดับโชว์ในงานเดียว</h2>
+        <p class="section-sub">ใช้หลายรูปแบบในงานเดียวให้แต่ละช่วงมีจังหวะของตัวเอง</p>
+      </div>
+    </div>
+    <div class="flow-card flow-card-dark" data-reveal>{{{flowTabsShows}}}</div>
+  </div>
+</section>
+
+<section class="section section-deep" aria-labelledby="team-title">
+  <div class="container performer-card" data-reveal>
+    <div class="performer-card-art"><div class="card-float">{{{portraitImg}}}</div></div>
+    <div class="performer-card-copy">
       <p class="kicker">PERFORMER</p>
       <h2 id="team-title">นักแสดงของเรา</h2>
-      <p class="performer-card-name"><span class="signature">{{site.performer.name}}</span> <span class="role">{{site.performer.role}}</span></p>
+      <p class="performer-sign"><span class="signature">{{site.performer.name}}</span><span>{{site.performer.role}}</span></p>
       {{{performerParagraphs}}}
-      <p class="note">{{site.performer.teamNote}}</p>
+      <p class="note note-dark">{{site.performer.teamNote}}</p>
       <a class="link-arrow" href="/about/">รู้จัก Velin</a>
     </div>
   </div>
 </section>
 
-<section class="section section-sand" aria-labelledby="process-title">
+<section class="section section-ivory" aria-labelledby="process-title">
   <div class="container">
-    <div class="section-head">
+    <div class="section-head section-head-center" data-reveal>
       <p class="kicker">HOW TO BOOK</p>
       <h2 id="process-title">จองง่าย ใน 3 ขั้นตอน</h2>
     </div>

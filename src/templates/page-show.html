@@ -1,73 +1,72 @@
 <article class="show-page" data-slug="{{show.slug}}">
   <section class="show-hero" aria-labelledby="page-title">
+    <div class="page-aura" aria-hidden="true"></div>
     <div class="container">
       {{{crumbs}}}
       <div class="show-hero-grid">
-        <div class="show-hero-media">
-          {{{show.coverImg}}}
-          <a class="media-count" href="#gallery">{{show.photoCount}} ภาพจากการแสดง</a>
+        <div class="show-media" data-carousel>
+          <div class="carousel" data-carousel-track tabindex="0" aria-label="ภาพจากการแสดง{{show.th}} ปัดเพื่อดูภาพถัดไป">{{{show.slides}}}</div>
+          <button type="button" class="car-nav car-prev" data-car-prev aria-label="ภาพก่อนหน้า"><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+          <button type="button" class="car-nav car-next" data-car-next aria-label="ภาพถัดไป"><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+          <span class="car-count" aria-hidden="true"><span data-car-index>1</span> / {{show.photoTotal}}</span>
+          <div class="car-thumbs" role="group" aria-label="เลือกภาพ">{{{show.thumbs}}}</div>
         </div>
-        <div class="show-hero-copy">
+
+        <div class="show-info">
           <p class="kicker"><span class="kicker-num">{{show.num}}</span> {{show.en}}</p>
           <h1 id="page-title">{{show.th}}</h1>
           <p class="show-tagline">{{show.tagline}}</p>
           <p class="performed"><span class="dot" aria-hidden="true"></span>{{show.performedLabel}}</p>
 
           <div class="price-box">
-            <p class="price price-lg">{{#show.priceFrom}}<span class="price-from">ราคาเริ่มต้น</span>{{/show.priceFrom}}{{^show.priceFrom}}<span class="price-from">ราคา</span>{{/show.priceFrom}}<span class="price-amount">{{show.priceText}}</span></p>
+            <div class="price-box-top">
+              <p class="price price-lg">{{#show.priceFrom}}<span class="price-from">ราคาเริ่มต้น</span>{{/show.priceFrom}}{{^show.priceFrom}}<span class="price-from">ราคา</span>{{/show.priceFrom}}<span class="price-amount">{{show.priceText}}</span></p>
+              <a class="price-help" href="#plan">ราคานี้รวมอะไร?</a>
+            </div>
             <div class="price-actions">
               <button type="button" class="pick pick-lg" data-pick="{{show.slug}}" aria-pressed="false" aria-label="เลือก {{show.th}}">
-                <svg class="icon icon-plus" aria-hidden="true"><use href="#i-plus"/></svg>
-                <svg class="icon icon-check" aria-hidden="true"><use href="#i-check"/></svg>
+                <span class="pick-icon" aria-hidden="true"><svg class="icon icon-plus"><use href="#i-plus"/></svg><svg class="icon icon-check"><use href="#i-check"/></svg></span>
                 <span data-pick-label>เลือกโชว์นี้</span>
               </button>
-              <a class="btn btn-line" href="{{site.contact.line}}" target="_blank" rel="noopener"><svg class="icon" aria-hidden="true"><use href="#i-line"/></svg> สอบถามโชว์นี้</a>
+              <a class="btn btn-line btn-lg" href="{{site.contact.line}}" target="_blank" rel="noopener"><svg class="icon" aria-hidden="true"><use href="#i-line"/></svg> สอบถามทาง LINE</a>
             </div>
             <p class="fine">{{#show.priceFrom}}{{site.priceNote}}{{/show.priceFrom}}{{^show.priceFrom}}{{site.estimateNote}}{{/show.priceFrom}}</p>
+          </div>
+
+          <div class="fits">
+            <p class="fits-label">เหมาะสำหรับ</p>
+            <ul class="tag-list">{{{show.fitsHtml}}}</ul>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="section" aria-labelledby="about-show">
+  <section class="section section-ivory" aria-labelledby="about-show">
     <div class="container detail-grid">
-      <div class="detail-main">
+      <div class="detail-main" data-reveal>
+        <p class="kicker">ABOUT THIS SHOW</p>
         <h2 id="about-show">รายละเอียดการแสดง</h2>
         {{{show.bodyHtml}}}
         <blockquote class="highlight"><p>{{show.highlight}}</p></blockquote>
       </div>
-      <aside class="detail-side">
-        <h2 class="h-small">เหมาะสำหรับ</h2>
-        <ul class="tag-list">{{{show.fitsHtml}}}</ul>
+      <aside class="detail-side" data-reveal>
         <h2 class="h-small">ดูโชว์ตามประเภทงาน</h2>
         <ul class="link-list">{{{show.occasionLinks}}}</ul>
+        <a class="btn btn-dark btn-block" href="/gallery/">ดูภาพการแสดงทั้งหมด</a>
       </aside>
     </div>
   </section>
 
-  <section class="section section-sand" id="gallery" aria-labelledby="gallery-title">
-    <div class="container">
-      <div class="section-head section-head-row">
-        <div>
-          <p class="kicker">GALLERY</p>
-          <h2 id="gallery-title">ภาพจากการแสดง{{show.th}}</h2>
-        </div>
-        <p class="fine">{{site.performer.photoCredit}} · กดที่ภาพเพื่อดูขนาดเต็ม</p>
-      </div>
-      <div class="gallery-grid">{{{show.galleryHtml}}}</div>
-    </div>
-  </section>
-
-  <section class="section" aria-labelledby="plan-title">
+  <section class="section section-dark" id="plan" aria-labelledby="plan-title">
     <div class="container plan-grid">
-      <div class="plan-card">
+      <div class="plan-card" data-reveal>
         <p class="kicker">BEFORE THE SHOW</p>
         <h2 id="plan-title">สิ่งที่ควรเตรียม</h2>
         <ul class="check-list">{{{show.prepareHtml}}}</ul>
       </div>
-      <div class="plan-card plan-card-dark">
-        <p class="kicker kicker-gold">IN YOUR QUOTE</p>
+      <div class="plan-card plan-card-gold" data-reveal>
+        <p class="kicker">IN YOUR QUOTE</p>
         <h2>สิ่งที่เราสรุปให้ในใบเสนอราคา</h2>
         <ul class="check-list">{{{quoteIncludes}}}</ul>
         {{^show.isVelin}}<p class="fine">{{site.performer.teamNote}}</p>{{/show.isVelin}}
@@ -75,9 +74,23 @@
     </div>
   </section>
 
-  <section class="section section-sand" aria-labelledby="related-title">
+  {{#pairFlow}}
+  <section class="section section-linen" aria-labelledby="pair-title">
     <div class="container">
-      <div class="section-head section-head-row">
+      <div class="section-head section-head-row" data-reveal>
+        <div>
+          <p class="kicker">RUN OF SHOW</p>
+          <h2 id="pair-title">ตัวอย่างการใช้คู่กับโชว์อื่นใน{{pairLabel}}</h2>
+        </div>
+      </div>
+      <div class="flow-card" data-reveal>{{{pairFlow}}}</div>
+    </div>
+  </section>
+  {{/pairFlow}}
+
+  <section class="section section-ivory" aria-labelledby="related-title">
+    <div class="container">
+      <div class="section-head section-head-row" data-reveal>
         <div>
           <p class="kicker">PAIRS WELL WITH</p>
           <h2 id="related-title">โชว์อื่นที่เข้ากับงานแบบเดียวกัน</h2>
@@ -91,12 +104,15 @@
 
 {{> cta-band}}
 
-<div class="mobile-bar mobile-bar-show">
-  <p class="mb-price">{{#show.priceFrom}}<small>เริ่มต้น</small>{{/show.priceFrom}}{{show.priceText}}</p>
-  <button type="button" class="pick pick-bar" data-pick="{{show.slug}}" aria-pressed="false" aria-label="เลือก {{show.th}}">
-    <svg class="icon icon-plus" aria-hidden="true"><use href="#i-plus"/></svg>
-    <svg class="icon icon-check" aria-hidden="true"><use href="#i-check"/></svg>
+<nav class="dock dock-show" aria-label="เลือกโชว์นี้">
+  <p class="dock-price">{{#show.priceFrom}}<small>เริ่มต้น</small>{{/show.priceFrom}}{{^show.priceFrom}}<small>ราคา</small>{{/show.priceFrom}}{{show.priceText}}</p>
+  <button type="button" class="dock-btn dock-pick" data-pick="{{show.slug}}" aria-pressed="false" aria-label="เลือก {{show.th}}">
+    <span class="pick-icon" aria-hidden="true"><svg class="icon icon-plus"><use href="#i-plus"/></svg><svg class="icon icon-check"><use href="#i-check"/></svg></span>
     <span data-pick-label>เลือก</span>
   </button>
-  <a class="mb-btn mb-line" href="{{site.contact.line}}" target="_blank" rel="noopener"><svg class="icon" aria-hidden="true"><use href="#i-line"/></svg><span>LINE</span></a>
-</div>
+  <button type="button" class="dock-btn dock-bag" data-sheet-open data-fly-target aria-label="รายการที่เลือก">
+    <svg class="icon" aria-hidden="true"><use href="#i-bag"/></svg>
+    <span class="badge badge-light" data-shortlist-count hidden>0</span>
+  </button>
+  <a class="dock-btn dock-line" href="{{site.contact.line}}" target="_blank" rel="noopener" aria-label="คุยทาง LINE"><svg class="icon" aria-hidden="true"><use href="#i-line"/></svg></a>
+</nav>

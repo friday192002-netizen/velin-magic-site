@@ -1,16 +1,23 @@
 <section class="page-hero" aria-labelledby="page-title">
+  <div class="page-aura" aria-hidden="true"></div>
   <div class="container">
     {{{crumbs}}}
-    <p class="kicker">GALLERY</p>
-    <h1 id="page-title">ภาพการแสดง</h1>
-    <p class="page-lede">{{totalPhotos}} ภาพตัวอย่างจากการแสดงจริง แยกตามรูปแบบโชว์ กดที่ภาพเพื่อดูขนาดเต็ม</p>
-    <div class="chips" role="group" aria-label="กรองภาพตามรูปแบบโชว์">{{{galleryChips}}}</div>
+    <div data-reveal>
+      <p class="kicker">GALLERY</p>
+      <h1 id="page-title">ภาพการแสดง</h1>
+      <p class="page-lede">{{photoCount}} ภาพจากงานจริง แยกตามรูปแบบโชว์ กดที่ภาพเพื่อดูขนาดเต็มและปัดดูภาพถัดไป</p>
+    </div>
   </div>
 </section>
 
-<div class="section section-tight">
-  <div class="container gallery-groups" data-gallery>{{{groups}}}</div>
-  <div class="container"><p class="fine">{{site.performer.photoCredit}}</p></div>
+<div class="section section-deep section-tight">
+  <div class="container">
+    <div class="chooser-bar chooser-bar-dark" data-sticky-bar>
+      <div class="chips" role="group" aria-label="กรองภาพตามรูปแบบโชว์">{{{galleryChips}}}</div>
+    </div>
+    <div class="gallery-groups" data-gallery>{{{groups}}}</div>
+    <p class="fine">{{site.performer.photoCredit}}</p>
+  </div>
 </div>
 
 {{> cta-band}}

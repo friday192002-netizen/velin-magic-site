@@ -1,14 +1,17 @@
 <section class="cta-band" aria-labelledby="cta-title">
-  <div class="container cta-inner">
-    <div>
-      <p class="kicker kicker-gold">LET’S MAKE IT YOURS</p>
-      <h2 id="cta-title">เล่ารายละเอียดงานของคุณ<br>แล้วเราจะช่วยเลือกโชว์ที่ใช่</h2>
-      <p class="cta-sub">ส่งรายการโชว์ที่เลือกไว้ วันงาน และจำนวนผู้ชม เพื่อรับใบเสนอราคาที่แน่นอน</p>
+  <div class="cta-aura" aria-hidden="true"></div>
+  <div class="container cta-inner" data-reveal>
+    <div class="cta-copy">
+      <p class="kicker">LET’S MAKE IT YOURS</p>
+      <h2 id="cta-title">ให้ช่วงเวลาสำคัญของงานคุณ<br><em>กลายเป็นเรื่องที่แขกเล่าต่อ</em></h2>
+      <p class="cta-sub">ส่งโชว์ที่เลือก วันงาน และจำนวนผู้ชม เราสรุประยะเวลา ทีม และราคาที่แน่นอนให้ก่อนจอง</p>
     </div>
     <div class="cta-actions">
-      <a class="btn btn-light btn-lg" href="/contact/">ขอใบเสนอราคา <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
-      <a class="btn btn-line btn-lg" href="{{site.contact.line}}" target="_blank" rel="noopener"><svg class="icon" aria-hidden="true"><use href="#i-line"/></svg> คุยทาง LINE</a>
-      <a class="cta-phone" href="tel:{{site.contact.telephone}}">หรือโทร {{site.contact.phone}}</a>
+      <a class="btn btn-gold btn-xl btn-block" href="/contact/">ขอใบเสนอราคา <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+      <div class="cta-row">
+        <a class="btn btn-line btn-lg" href="{{site.contact.line}}" target="_blank" rel="noopener"><svg class="icon" aria-hidden="true"><use href="#i-line"/></svg> LINE</a>
+        <a class="btn btn-glass btn-lg" href="tel:{{site.contact.telephone}}"><svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg> {{site.contact.phone}}</a>
+      </div>
     </div>
   </div>
 </section>

@@ -30,5 +30,5 @@
 ```bash
 python -m pip install --user Pillow
 python tools/build.py
-python -m http.server 4321 --directory public
+python tools/serve.py
 ```

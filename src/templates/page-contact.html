@@ -1,17 +1,27 @@
-<section class="page-hero" aria-labelledby="page-title">
+<section class="page-hero page-hero-compact" aria-labelledby="page-title">
+  <div class="page-aura" aria-hidden="true"></div>
   <div class="container">
     {{{crumbs}}}
-    <p class="kicker">REQUEST A QUOTE</p>
-    <h1 id="page-title">ขอใบเสนอราคา</h1>
-    <p class="page-lede">ตรวจรายการโชว์ที่เลือก กรอกรายละเอียดงานสั้น ๆ แล้วกดส่งทาง LINE เราจะสรุประยะเวลา ทีม และราคาที่แน่นอนให้</p>
+    <div class="contact-hero" data-reveal>
+      <div>
+        <p class="kicker">REQUEST A QUOTE</p>
+        <h1 id="page-title">ขอใบเสนอราคา</h1>
+        <p class="page-lede">ใช้เวลาไม่ถึง 1 นาที ตรวจโชว์ที่เลือก กรอกรายละเอียดงานสั้น ๆ แล้วส่งทาง LINE</p>
+      </div>
+      <ol class="stepper" aria-label="ขั้นตอน" data-stepper>
+        <li class="is-active"><span>1</span>โชว์ที่เลือก</li>
+        <li><span>2</span>รายละเอียดงาน</li>
+        <li><span>3</span>ส่งทาง LINE</li>
+      </ol>
+    </div>
   </div>
 </section>
 
-<section class="section section-tight">
+<section class="section section-linen section-tight">
   <div class="container contact-grid">
     <div class="contact-main">
 
-      <div class="panel" aria-labelledby="picked-title">
+      <div class="panel" aria-labelledby="picked-title" data-step="1">
         <div class="panel-head">
           <h2 id="picked-title" class="h-small"><span class="step-dot">1</span> โชว์ที่เลือกไว้</h2>
           <a class="link-arrow" href="/shows/">เพิ่ม / เปลี่ยนโชว์</a>
@@ -21,17 +31,17 @@
         </div>
       </div>
 
-      <form class="panel quote-form" data-quote-form novalidate aria-labelledby="form-title">
+      <form class="panel quote-form" data-quote-form novalidate aria-labelledby="form-title" data-step="2">
         <h2 id="form-title" class="h-small"><span class="step-dot">2</span> รายละเอียดงาน</h2>
         <div class="form-grid">
           <label class="field">
             <span class="field-label">ชื่อผู้ติดต่อ <b aria-hidden="true">*</b></span>
-            <input name="name" type="text" autocomplete="name" required>
+            <input name="name" type="text" autocomplete="name" required enterkeyhint="next">
             <span class="field-error" data-error></span>
           </label>
           <label class="field">
             <span class="field-label">เบอร์โทร <b aria-hidden="true">*</b></span>
-            <input name="phone" type="tel" autocomplete="tel" inputmode="tel" required>
+            <input name="phone" type="tel" autocomplete="tel" inputmode="tel" required enterkeyhint="next">
             <span class="field-error" data-error></span>
           </label>
           <label class="field">
@@ -48,40 +58,45 @@
           </label>
           <label class="field">
             <span class="field-label">สถานที่ / จังหวัด</span>
-            <input name="place" type="text" placeholder="เช่น โรงแรมในกรุงเทพฯ">
+            <input name="place" type="text" placeholder="เช่น โรงแรมในกรุงเทพฯ" enterkeyhint="next">
           </label>
           <label class="field">
             <span class="field-label">จำนวนผู้ชมโดยประมาณ</span>
-            <input name="guests" type="number" min="1" inputmode="numeric" placeholder="เช่น 150">
+            <input name="guests" type="number" min="1" inputmode="numeric" placeholder="เช่น 150" enterkeyhint="next">
           </label>
           <label class="field field-wide">
             <span class="field-label">รายละเอียดเพิ่มเติม</span>
             <textarea name="details" rows="3" placeholder="ธีมงาน ช่วงเวลาที่อยากให้แสดง หรือสิ่งที่อยากให้เกิดขึ้น"></textarea>
           </label>
         </div>
-        <button type="submit" class="btn btn-primary btn-lg btn-block">สร้างข้อความสำหรับส่ง <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></button>
-        <p class="fine">ข้อมูลจะถูกใช้สร้างข้อความในเบราว์เซอร์ของคุณเท่านั้น ไม่มีการส่งหรือบันทึกไว้บนเว็บไซต์ — <a href="/privacy/">อ่านเพิ่มเติม</a></p>
+        <button type="submit" class="btn btn-dark btn-xl btn-block">สร้างข้อความสำหรับส่ง <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+        <p class="fine">ข้อมูลใช้สร้างข้อความในเบราว์เซอร์ของคุณเท่านั้น ไม่มีการส่งหรือบันทึกไว้บนเว็บไซต์ — <a href="/privacy/">อ่านเพิ่มเติม</a></p>
       </form>
 
-      <div class="panel quote-output" data-quote-output hidden tabindex="-1" aria-labelledby="out-title">
-        <h2 id="out-title" class="h-small"><span class="step-dot">3</span> ส่งข้อความทาง LINE</h2>
-        <p>กด “คัดลอกและเปิด LINE” แล้ววางข้อความในแชทได้ทันที</p>
+      <div class="panel quote-output" data-quote-output hidden tabindex="-1" aria-labelledby="out-title" data-step="3">
+        <div class="out-head">
+          <span class="out-check" aria-hidden="true"><svg class="icon"><use href="#i-check"/></svg></span>
+          <div>
+            <h2 id="out-title" class="h-small">ข้อความพร้อมส่งแล้ว</h2>
+            <p>กด “คัดลอกและเปิด LINE” แล้ววางข้อความในแชทได้ทันที</p>
+          </div>
+        </div>
         <textarea class="message" readonly rows="10" data-quote-message aria-label="ข้อความที่จะส่ง"></textarea>
         <div class="out-actions">
-          <a class="btn btn-line btn-lg" href="{{site.contact.line}}" target="_blank" rel="noopener" data-copy-open><svg class="icon" aria-hidden="true"><use href="#i-line"/></svg> คัดลอกและเปิด LINE</a>
-          <button type="button" class="btn btn-ghost btn-lg" data-copy>คัดลอกข้อความ</button>
+          <a class="btn btn-line btn-xl" href="{{site.contact.line}}" target="_blank" rel="noopener" data-copy-open><svg class="icon" aria-hidden="true"><use href="#i-line"/></svg> คัดลอกและเปิด LINE</a>
+          <button type="button" class="btn btn-ghost btn-xl" data-copy>คัดลอกข้อความ</button>
         </div>
       </div>
     </div>
 
     <aside class="contact-side">
-      <div class="panel panel-night">
-        <p class="kicker kicker-gold">TALK TO US DIRECTLY</p>
-        <h2 class="h-small">คุยกับเราโดยตรง</h2>
+      <div class="panel panel-dark">
+        <p class="kicker">TALK TO US DIRECTLY</p>
+        <h2 class="h-small">อยากคุยก่อน? ได้เลย</h2>
         <a class="btn btn-line btn-lg btn-block" href="{{site.contact.line}}" target="_blank" rel="noopener"><svg class="icon" aria-hidden="true"><use href="#i-line"/></svg> LINE {{site.contact.lineName}}</a>
-        <a class="btn btn-outline-light btn-lg btn-block" href="tel:{{site.contact.telephone}}"><svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg> {{site.contact.phone}}</a>
-        <p class="fine fine-light">{{site.contact.note}}</p>
-        <div class="socials socials-light">
+        <a class="btn btn-glass btn-lg btn-block" href="tel:{{site.contact.telephone}}"><svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg> {{site.contact.phone}}</a>
+        <p class="fine fine-dark">{{site.contact.note}}</p>
+        <div class="socials">
           <a href="{{site.social.instagram}}" target="_blank" rel="noopener" aria-label="Instagram"><svg class="icon" aria-hidden="true"><use href="#i-ig"/></svg></a>
           <a href="{{site.social.facebook}}" target="_blank" rel="noopener" aria-label="Facebook"><svg class="icon" aria-hidden="true"><use href="#i-fb"/></svg></a>
           <a href="{{site.social.tiktok}}" target="_blank" rel="noopener" aria-label="TikTok"><svg class="icon" aria-hidden="true"><use href="#i-tt"/></svg></a>

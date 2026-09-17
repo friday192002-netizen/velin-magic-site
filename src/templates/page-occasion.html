@@ -1,25 +1,29 @@
 <section class="occ-hero" aria-labelledby="page-title">
+  <div class="page-aura" aria-hidden="true"></div>
   <div class="container">
     {{{crumbs}}}
     <div class="occ-hero-grid">
-      <div class="occ-hero-copy">
+      <div class="occ-hero-copy" data-reveal>
         <p class="kicker">{{occ.en}}</p>
         <h1 id="page-title">{{occ.seoTitle}}</h1>
         <p class="page-lede">{{occ.intro}}</p>
-        <p class="occ-meta"><strong>{{occ.count}} รูปแบบ</strong> ที่เหมาะกับ{{occ.label}} · เริ่มต้น <strong>{{occ.fromPrice}}</strong></p>
+        <ul class="occ-meta">
+          <li><strong>{{occ.count}}</strong> รูปแบบที่แนะนำ</li>
+          <li>เริ่มต้น <strong>{{occ.fromPrice}}</strong></li>
+        </ul>
         <div class="hero-actions">
-          <a class="btn btn-primary btn-lg" href="#recommended">ดูโชว์ที่แนะนำ</a>
-          <a class="btn btn-line btn-lg" href="{{site.contact.line}}" target="_blank" rel="noopener"><svg class="icon" aria-hidden="true"><use href="#i-line"/></svg> ปรึกษาทาง LINE</a>
+          <a class="btn btn-gold btn-xl" href="#recommended">ดูโชว์ที่แนะนำ <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+          <a class="btn btn-line btn-xl" href="{{site.contact.line}}" target="_blank" rel="noopener"><svg class="icon" aria-hidden="true"><use href="#i-line"/></svg> ปรึกษาทาง LINE</a>
         </div>
       </div>
-      <div class="occ-hero-media">{{{occ.coverImg}}}</div>
+      <div class="occ-hero-media" data-reveal>{{{occ.coverImg}}}</div>
     </div>
   </div>
 </section>
 
-<section class="section section-sand" aria-labelledby="why-title">
+<section class="section section-ivory" aria-labelledby="why-title">
   <div class="container">
-    <div class="section-head">
+    <div class="section-head section-head-center" data-reveal>
       <p class="kicker">WHY MAGIC WORKS HERE</p>
       <h2 id="why-title">มายากลช่วยงานของคุณอย่างไร</h2>
     </div>
@@ -27,9 +31,24 @@
   </div>
 </section>
 
-<section class="section" id="recommended" aria-labelledby="rec-title">
+{{#occ.flowHtml}}
+<section class="section section-dark" aria-labelledby="flow-title">
   <div class="container">
-    <div class="section-head section-head-row">
+    <div class="section-head section-head-row" data-reveal>
+      <div>
+        <p class="kicker">RUN OF SHOW</p>
+        <h2 id="flow-title">ไอเดียจัดลำดับโชว์สำหรับ{{occ.label}}</h2>
+        <p class="section-sub">ให้แต่ละช่วงของงานมีจังหวะของตัวเอง กดเลือกทั้งชุดแล้วส่งให้เราปรับให้พอดีกับกำหนดการ</p>
+      </div>
+    </div>
+    <div class="flow-card flow-card-dark" data-reveal>{{{occ.flowHtml}}}</div>
+  </div>
+</section>
+{{/occ.flowHtml}}
+
+<section class="section section-ivory" id="recommended" aria-labelledby="rec-title">
+  <div class="container">
+    <div class="section-head section-head-row" data-reveal>
       <div>
         <p class="kicker">RECOMMENDED SHOWS</p>
         <h2 id="rec-title">โชว์ที่แนะนำสำหรับ{{occ.label}}</h2>
@@ -41,18 +60,18 @@
   </div>
 </section>
 
-<section class="section section-sand" aria-labelledby="faq-title">
+<section class="section section-linen" aria-labelledby="faq-title">
   <div class="container faq-wrap">
-    <div class="section-head">
+    <div class="section-head" data-reveal>
       <p class="kicker">GOOD TO KNOW</p>
       <h2 id="faq-title">คำถามที่พบบ่อย</h2>
       <a class="link-arrow" href="/faq/">ดูคำถามทั้งหมด</a>
     </div>
-    <div class="faq-list">{{{faqHtml}}}</div>
+    <div class="faq-list" data-reveal>{{{faqHtml}}}</div>
   </div>
 </section>
 
-<section class="section" aria-labelledby="other-title">
+<section class="section section-deep section-compact" aria-labelledby="other-title">
   <div class="container">
     <h2 id="other-title" class="h-small">ดูโชว์สำหรับงานประเภทอื่น</h2>
     <ul class="pill-links">{{{occ.otherLinks}}}</ul>

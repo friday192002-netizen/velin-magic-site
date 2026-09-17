@@ -1,5 +1,5 @@
 {
-  "_help": "รูปแบบการแสดงทั้งหมด เรียงตามลำดับที่ต้องการให้แสดงบนเว็บ | price = ตัวเลขบาท | priceFrom = true จะขึ้นคำว่า 'เริ่มต้น' | occasions = รหัสจาก occasions.json | รูปภาพไม่ต้องใส่ที่นี่ ให้วางไฟล์ใน photos/shows/<slug>/ (ไฟล์ชื่อ cover.* คือภาพปก) | performedBy = velin (Velin แสดงเอง) หรือ team (Velin ร่วมกับทีมผู้เชี่ยวชาญ)",
+  "_help": "รูปแบบการแสดงทั้งหมด เรียงตามลำดับที่ต้องการให้แสดงบนเว็บ | price = ตัวเลขบาท | priceFrom = true จะขึ้นคำว่า 'เริ่มต้น' | occasions = รหัสจาก occasions.json | รูปภาพไม่ต้องใส่ที่นี่ ให้วางไฟล์ใน photos/shows/<slug>/ (ไฟล์ชื่อ cover.* คือภาพปก) | performedBy = velin (Velin แสดงเอง) หรือ team (Velin ร่วมกับทีมผู้เชี่ยวชาญ) | moods = บรรยากาศที่ใช้ในตัวช่วยหาโชว์ (รหัสจาก finder.moods ใน site.json)",
   "shows": [
     {
       "slug": "opening",
@@ -22,6 +22,10 @@
       "occasions": [
         "launch",
         "corporate"
+      ],
+      "moods": [
+        "stage",
+        "spectacle"
       ],
       "performedBy": "team",
       "prepare": [
@@ -56,6 +60,9 @@
         "wedding",
         "launch"
       ],
+      "moods": [
+        "intimate"
+      ],
       "performedBy": "velin",
       "prepare": [
         "ลักษณะการจัดโต๊ะหรือพื้นที่รับรองแขก",
@@ -89,6 +96,9 @@
         "festival",
         "wedding"
       ],
+      "moods": [
+        "stage"
+      ],
       "performedBy": "velin",
       "prepare": [
         "ขนาดเวทีและแนวสายตาของผู้ชม",
@@ -120,6 +130,9 @@
       "occasions": [
         "kids",
         "festival"
+      ],
+      "moods": [
+        "family"
       ],
       "performedBy": "team",
       "prepare": [
@@ -153,6 +166,9 @@
         "kids",
         "launch"
       ],
+      "moods": [
+        "family"
+      ],
       "performedBy": "team",
       "prepare": [
         "ความสูงและพื้นที่ว่างเหนือจุดแสดง",
@@ -183,6 +199,9 @@
       "occasions": [
         "kids",
         "festival"
+      ],
+      "moods": [
+        "family"
       ],
       "performedBy": "team",
       "prepare": [
@@ -216,6 +235,10 @@
         "corporate",
         "launch",
         "festival"
+      ],
+      "moods": [
+        "spectacle",
+        "stage"
       ],
       "performedBy": "team",
       "prepare": [

@@ -18,9 +18,10 @@ folder. There is no framework, no npm, and no build on Vercel.
 
 ```
 content/          ✏️  ALL text, prices, contact details, SEO copy (JSON)
-  site.json         brand, phone/LINE/socials, stats, process, performer copy
-  shows.json        the 7 show formats: price, copy, occasions, prep notes
-  occasions.json    the 5 event types → one landing page each
+  site.json         brand, phone/LINE/socials, stats, process, performer copy,
+                    finder moods, "why us" points
+  shows.json        the 7 show formats: price, copy, occasions, moods, prep notes
+  occasions.json    the 5 event types → one landing page each, plus a run-of-show `flow`
   faq.json          questions (also emitted as FAQPage structured data)
 photos/           📷  ORIGINAL images, any size (jpg/png/webp)
   shows/<slug>/     cover.* = card/hero image; every other file = gallery, sorted by filename
@@ -29,9 +30,11 @@ photos/           📷  ORIGINAL images, any size (jpg/png/webp)
 src/              🎨  design
   templates/        layout.html + page-*.html + partials (see "Templates")
   css/site.css      all styles; design tokens at the top
-  js/site.js        shortlist, filters, lightbox, video, quote composer
+  js/site.js        shortlist + sheet, finder, tabs, carousel, filters, lightbox,
+                    video, reveal/parallax motion, quote composer
   static/           copied to public/ as-is (favicon.svg)
 tools/build.py    ⚙️  content + photos + src → public/
+tools/serve.py    local preview server (use this, not `python -m http.server`)
 public/           🚫  GENERATED. Never edit by hand. Committed so Vercel can serve it.
 docs/             decisions and handoff notes
 archive/          old versions, read-only history — ignore unless asked
@@ -43,7 +46,7 @@ update-site.cmd   double-click on Windows: build + open local preview
 ```bash
 python -m pip install --user Pillow   # once per machine
 python tools/build.py                 # rebuild public/ (fast: only new photos are encoded)
-python -m http.server 4321 --directory public   # preview at http://localhost:4321
+python tools/serve.py                 # preview at http://localhost:4321
 ```
 
 Always run the build after changing `content/`, `photos/` or `src/`, and commit
@@ -87,7 +90,22 @@ the `occasions` array of the relevant shows, rebuild.
 
 **Change contact details** — `content/site.json` → `contact` / `social`.
 
-**Change the look** — tokens at the top of `src/css/site.css`; page structure in
+**Tune the show finder** (home page, "หาโชว์ที่ใช่ใน 2 ขั้นตอน") — step 1 lists
+the occasions; step 2 lists `site.json` → `finder.moods`. A show appears for a
+mood when its `moods` array in `shows.json` contains that mood's `slug`. The
+build stops with a Thai error if a show names a mood that doesn't exist.
+
+**Change a run-of-show idea** — `occasions.json` → `flow`: ordered
+`{moment, show, note}` steps. It renders as a timeline with the total price and
+a "เลือกทั้งชุด" button on the occasion page, in the tabs on the home and
+catalogue pages, and on each show page that appears in a flow.
+
+**Text tokens** — `{showCount}` and `{minPrice}` inside `site.json` → `stats`
+and `why` are replaced at build time, so counts and prices never go stale.
+
+**Change the look** — tokens at the top of `src/css/site.css` (espresso scale,
+champagne gradients, ivory/linen surfaces; `--gold-ink` for gold text on light
+backgrounds); page structure in
 `src/templates/`.
 
 ## Templates
@@ -109,7 +127,7 @@ Lists (cards, rows, FAQ) are assembled in `build.py` from partials such as
 
 | URL | Purpose | Structured data |
 | --- | --- | --- |
-| `/` | hero, occasions, all shows, process, performer, film, FAQ | EntertainmentBusiness, WebSite, FAQPage |
+| `/` | hero, show finder, all shows, occasions, why us, run-of-show tabs, performer, film, process, FAQ | EntertainmentBusiness, WebSite, FAQPage |
 | `/shows/` | catalogue: filter by occasion, cards, price table (171 Magic Club structure) | ItemList, BreadcrumbList |
 | `/shows/<slug>/` | one page per format: price, gallery, prep, related | Service + Offer, BreadcrumbList |
 | `/occasions/<slug>/` | landing page per event type | ItemList, BreadcrumbList |
@@ -126,12 +144,21 @@ a year (`vercel.json`).
 Occasion or catalogue → show page → **เลือก** (adds to a shortlist stored in
 `localStorage`, shown as a badge and toast on every page) → `/contact/` lists
 the shortlist with an estimated total → short form → generated message →
-**คัดลอกและเปิด LINE**. Nothing is sent to a server. Phones get a sticky bottom
-bar (LINE / call / quote; on show pages: price / เลือก / LINE).
+**คัดลอกและเปิด LINE**. Nothing is sent to a server. The bag button (header) and
+the dock open the shortlist sheet (bottom sheet on phones, drawer on desktop)
+from any page. The home finder and the run-of-show timelines are shortcuts into
+the same shortlist. Phones get a sticky bottom
+bar (LINE / call / shortlist; on show pages: price / เลือก / bag / LINE; hidden on
+`/contact/`, and on the home page until the hero buttons scroll away).
+
+Motion lives in `site.js` and CSS: `[data-reveal]` fades sections in (only when
+JS runs, so content never stays hidden), `[data-count]` counts stats up,
+`[data-parallax]` drifts the hero portrait. Everything honours
+`prefers-reduced-motion`.
 
 ## Before you finish
 
 - `python tools/build.py` completes without errors.
-- Pages open locally; no console errors; no horizontal scroll at 390px wide.
+- Pages open locally (`python tools/serve.py`); no console errors; no horizontal scroll at 390px wide.
 - If you changed copy: no invented facts (rule 3).
 - Commit `content/`/`photos/`/`src/` changes **with** the regenerated `public/`.

@@ -4,7 +4,10 @@
     {
       "name": "velin-site",
       "runtimeExecutable": "python",
-      "runtimeArgs": ["-m", "http.server", "4321", "--directory", "public"],
+      "runtimeArgs": [
+        "tools/serve.py",
+        "4321"
+      ],
       "port": 4321
     }
   ]
