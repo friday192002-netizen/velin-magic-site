@@ -1,3 +1,8 @@
 # Normalise to LF in the repo so Windows CRLF never shows up as a diff.
 * text=auto eol=lf
 *.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+# batch files misbehave with LF line endings
+*.cmd text eol=crlf

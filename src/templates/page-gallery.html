@@ -1,0 +1,16 @@
+<section class="page-hero" aria-labelledby="page-title">
+  <div class="container">
+    {{{crumbs}}}
+    <p class="kicker">GALLERY</p>
+    <h1 id="page-title">ภาพการแสดง</h1>
+    <p class="page-lede">{{totalPhotos}} ภาพตัวอย่างจากการแสดงจริง แยกตามรูปแบบโชว์ กดที่ภาพเพื่อดูขนาดเต็ม</p>
+    <div class="chips" role="group" aria-label="กรองภาพตามรูปแบบโชว์">{{{galleryChips}}}</div>
+  </div>
+</section>
+
+<div class="section section-tight">
+  <div class="container gallery-groups" data-gallery>{{{groups}}}</div>
+  <div class="container"><p class="fine">{{site.performer.photoCredit}}</p></div>
+</div>
+
+{{> cta-band}}

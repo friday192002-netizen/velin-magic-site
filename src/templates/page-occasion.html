@@ -1,0 +1,62 @@
+<section class="occ-hero" aria-labelledby="page-title">
+  <div class="container">
+    {{{crumbs}}}
+    <div class="occ-hero-grid">
+      <div class="occ-hero-copy">
+        <p class="kicker">{{occ.en}}</p>
+        <h1 id="page-title">{{occ.seoTitle}}</h1>
+        <p class="page-lede">{{occ.intro}}</p>
+        <p class="occ-meta"><strong>{{occ.count}} รูปแบบ</strong> ที่เหมาะกับ{{occ.label}} · เริ่มต้น <strong>{{occ.fromPrice}}</strong></p>
+        <div class="hero-actions">
+          <a class="btn btn-primary btn-lg" href="#recommended">ดูโชว์ที่แนะนำ</a>
+          <a class="btn btn-line btn-lg" href="{{site.contact.line}}" target="_blank" rel="noopener"><svg class="icon" aria-hidden="true"><use href="#i-line"/></svg> ปรึกษาทาง LINE</a>
+        </div>
+      </div>
+      <div class="occ-hero-media">{{{occ.coverImg}}}</div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-sand" aria-labelledby="why-title">
+  <div class="container">
+    <div class="section-head">
+      <p class="kicker">WHY MAGIC WORKS HERE</p>
+      <h2 id="why-title">มายากลช่วยงานของคุณอย่างไร</h2>
+    </div>
+    <ul class="points">{{{occ.pointsHtml}}}</ul>
+  </div>
+</section>
+
+<section class="section" id="recommended" aria-labelledby="rec-title">
+  <div class="container">
+    <div class="section-head section-head-row">
+      <div>
+        <p class="kicker">RECOMMENDED SHOWS</p>
+        <h2 id="rec-title">โชว์ที่แนะนำสำหรับ{{occ.label}}</h2>
+        <p class="section-sub">กด “เลือก” ได้หลายรายการ แล้วส่งรายการให้เราทีเดียว</p>
+      </div>
+      <a class="link-arrow" href="/shows/">ดูทุกรูปแบบ</a>
+    </div>
+    {{{occ.showGrid}}}
+  </div>
+</section>
+
+<section class="section section-sand" aria-labelledby="faq-title">
+  <div class="container faq-wrap">
+    <div class="section-head">
+      <p class="kicker">GOOD TO KNOW</p>
+      <h2 id="faq-title">คำถามที่พบบ่อย</h2>
+      <a class="link-arrow" href="/faq/">ดูคำถามทั้งหมด</a>
+    </div>
+    <div class="faq-list">{{{faqHtml}}}</div>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="other-title">
+  <div class="container">
+    <h2 id="other-title" class="h-small">ดูโชว์สำหรับงานประเภทอื่น</h2>
+    <ul class="pill-links">{{{occ.otherLinks}}}</ul>
+  </div>
+</section>
+
+{{> cta-band}}

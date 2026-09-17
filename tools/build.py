@@ -1,138 +1,526 @@
-"""Build crawlable static pages from content/ and templates/. Standard library only."""
-from pathlib import Path
-from html import escape
+#!/usr/bin/env python3
+"""
+Velin Magic — site builder.
+
+    content/  (text, prices, contact)  ┐
+    photos/   (original images)        ├──►  public/   (what Vercel serves)
+    src/      (templates, css, js)     ┘
+
+Run:   python tools/build.py
+Needs: Python 3.9+ and Pillow  (python -m pip install --user Pillow)
+
+Nothing in public/ is edited by hand: every file there is written by this script,
+and files this run did not produce are deleted at the end.
+"""
+
+from __future__ import annotations
+
+import datetime as dt
+import hashlib
+import html
 import json
 import re
-from datetime import date
+import shutil
+import sys
+from pathlib import Path
+
+try:
+    from PIL import Image, ImageOps
+except ImportError:  # pragma: no cover
+    sys.exit("ต้องติดตั้ง Pillow ก่อน:  python -m pip install --user Pillow")
 
 ROOT = Path(__file__).resolve().parents[1]
+CONTENT = ROOT / "content"
+PHOTOS = ROOT / "photos"
+SRC = ROOT / "src"
+OUT = ROOT / "public"
+
+IMAGE_EXT = {".jpg", ".jpeg", ".png", ".webp"}
+WEBP_QUALITY = 80
+TODAY = dt.date.today().isoformat()
+
+written: set[Path] = set()
 
 
-def build():
-    site = json.loads((ROOT / 'content/site.json').read_text(encoding='utf-8'))
-    shows = json.loads((ROOT / 'content/shows.json').read_text(encoding='utf-8'))
-    base = site['url'].rstrip('/')
-    e = lambda value: escape(str(value), quote=True)
-    pages = []
+# ─────────────────────────────────────────────────────────────── files
 
-    def template(name):
-        return (ROOT / f'templates/{name}.html').read_text(encoding='utf-8')
+def write(rel: str, data: str | bytes) -> None:
+    """Write into public/, touching the disk only when the bytes change."""
+    path = OUT / rel
+    written.add(path)
+    blob = data.encode("utf-8") if isinstance(data, str) else data
+    if path.exists() and path.read_bytes() == blob:
+        return
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_bytes(blob)
 
-    def photo(p, eager=False, css=''):
-        return f'<img class="{css}" src="{e(p["src"])}" width="{p["width"]}" height="{p["height"]}" alt="{e(p["alt"])}" loading="{"eager" if eager else "lazy"}" decoding="async"{chr(32)+"fetchpriority=\"high\"" if eager else ""}>'
 
-    def cta(text='คุยเรื่องงานของคุณ', selected=''):
-        return f'<a class="button button--dark" href="/contact/{"?shows="+e(selected) if selected else ""}">{text}<span aria-hidden="true">↗</span></a>'
+def short_hash(blob: bytes) -> str:
+    return hashlib.sha1(blob).hexdigest()[:8]
 
-    def card(s, select=False):
-        url = '/shows/' + s['slug'] + '/'
-        selection = f'<label class="select-show"><input type="checkbox" name="shortlist" value="{s["slug"]}" data-name="{e(s["name"])}"> เพิ่มในรายการที่สนใจ</label>' if select else ''
-        return f'''<article class="catalog-card" data-tags="{' '.join(s['tags'])}" data-slug="{s['slug']}">
-          <a class="card-photo" href="{url}" aria-label="ดูรายละเอียด {e(s['name'])}">{photo(s['cover'])}<span class="photo-arrow" aria-hidden="true">↗</span></a>
-          <div class="card-copy"><p class="eyebrow">{e(s['english'])}</p><h3><a href="{url}">{e(s['name'])}</a></h3><p>{e(s['tagline'])}</p>
-          <a class="card-details" href="{url}">ดูรูปแบบและรายละเอียด <span aria-hidden="true">→</span></a>{selection}</div></article>'''
 
-    def steps():
-        return '''<div class="journey"><div><span>01</span><h3>เลือกความรู้สึกที่อยากสร้าง</h3><p>ดูโชว์ตามประเภทงาน หรือให้เราช่วยแนะนำ</p></div><div><span>02</span><h3>เล่ารายละเอียดให้ฟัง</h3><p>วันงาน สถานที่ และจำนวนผู้ชมโดยประมาณ</p></div><div><span>03</span><h3>ออกแบบแล้วค่อยยืนยัน</h3><p>คุยรูปแบบ ทีม และใบเสนอราคาก่อนจอง</p></div></div>'''
+def load(name: str):
+    return json.loads((CONTENT / name).read_text(encoding="utf-8"))
 
-    def invite():
-        return f'''<section class="invitation section"><p class="eyebrow">LET’S MAKE IT YOURS</p><h2>ยังไม่แน่ใจว่าโชว์ไหน<br><em>เหมาะกับงานของคุณ?</em></h2><p>เริ่มจากบรรยากาศที่คุณอยากให้เกิดขึ้น แล้วเราจะช่วยเลือกรูปแบบให้</p>{cta('ให้เราช่วยแนะนำ')}<a class="quiet-link" href="tel:{site['telephone']}">หรือโทร {site['phone']}</a></section>'''
 
-    def faq(items):
-        return '<div class="questions">'+''.join(f'<details><summary>{e(q)}</summary><p>{e(a)}</p></details>' for q,a in items)+'</div>'
+# ─────────────────────────────────────────────────────────────── templates
+# {{key}} escaped · {{{key}}} raw HTML · {{> partial}} include
+# {{#key}}…{{/key}} shown when truthy · {{^key}}…{{/key}} shown when falsy
 
-    def render(path, title, description, content, section='', image='/assets/velin-hero.png', schema=None, noindex=False):
-        url = base + path
-        home = path == '/'
-        nav = ''.join(f'<a href="{href}"'+(' aria-current="page"' if section==key else '')+f'>{label}</a>' for href,label,key in [('/shows/','รูปแบบโชว์','shows'),('/about/','รู้จัก Velin','about'),('/gallery/','ภาพการแสดง','gallery')])
-        structured = [{'@context':'https://schema.org','@type':'WebPage','name':title,'description':description,'url':url,'inLanguage':'th','isPartOf':{'@id':base+'/#website'}}]
-        if home:
-            structured += [{'@context':'https://schema.org','@type':'WebSite','@id':base+'/#website','url':base+'/','name':'Velin Magic','inLanguage':'th'}, {'@context':'https://schema.org','@type':'Organization','@id':base+'/#organization','name':'Velin Magic','url':base+'/','telephone':site['phone'],'sameAs':[site['instagram'],site['facebook'],site['tiktok']]}]
+SECTION = re.compile(r"\{\{([#^])\s*([\w.]+)\s*\}\}(.*?)\{\{/\s*\2\s*\}\}", re.S)
+INCLUDE = re.compile(r"\{\{>\s*([\w-]+)\s*\}\}")
+VARIABLE = re.compile(r"\{\{\{\s*([\w.]+)\s*\}\}\}|\{\{\s*([\w.]+)\s*\}\}")
+_templates: dict[str, str] = {}
+
+
+def template(name: str) -> str:
+    if name not in _templates:
+        _templates[name] = (SRC / "templates" / f"{name}.html").read_text(encoding="utf-8")
+    return _templates[name]
+
+
+def lookup(ctx: dict, key: str):
+    cur = ctx
+    for part in key.split("."):
+        if isinstance(cur, dict) and part in cur:
+            cur = cur[part]
         else:
-            crumbs=[{'@type':'ListItem','position':1,'name':'หน้าหลัก','item':base+'/'}]
-            if path.startswith('/shows/') and path != '/shows/':
-                crumbs.append({'@type':'ListItem','position':2,'name':'รูปแบบโชว์','item':base+'/shows/'})
-            crumbs.append({'@type':'ListItem','position':len(crumbs)+1,'name':title.split(' | ')[0],'item':url})
-            structured.append({'@context':'https://schema.org','@type':'BreadcrumbList','itemListElement':crumbs})
-        if schema:
-            structured.append(schema)
-        footer_links=''.join(f'<a href="/shows/{s["slug"]}/">{e(s["name"])}</a>' for s in shows)
-        html=f'''<!doctype html>
-<html lang="th"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#211b17"><title>{e(title)}</title><meta name="description" content="{e(description)}">
-<meta name="robots" content="{'noindex,follow' if noindex else 'index,follow,max-image-preview:large'}"><link rel="canonical" href="{url}">
-<meta property="og:type" content="website"><meta property="og:locale" content="th_TH"><meta property="og:site_name" content="Velin Magic"><meta property="og:title" content="{e(title)}"><meta property="og:description" content="{e(description)}"><meta property="og:url" content="{url}"><meta property="og:image" content="{base+image}"><meta name="twitter:card" content="summary_large_image">
-<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&amp;family=IBM+Plex+Sans+Thai:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/css/site.css"><link rel="stylesheet" href="/assets/css/pages.css"><script src="/assets/js/site.js" defer></script><script src="/assets/js/catalog.js" defer></script>
-<script type="application/ld+json">{json.dumps(structured,ensure_ascii=False).replace('<', chr(92)+'u003c')}</script>
-</head><body class="{'home-page' if home else 'inner-page'}" id="top">
-<a class="skip" href="#main">ข้ามไปยังเนื้อหา</a>
-<header class="header" id="header"><a class="brand" href="/" aria-label="Velin — หน้าหลัก">velin<span class="brand-star" aria-hidden="true">✳</span></a><nav class="nav" id="navigation" aria-label="เมนูหลัก">{nav}<a class="nav-book" href="/contact/" {'aria-current="page"' if section=='contact' else ''}>คุยเรื่องงานของคุณ <span aria-hidden="true">↗</span></a></nav><button class="menu-toggle" type="button" aria-expanded="false" aria-controls="navigation"><span>เมนู</span><span class="menu-lines" aria-hidden="true"></span></button></header>
-<main id="main">{content}</main>
-<footer class="footer"><div class="footer-top"><a class="brand" href="/">velin<span class="brand-star" aria-hidden="true">✳</span></a><p>Make room for <em>wonder.</em></p><a class="back-top" href="#top" aria-label="กลับด้านบน">↑</a></div><div class="footer-sitemap"><div><p class="eyebrow">EXPLORE THE MAGIC</p><nav aria-label="รูปแบบการแสดง">{footer_links}</nav></div><div><p class="eyebrow">START A CONVERSATION</p><a href="tel:{site['telephone']}">{site['phone']}</a><a href="{site['line']}" target="_blank" rel="noopener noreferrer">LINE {site['lineName']} ↗</a><a href="/contact/">สอบถามวันว่างและรายละเอียดงาน →</a></div></div><div class="footer-bottom"><span>© <span id="year">{date.today().year}</span> VELIN MAGIC</span><nav aria-label="โซเชียลมีเดีย"><a href="{site['instagram']}" target="_blank" rel="noopener noreferrer">INSTAGRAM ↗</a><a href="{site['facebook']}" target="_blank" rel="noopener noreferrer">FACEBOOK ↗</a><a href="{site['tiktok']}" target="_blank" rel="noopener noreferrer">TIKTOK ↗</a></nav><a href="/privacy/">ความเป็นส่วนตัว</a></div></footer>
-<dialog id="media-dialog" class="media-dialog" aria-labelledby="media-title"><div class="media-shell"><button class="dialog-close" type="button" aria-label="ปิดหน้าต่าง" autofocus>×</button><h2 id="media-title">ภาพการแสดง</h2><div id="media-content"></div><p id="media-caption"></p></div></dialog>
-</body></html>'''
-        dest=ROOT/('index.html' if home else path.strip('/')+'/index.html')
-        dest.parent.mkdir(parents=True,exist_ok=True)
-        dest.write_text(html,encoding='utf-8')
-        if not noindex: pages.append(path)
+            return None
+    return cur
 
-    def intro(eyebrow,title,description):
-        return f'<section class="page-intro section"><p class="eyebrow">{eyebrow}</p><h1>{title}</h1><p class="intro-description">{description}</p></section>'
 
-    hero=template('hero').replace('id="top"','id="hero"')
-    hero=hero.replace('ค้นพบการแสดง','ค้นหาโชว์ที่ใช่').replace('Stage magic. Close-up. Your moment.','YOUR OCCASION. YOUR KIND OF MAGIC.')
-    home=hero+f'''<section class="section home-discover"><div class="section-kicker"><span>01 / FIND YOUR MAGIC</span><span>YOUR MOMENT STARTS HERE</span></div><div class="section-title"><div><p class="eyebrow">การแสดงที่เข้ากับงานของคุณ</p><h2>One occasion.<br><em>Many possibilities.</em></h2></div><p>จากความมหัศจรรย์ใกล้แค่ปลายนิ้ว<br>ถึงช่วงเวลาที่สะกดทั้งเวที</p></div><div class="occasion-links">{''.join(f'<a href="/shows/?occasion={key}">{label}<span>↗</span></a>' for key,label in site['categories'].items())}</div><div class="catalog-grid home-grid">{''.join(card(next(s for s in shows if s['slug']==slug)) for slug in ['stage','closeup','opening'])}</div><div class="section-end"><p>7 รูปแบบการแสดง · เลือกให้ตรงกับผู้ชมและบรรยากาศ</p><a class="line-link" href="/shows/">สำรวจการแสดงทั้งหมด ↗</a></div></section>'''
-    home+=template('artist').replace('01 / THE ARTIST','02 / THE ARTIST').replace('</div></div></div>','<a class="line-link" href="/about/">รู้จักตัวตนของ Velin ↗</a></div></div></div>')
-    home+=template('film')+f'<section class="section planning"><p class="eyebrow">SIMPLE FROM THE FIRST HELLO</p><h2>จากไอเดียของคุณ<br>สู่ช่วงเวลาที่น่าจดจำ</h2>{steps()}</section>'+invite()
-    render('/','Velin Magic | นักมายากลและการแสดงสำหรับงานพิเศษ','ค้นพบการแสดงมายากลของ Velin ทั้งมายากลเวที โคลสอัพ และรูปแบบโชว์สำหรับงานบริษัท งานแต่ง เปิดตัวสินค้า และครอบครัว พร้อมคุยรายละเอียดงานโดยตรง',home)
+def render(tpl: str, ctx: dict) -> str:
+    while True:
+        out = SECTION.sub(
+            lambda m: m.group(3) if bool(lookup(ctx, m.group(2))) == (m.group(1) == "#") else "", tpl)
+        if out == tpl:
+            break
+        tpl = out
+    tpl = INCLUDE.sub(lambda m: render(template(m.group(1)), ctx), tpl)
 
-    filters='<div class="filter-bar" role="group" aria-label="เลือกตามประเภทงาน"><button type="button" class="filter-chip" data-filter="all" aria-pressed="true">ทั้งหมด</button>'+''.join(f'<button type="button" class="filter-chip" data-filter="{k}" aria-pressed="false">{v}</button>' for k,v in site['categories'].items())+'</div>'
-    catalog=intro('THE PERFORMANCE COLLECTION','เลือกโชว์ที่ใช่<br><em>สำหรับช่วงเวลาของคุณ</em>','ไม่ต้องรู้จักมายากลทุกแบบ เริ่มจากประเภทงาน แล้วค่อยค้นหาการแสดงที่เข้ากับคุณ')
-    catalog+=f'''<section class="section catalog-section" aria-label="รายการการแสดง"><div class="catalog-toolbar"><p>งานของคุณเป็นแบบไหน?</p><a href="/contact/">ยังไม่แน่ใจ ให้เราช่วยเลือก ↗</a></div>{filters}<p id="filter-status" class="result-count" role="status">ทั้งหมด 7 รูปแบบการแสดง</p><div class="catalog-grid" id="show-catalog">{''.join(card(s,True) for s in shows)}</div><p class="image-note">ภาพประกอบรูปแบบการแสดงจากคลัง 171 Magic Club · ทีมและรายละเอียดของแต่ละงานจะยืนยันก่อนจอง</p></section>
-    <section class="section planning"><p class="eyebrow">A LITTLE GUIDANCE</p><h2>เลือกง่ายขึ้น<br>เมื่อเริ่มจากบรรยากาศ</h2><div class="guidance-grid"><article><span>01 / CONNECTION</span><h3>อยากให้แขกได้คุยและมีส่วนร่วม</h3><p>โคลสอัพเข้าไปสร้างความสนุกถึงวงสนทนา เหมาะกับช่วงต้อนรับหรืองานที่แขกอยู่หลายโต๊ะ</p><a class="line-link" href="/shows/closeup/">ดูมายากลโคลสอัพ →</a></article><article><span>02 / ATTENTION</span><h3>อยากให้ทุกสายตาหันมาที่เวที</h3><p>เลือกมายากลเวทีหรือโชว์เปิดตัว เพื่อสร้างจังหวะสำคัญที่ทุกคนรับชมพร้อมกัน</p><a class="line-link" href="/shows/stage/">ดูมายากลเวที →</a></article><article><span>03 / PLAYFULNESS</span><h3>อยากให้เด็กและครอบครัวสนุกด้วยกัน</h3><p>บับเบิ้ล จั๊กกลิ้ง และลูกโป่ง เพิ่มสีสันให้พื้นที่กิจกรรมด้วยทีมที่เหมาะกับรูปแบบงาน</p><a class="line-link" href="/shows/?occasion=kids">ดูโชว์สำหรับครอบครัว →</a></article></div></section>{invite()}
-    <aside class="shortlist-bar" id="shortlist-bar" aria-label="รายการที่สนใจ" hidden><div><strong id="shortlist-count">เลือกแล้ว 0 โชว์</strong><p id="shortlist-names"></p></div><button type="button" id="clear-shortlist">ล้างรายการ</button><a class="button button--dark" id="shortlist-contact" href="/contact/">คุยรายละเอียด <span>↗</span></a></aside>'''
-    render('/shows/','รูปแบบการแสดงมายากล 7 ประเภท | Velin Magic','เลือกโชว์ตามลักษณะงาน: มายากลเปิดตัว โคลสอัพ มายากลเวที บับเบิ้ล จั๊กกลิ้ง โบโซ่และลูกโป่ง หรืออิลลูชัน ดูภาพและรายละเอียดก่อนคุยเรื่องงาน',catalog,'shows',shows[0]['cover']['src'],{'@context':'https://schema.org','@type':'ItemList','itemListElement':[{'@type':'ListItem','position':i+1,'url':base+'/shows/'+s['slug']+'/','name':s['name']} for i,s in enumerate(shows)]})
+    def var(m):
+        raw_key, esc_key = m.group(1), m.group(2)
+        value = lookup(ctx, raw_key or esc_key)
+        if value is None:
+            return ""
+        return str(value) if raw_key else html.escape(str(value), quote=True)
 
+    return VARIABLE.sub(var, tpl)  # single pass: inserted values are never re-parsed
+
+
+def fragment(name: str, ctx: dict, **extra) -> str:
+    return render(template(name), {**ctx, **extra})
+
+
+# ─────────────────────────────────────────────────────────────── images
+
+class Photo:
+    """One source image and the responsive WebP files built from it."""
+
+    def __init__(self, source: Path, alt: str, widths=(480, 960, 1600)):
+        self.source = source
+        self.alt = alt
+        blob = source.read_bytes()
+        digest = short_hash(blob)
+        with Image.open(source) as im:
+            im = ImageOps.exif_transpose(im)
+            self.width, self.height = im.size
+            keep_alpha = im.mode in ("RGBA", "LA") or "transparency" in im.info
+            im = im.convert("RGBA" if keep_alpha else "RGB")
+
+            rel_dir = source.parent.relative_to(PHOTOS).as_posix()
+            stem = re.sub(r"[^a-z0-9-]+", "-", source.stem.lower()).strip("-") or "image"
+            self.variants: list[tuple[int, str]] = []
+            for w in sorted({min(w, self.width) for w in widths}):
+                rel = f"img/{rel_dir}/{stem}-{digest}-{w}.webp"
+                target = OUT / rel
+                written.add(target)
+                if not target.exists():
+                    target.parent.mkdir(parents=True, exist_ok=True)
+                    frame = im if w == self.width else im.resize((w, round(self.height * w / self.width)), Image.LANCZOS)
+                    frame.save(target, "WEBP", quality=WEBP_QUALITY, method=5)
+                self.variants.append((w, "/" + rel))
+        self.digest = digest
+
+    def url(self, target_width: int = 960) -> str:
+        fit = [u for w, u in self.variants if w >= target_width]
+        return fit[0] if fit else self.variants[-1][1]
+
+    @property
+    def largest(self) -> str:
+        return self.variants[-1][1]
+
+    def tag(self, sizes: str, cls: str = "", eager: bool = False, alt: str | None = None) -> str:
+        srcset = ", ".join(f"{u} {w}w" for w, u in self.variants)
+        attrs = [
+            f'src="{self.url(960)}"',
+            f'srcset="{srcset}"',
+            f'sizes="{sizes}"',
+            f'width="{self.width}" height="{self.height}"',
+            f'alt="{html.escape(alt if alt is not None else self.alt, quote=True)}"',
+            'loading="eager" fetchpriority="high"' if eager else 'loading="lazy"',
+            'decoding="async"',
+        ]
+        if cls:
+            attrs.insert(0, f'class="{cls}"')
+        return "<img " + " ".join(attrs) + ">"
+
+    def og(self, name: str) -> str:
+        """1200×630 JPEG for link previews — social platforms still reject WebP."""
+        rel = f"og/{name}-{self.digest}.jpg"
+        target = OUT / rel
+        written.add(target)
+        if not target.exists():
+            target.parent.mkdir(parents=True, exist_ok=True)
+            with Image.open(self.source) as im:
+                im = ImageOps.exif_transpose(im).convert("RGB")
+                ImageOps.fit(im, (1200, 630), Image.LANCZOS, centering=(0.5, 0.4)).save(
+                    target, "JPEG", quality=84, optimize=True, progressive=True)
+        return "/" + rel
+
+
+def show_photos(slug: str, show_name: str, cover_alt: str) -> tuple[Photo, list[Photo]]:
+    folder = PHOTOS / "shows" / slug
+    files = sorted(p for p in folder.iterdir() if p.suffix.lower() in IMAGE_EXT) if folder.exists() else []
+    if not files:
+        sys.exit(f"ไม่พบรูปของโชว์ '{slug}' — วางรูปไว้ที่ photos/shows/{slug}/ (อย่างน้อย cover.jpg)")
+    covers = [p for p in files if p.stem.lower() == "cover"]
+    cover_file = covers[0] if covers else files[0]
+    cover = Photo(cover_file, cover_alt)
+    gallery = [
+        Photo(p, f"ภาพตัวอย่างการแสดง{show_name} ภาพที่ {i}")
+        for i, p in enumerate((p for p in files if p != cover_file), start=1)
+    ]
+    return cover, gallery
+
+
+# ─────────────────────────────────────────────────────────────── helpers
+
+def baht(n: int) -> str:
+    return "฿" + f"{n:,}"
+
+
+def fit(text: str, limit: int = 155) -> str:
+    """Trim a meta description to what search results show, at a word boundary."""
+    text = " ".join(text.split())
+    if len(text) <= limit:
+        return text
+    cut = text.rfind(" ", 0, limit - 1)
+    return text[: cut if cut > limit * 0.6 else limit - 1].rstrip(" ,") + "…"
+
+
+def jsonld(*objects) -> str:
+    blocks = []
+    for obj in objects:
+        data = json.dumps(obj, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
+        blocks.append(f'<script type="application/ld+json">{data}</script>')
+    return "".join(blocks)
+
+
+def breadcrumb(site: dict, trail: list[tuple[str, str]]) -> tuple[str, dict]:
+    items = [("หน้าแรก", "/")] + trail
+    crumbs = "".join(
+        (f'<li><a href="{u}">{html.escape(t)}</a></li>' if i < len(items) - 1
+         else f'<li aria-current="page">{html.escape(t)}</li>')
+        for i, (t, u) in enumerate(items))
+    nav = f'<nav class="crumbs" aria-label="เส้นทาง"><ol>{crumbs}</ol></nav>'
+    data = {
+        "@context": "https://schema.org", "@type": "BreadcrumbList",
+        "itemListElement": [
+            {"@type": "ListItem", "position": i + 1, "name": t, "item": site["url"] + u}
+            for i, (t, u) in enumerate(items)],
+    }
+    return nav, data
+
+
+# ─────────────────────────────────────────────────────────────── build
+
+def build() -> None:
+    site = load("site.json")
+    shows = load("shows.json")["shows"]
+    occasions = load("occasions.json")["occasions"]
+    faqs = load("faq.json")["faq"]
+    base = site["url"].rstrip("/")
+    OUT.mkdir(exist_ok=True)
+
+    # ── static assets, fingerprinted so they can be cached for a year
+    css = (SRC / "css" / "site.css").read_bytes()
+    js = (SRC / "js" / "site.js").read_bytes()
+    css_url = f"/assets/site.{short_hash(css)}.css"
+    js_url = f"/assets/site.{short_hash(js)}.js"
+    write(css_url[1:], css)
+    write(js_url[1:], js)
+    for f in (SRC / "static").iterdir():
+        if f.is_file():
+            write(f.name, f.read_bytes())
+
+    # ── photos
+    hero = Photo(PHOTOS / "velin" / "hero-cutout.png",
+                 "Velin นักมายากลในสูทสีน้ำตาลและหน้ากากครึ่งใบ พร้อมนกพิราบขาวสองตัว",
+                 widths=(640, 1000, 1750))
+    portrait = Photo(PHOTOS / "velin" / "portrait-card.webp",
+                     "ภาพวาด Velin บนไพ่แจ็กโพดำ", widths=(480, 1005))
+    film_poster = Photo(PHOTOS / "site" / "opening.webp", "นักมายากลบนเวทีและผู้ชมในงาน", widths=(640, 1200))
+
+    occ_by_slug = {o["slug"]: o for o in occasions}
+    for i, s in enumerate(shows, start=1):
+        s["num"] = f"{i:02d}"
+        s["url"] = f"/shows/{s['slug']}/"
+        s["priceText"] = baht(s["price"])
+        s["tags"] = " ".join(s["occasions"])
+        s["performedLabel"] = "แสดงโดย Velin" if s["performedBy"] == "velin" else "Velin ร่วมกับทีมผู้เชี่ยวชาญ"
+        s["cover"], s["gallery"] = show_photos(s["slug"], s["th"], s["coverAlt"])
+        unknown = [o for o in s["occasions"] if o not in occ_by_slug]
+        if unknown:
+            sys.exit(f"shows.json: โชว์ '{s['slug']}' อ้างถึงประเภทงานที่ไม่มีใน occasions.json: {unknown}")
+
+    for o in occasions:
+        o["url"] = f"/occasions/{o['slug']}/"
+        o["shows"] = [s for s in shows if o["slug"] in s["occasions"]]
+        o["count"] = len(o["shows"])
+        cover_show = next((s for s in shows if s["slug"] == o.get("coverShow")), None) or (o["shows"] or shows)[0]
+        o["cover"] = cover_show["cover"]
+
+    min_price = min(s["price"] for s in shows)
+
+    # data the browser needs for the shortlist (prices live in one place: content/)
+    show_data = json.dumps(
+        [{"slug": s["slug"], "th": s["th"], "en": s["en"], "price": s["price"],
+          "from": s["priceFrom"], "url": s["url"], "thumb": s["cover"].url(480)} for s in shows],
+        ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
+
+    organization = {
+        "@context": "https://schema.org", "@type": "EntertainmentBusiness",
+        "@id": base + "/#business", "name": site["name"], "url": base + "/",
+        "description": site["description"], "telephone": site["contact"]["telephone"],
+        "areaServed": {"@type": "Country", "name": site["areaServed"]},
+        "priceRange": f"{baht(min_price)}+", "image": base + shows[0]["cover"].og("home"),
+        "sameAs": list(site["social"].values()),
+    }
+
+    common = {
+        "site": site, "cssUrl": css_url, "jsUrl": js_url, "showData": show_data, "year": dt.date.today().year,
+        "navOccasions": "".join(f'<li><a href="{o["url"]}">{html.escape(o["label"])}</a></li>' for o in occasions),
+        "footerShows": "".join(f'<li><a href="{s["url"]}">{html.escape(s["th"])}</a></li>' for s in shows),
+        "footerOccasions": "".join(f'<li><a href="{o["url"]}">{html.escape(o["label"])}</a></li>' for o in occasions),
+        "minPrice": baht(min_price), "showCount": len(shows),
+    }
+
+    sitemap: list[str] = []
+
+    def card(s: dict, heading: str = "h3") -> str:
+        return fragment("show-card", common, show={**s, "coverImg": s["cover"].tag(
+            "(max-width: 640px) 92vw, (max-width: 1024px) 46vw, 380px", cls="card-img")}, heading=heading)
+
+    def cards(items: list[dict], heading: str = "h3") -> str:
+        return "".join(card(s, heading) for s in items)
+
+    def show_grid(items: list[dict], heading: str = "h3", attrs: str = "") -> str:
+        """Pick the column count that leaves no orphan card, adding the
+        'not sure yet?' card when one extra tile is what evens the rows."""
+        n = len(items)
+        cols, help_card = 3, False
+        for c, extra in ((4, False), (3, False), (4, True), (3, True), (2, False), (2, True)):
+            if (n + extra) % c == 0 and (n + extra) >= c:
+                cols, help_card = c, extra
+                break
+        inner = cards(items, heading) + (fragment("help-card", common) if help_card else "")
+        return f'<div class="card-grid card-grid-{cols}"{attrs}>{inner}</div>'
+
+    def chips(active: str = "all") -> str:
+        out = [f'<button type="button" class="chip" data-filter="all" aria-pressed="{str(active == "all").lower()}">ทั้งหมด</button>']
+        out += [f'<button type="button" class="chip" data-filter="{o["slug"]}" aria-pressed="false">{html.escape(o["label"])}</button>'
+                for o in occasions]
+        return "".join(out)
+
+    def faq_html(items: list[dict]) -> str:
+        return "".join(
+            f'<details class="faq-item"><summary><span>{html.escape(f["q"])}</span><span class="faq-icon" aria-hidden="true"></span></summary>'
+            f'<div class="faq-answer"><p>{html.escape(f["a"])}</p></div></details>' for f in items)
+
+    def faq_ld(items: list[dict]) -> dict:
+        return {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [
+            {"@type": "Question", "name": f["q"], "acceptedAnswer": {"@type": "Answer", "text": f["a"]}} for f in items]}
+
+    process_html = "".join(
+        f'<li class="step"><span class="step-n">{i:02d}</span><h3>{html.escape(p["title"])}</h3><p>{html.escape(p["text"])}</p></li>'
+        for i, p in enumerate(site["process"], start=1))
+    stats_html = "".join(
+        f'<div class="stat"><dt>{html.escape(x["label"])}</dt><dd>{html.escape(x["value"])}</dd></div>' for x in site["stats"])
+    common.update(processHtml=process_html, statsHtml=stats_html,
+                  performerParagraphs="".join(f"<p>{html.escape(p)}</p>" for p in site["performer"]["paragraphs"]),
+                  portraitImg=portrait.tag("(max-width: 800px) 70vw, 420px", cls="portrait-img"))
+
+    def page(path: str, title: str, description: str, body: str, *, og_image: str,
+             ld: list | None = None, body_class: str = "", mobile_bar: str = "default",
+             index: bool = True, full_title: bool = False) -> None:
+        canonical = base + path
+        ctx = {
+            **common,
+            "page": {
+                "title": title if full_title else f"{title} | {site['name']}",
+                "description": description, "canonical": canonical,
+                "ogImage": base + og_image, "bodyClass": body_class,
+                "robots": "index,follow,max-image-preview:large" if index else "noindex,follow",
+                "jsonld": jsonld(*(ld or [])),
+            },
+            "content": body,
+            "mobileBarDefault": mobile_bar == "default",
+        }
+        rel = "index.html" if path == "/" else path.strip("/") + "/index.html"
+        if path == "/404.html":
+            rel = "404.html"
+        write(rel, render(template("layout"), ctx))
+        if index:
+            sitemap.append(canonical)
+
+    # ── home
+    home_occ = "".join(fragment("occasion-tile", common, occ={
+        **o, "img": o["cover"].tag("(max-width: 640px) 46vw, 240px", cls="tile-img")}) for o in occasions)
+    home = fragment("page-home", common,
+                    heroImg=hero.tag("(max-width: 720px) 130vw, (max-width: 1100px) 70vw, 58vw", cls="hero-portrait", eager=True),
+                    heroPreload=hero.url(1000),
+                    occasionTiles=home_occ, showGrid=show_grid(shows),
+                    faqHtml=faq_html([f for f in faqs if f.get("home")]),
+                    filmPoster=film_poster.tag("(max-width: 900px) 92vw, 560px", cls="film-img"))
+    page("/", f"{site['name']} — รับแสดงมายากล งานบริษัท งานเปิดตัว งานแต่ง และงานเด็ก",
+         fit(site["description"]), home, og_image=shows[0]["cover"].og("home"),
+         ld=[organization, {"@context": "https://schema.org", "@type": "WebSite", "name": site["name"], "url": base + "/"},
+             faq_ld([f for f in faqs if f.get("home")])],
+         body_class="has-dark-hero", full_title=True)
+
+    # ── catalogue (the 171 Magic Club structure)
+    crumbs, crumbs_ld = breadcrumb(site, [("รูปแบบการแสดง", "/shows/")])
+    price_rows = "".join(fragment("price-row", common, show=s) for s in shows)
+    catalogue = fragment("page-shows", common, crumbs=crumbs, chips=chips(), showGrid=show_grid(shows, "h2", " data-filter-grid"),
+                         priceRows=price_rows)
+    item_list = {"@context": "https://schema.org", "@type": "ItemList", "name": "รูปแบบการแสดงมายากล",
+                 "itemListElement": [{"@type": "ListItem", "position": i + 1, "url": base + s["url"], "name": s["th"]}
+                                     for i, s in enumerate(shows)]}
+    page("/shows/", f"รูปแบบการแสดงมายากล {len(shows)} แบบ พร้อมราคา",
+         f"เปรียบเทียบการแสดงมายากล {len(shows)} รูปแบบ ตั้งแต่มายากลโคลสอัพ มายากลเวที บับเบิ้ลโชว์ ไปจนถึงอิลลูชัน ราคาเริ่มต้น {baht(min_price)} เลือกตามประเภทงานได้ทันที",
+         catalogue, og_image=shows[2]["cover"].og("shows"), ld=[item_list, crumbs_ld])
+
+    # ── one page per show
     for s in shows:
-        credit='การแสดงในแนวทางของ Velin · ยืนยันรายละเอียดตามงาน' if s['delivery']=='velin' else 'รูปแบบที่ประสานทีมร่วมแสดง · ยืนยันนักแสดงและความพร้อมตามงาน'
-        questions=[('โชว์นี้เหมาะกับงานแบบไหน?', 'เหมาะกับ'+ ' / '.join(s['occasions'])+' โดยจะปรับรูปแบบร่วมกันตามสถานที่และผู้ชม'),('ใช้เวลาและพื้นที่เท่าไร?', 'ระยะเวลา พื้นที่ อุปกรณ์ และเวลาติดตั้งจะสรุปให้เหมาะกับสถานที่จริง กรุณาแจ้งกำหนดการและข้อจำกัดของงานก่อนยืนยัน'),('ขอรายละเอียดและจองอย่างไร?', 'เลือกการแสดงนี้แล้วแจ้งวันจัดงาน สถานที่ และจำนวนผู้ชม เราจะตรวจสอบวันว่างและส่งรายละเอียดพร้อมใบเสนอราคาให้พิจารณา')]
-        gallery=''.join(f'<button class="gallery-item detail-photo" type="button" aria-label="ขยายภาพ {e(s["name"])} {i+1}" data-caption="{e(p["credit"])}">{photo(p)}</button>' for i,p in enumerate(s['gallery']))
-        detail=f'''<div class="breadcrumbs"><a href="/">หน้าหลัก</a><span>/</span><a href="/shows/">รูปแบบโชว์</a><span>/</span><span>{e(s['name'])}</span></div>
-        <section class="detail-hero"><div class="detail-copy"><p class="eyebrow">{e(s['english'])}</p><h1>{e(s['name'])}</h1><p class="detail-tagline">{e(s['tagline'])}</p><div class="detail-tags">{''.join(f'<span>{site["categories"][t]}</span>' for t in s['tags'])}</div>{cta('สนใจการแสดงนี้',s['slug'])}<a class="quiet-link" href="#show-details">อ่านรายละเอียด ↓</a><p class="delivery-note">{credit}</p></div><figure class="detail-cover">{photo(s['cover'],True)}<figcaption>ภาพประกอบรูปแบบการแสดง · 171 Magic Club</figcaption></figure></section>
-        <section class="section detail-body" id="show-details"><div><p class="eyebrow">THE EXPERIENCE</p><h2>{e(s['highlight'])}</h2>{''.join('<p>'+e(p)+'</p>' for p in s['description'])}<h3>เหมาะกับโอกาสแบบไหน</h3><ul class="fits-list">{''.join('<li>'+e(p)+'</li>' for p in s['occasions'])}</ul></div><aside class="planning-note"><p class="eyebrow">BEFORE THE SHOW</p><h3>เตรียมข้อมูลเท่านี้<br>ก็เริ่มคุยกันได้</h3><ul>{''.join('<li>'+e(p)+'</li>' for p in s['preparation'])}</ul><p>รูปแบบ นักแสดง อุปกรณ์ และรายละเอียดงานจะสรุปร่วมกันก่อนยืนยันการจอง</p>{cta('เช็กวันว่างและคุยรายละเอียด',s['slug'])}</aside></section>
-        <section class="section detail-gallery"><div class="section-title"><h2>A closer <em>look.</em></h2><p>ภาพประกอบการแสดงจากคลัง 171 Magic Club<br>กดที่ภาพเพื่อดูขนาดใหญ่</p></div><div class="photo-grid">{gallery}</div></section>
-        <section class="section detail-faq"><div><p class="eyebrow">GOOD TO KNOW</p><h2>คำถามก่อนจอง</h2></div>{faq(questions)}</section>
-        <section class="section related"><div class="section-title"><h2>You may <em>also like.</em></h2><a class="line-link" href="/shows/">กลับไปดูทั้งหมด →</a></div><div class="catalog-grid">{''.join(card(other) for other in sorted([x for x in shows if x['slug']!=s['slug']],key=lambda x:-len(set(x['tags'])&set(s['tags'])))[:3])}</div></section>{invite()}'''
-        render('/shows/'+s['slug']+'/',s['name']+' สำหรับงานอีเวนต์และโอกาสพิเศษ | Velin Magic',s['tagline']+' ดูภาพ รูปแบบงานที่เหมาะสม และข้อมูลที่ควรเตรียมก่อนสอบถามการแสดงกับ Velin',detail,'shows',s['cover']['src'],{'@context':'https://schema.org','@type':'Service','name':s['name'],'description':s['tagline'],'url':base+'/shows/'+s['slug']+'/','serviceType':s['english']})
+        crumbs, crumbs_ld = breadcrumb(site, [("รูปแบบการแสดง", "/shows/"), (s["th"], s["url"])])
+        related = sorted((x for x in shows if x is not s),
+                         key=lambda x: -len(set(x["occasions"]) & set(s["occasions"])))[:3]
+        gallery = "".join(
+            f'<a class="gallery-item" href="{p.largest}" data-lightbox="{s["slug"]}" data-caption="{html.escape(p.alt, quote=True)}">'
+            f'{p.tag("(max-width: 640px) 46vw, (max-width: 1024px) 31vw, 300px", alt=p.alt)}</a>'
+            for p in [s["cover"], *s["gallery"]])
+        body = fragment("page-show", common, crumbs=crumbs, show={
+            **s,
+            "coverImg": s["cover"].tag("(max-width: 900px) 100vw, 640px", cls="show-hero-img", eager=True),
+            "bodyHtml": "".join(f"<p>{html.escape(t)}</p>" for t in s["body"]),
+            "fitsHtml": "".join(f"<li>{html.escape(t)}</li>" for t in s["fits"]),
+            "occasionLinks": "".join(f'<li><a href="{occ_by_slug[o]["url"]}">{html.escape(occ_by_slug[o]["label"])}</a></li>'
+                                     for o in s["occasions"]),
+            "prepareHtml": "".join(f"<li>{html.escape(t)}</li>" for t in s["prepare"]),
+            "galleryHtml": gallery, "photoCount": len(s["gallery"]) + 1,
+            "isVelin": s["performedBy"] == "velin",
+        }, quoteIncludes="".join(f"<li>{html.escape(t)}</li>" for t in site["quoteIncludes"]),
+            relatedGrid=show_grid(related))
+        price_spec = {"@type": "PriceSpecification", "priceCurrency": "THB",
+                      **({"minPrice": s["price"]} if s["priceFrom"] else {"price": s["price"]})}
+        service = {
+            "@context": "https://schema.org", "@type": "Service",
+            "name": f'{s["th"]} ({s["en"].title()})', "serviceType": "การแสดงมายากล",
+            "description": " ".join([s["tagline"], *s["body"]]),
+            "image": base + s["cover"].og(s["slug"]), "url": base + s["url"],
+            "provider": {"@id": base + "/#business"}, "areaServed": {"@type": "Country", "name": site["areaServed"]},
+            "offers": {"@type": "Offer", "priceCurrency": "THB", "price": s["price"], "priceSpecification": price_spec,
+                       "url": base + s["url"]},
+        }
+        price_label = "ราคาเริ่มต้น" if s["priceFrom"] else "ราคา"
+        page(s["url"], f'{s["th"]} ({s["en"].title()}) {price_label} {s["priceText"]}',
+             fit(f'{s["th"]} {price_label} {s["priceText"]} — {s["tagline"]} {s["body"][0]}'),
+             body, og_image=s["cover"].og(s["slug"]), ld=[service, crumbs_ld, organization], mobile_bar="show")
 
-    about=intro('THE PERSON BEHIND THE MAGIC','ผมเชื่อในความรู้สึก<br><em>หลังจากกลจบลง</em>','Velin — นักมายากล ผู้ถ่ายทอดตัวตนผ่านการแสดง และเรื่องราวที่เกิดขึ้นระหว่างเรากับผู้ชม')+template('artist')
-    about+=f'<section class="section artist-values"><p class="eyebrow">A PERSONAL APPROACH</p><h2>ให้การแสดงเข้ากับงาน<br>และยังคงเป็นตัวเอง</h2>{steps()}<p class="brand-note">Velin คือพื้นที่ของผลงานส่วนตัวในฐานะศิลปินและนักมายากล ส่วนรูปแบบโชว์ที่ต้องใช้ผู้เชี่ยวชาญเฉพาะทาง จะคุยเรื่องทีมร่วมแสดงให้ชัดเจนก่อนจอง โดยใช้ช่องทางติดต่อร่วมกับ Untitled Magic</p></section>'+invite()
-    render('/about/','รู้จัก Velin | ตัวตนและแนวคิดของนักมายากล','รู้จักแนวคิดการแสดงของ Velin นักมายากลที่ให้ความสำคัญกับประสบการณ์ผู้ชมและการออกแบบการแสดงให้เข้ากับโอกาสของคุณ',about,'about')
+    # ── one page per occasion
+    for o in occasions:
+        crumbs, crumbs_ld = breadcrumb(site, [("เลือกตามประเภทงาน", "/shows/"), (o["label"], o["url"])])
+        others = "".join(f'<li><a href="{x["url"]}">{html.escape(x["label"])}</a></li>' for x in occasions if x is not o)
+        body = fragment("page-occasion", common, crumbs=crumbs, occ={
+            **o, "coverImg": o["cover"].tag("(max-width: 900px) 100vw, 560px", cls="occ-hero-img", eager=True),
+            "pointsHtml": "".join(f'<li><h3>{html.escape(p["title"])}</h3><p>{html.escape(p["text"])}</p></li>' for p in o["points"]),
+            "showGrid": show_grid(o["shows"]), "otherLinks": others,
+            "fromPrice": baht(min(s["price"] for s in o["shows"])),
+        }, faqHtml=faq_html([f for f in faqs if f.get("home")][:3]))
+        page(o["url"], o["seoTitle"], fit(o["seoDescription"]), body, og_image=o["cover"].og("occasion-" + o["slug"]),
+             ld=[crumbs_ld, {"@context": "https://schema.org", "@type": "ItemList", "name": o["seoTitle"],
+                             "itemListElement": [{"@type": "ListItem", "position": i + 1, "url": base + s["url"], "name": s["th"]}
+                                                 for i, s in enumerate(o["shows"])]}])
 
-    gallery=intro('THE MOMENTS COLLECTION','ภาพที่เล่าเรื่อง<br><em>แทนคำอธิบาย</em>','สำรวจบรรยากาศและรูปแบบการแสดง แล้วค้นหาความรู้สึกที่คุณอยากให้เกิดขึ้นในงาน')
-    gallery+='<section class="section gallery-overview"><div class="photo-grid">'+''.join(f'<figure>{photo(s["cover"])}<figcaption><a href="/shows/{s["slug"]}/">{e(s["name"])} ↗</a><span>ภาพจากคลัง 171 Magic Club</span></figcaption></figure>' for s in shows)+'</div></section>'+template('moments')+invite()
-    render('/gallery/','ภาพการแสดงมายากลและไอเดียสำหรับงาน | Velin Magic','ดูภาพรูปแบบการแสดงมายากลเวที โคลสอัพ เปิดตัว บับเบิ้ล จั๊กกลิ้ง ลูกโป่ง และอิลลูชัน เพื่อเลือกบรรยากาศที่เหมาะกับงาน',gallery,'gallery')
+    # ── about
+    crumbs, crumbs_ld = breadcrumb(site, [("เกี่ยวกับ Velin", "/about/")])
+    person = {"@context": "https://schema.org", "@type": "Person", "name": site["performer"]["name"],
+              "jobTitle": "Magician", "worksFor": {"@id": base + "/#business"},
+              "image": base + portrait.og("velin"), "sameAs": [site["social"]["tiktok"]]}
+    velin_shows = [s for s in shows if s["performedBy"] == "velin"]
+    page("/about/", "เกี่ยวกับ Velin นักมายากล", "รู้จัก Velin นักมายากลผู้เชื่อว่ามายากลที่ดีอยู่ในความรู้สึกหลังกลจบลง พร้อมรูปแบบการแสดงที่ Velin แสดงด้วยตัวเอง",
+         fragment("page-about", common, crumbs=crumbs, velinGrid=show_grid(velin_shows)),
+         og_image=portrait.og("velin"), ld=[person, crumbs_ld])
 
-    booking=template('booking').replace('<h2 id="booking-title">','<h1 id="booking-title">').replace('your magic.</em></h2>','your magic.</em></h1>')
-    options='<option value="ยังไม่แน่ใจ อยากขอคำแนะนำ">ยังไม่แน่ใจ อยากขอคำแนะนำ</option>'+''.join(f'<option value="{e(s["name"])}" data-slug="{s["slug"]}">{e(s["name"])}</option>' for s in shows)
-    booking=re.sub(r'(<select name="show" id="show-choice">).*?(</select>)',lambda m:m[1]+options+m[2],booking,flags=re.S)
-    booking=booking.replace('<label>การแสดงที่สนใจ','<div id="selected-shows" class="selected-summary" hidden><p>รายการที่คุณสนใจ</p><ul id="selected-show-list"></ul><a href="/shows/">กลับไปเลือกใหม่ →</a></div><label id="single-show-label">การแสดงที่สนใจ')
-    booking=booking.replace('<form id="booking-form"','<noscript><p>แบบฟอร์มเตรียมข้อความต้องใช้ JavaScript คุณสามารถโทรหรือติดต่อผ่าน LINE ด้านข้างได้โดยตรง</p></noscript><form id="booking-form"')
-    booking=booking.replace('</form>','<p class="form-note"><a href="/privacy/">การใช้ข้อมูลและความเป็นส่วนตัว →</a></p></form>')
-    booking=booking.replace('05 / YOUR NEXT MOMENT','YOUR NEXT MOMENT').replace('LET’S CREATE SOMETHING MEMORABLE','LET’S CREATE SOMETHING MEMORABLE')
-    for old,new in [('062–092–5274',site['phone']),('tel:0620925274','tel:'+site['telephone']),('https://lin.ee/gEOLM00',site['line']),('@untitled.magic',site['lineName'])]: booking=booking.replace(old,new)
-    render('/contact/','ติดต่อและสอบถามการแสดง | Velin Magic','สอบถามวันว่างและรายละเอียดการแสดง Velin แจ้งวันที่ สถานที่ และจำนวนผู้ชม เพื่อรับคำแนะนำรูปแบบโชว์และใบเสนอราคา',booking,'contact')
-    privacy=intro('YOUR INFORMATION','ข้อมูลของคุณ<br><em>อยู่ในการตัดสินใจของคุณ</em>','หน้านี้อธิบายการทำงานของแบบฟอร์มและบริการภายนอกที่เว็บไซต์ใช้')+'''<section class="section prose"><h2>แบบฟอร์มเตรียมข้อความ</h2><p>ชื่อ เบอร์โทร และรายละเอียดงานที่กรอกจะใช้สร้างข้อความในเบราว์เซอร์ของคุณ เว็บไซต์ไม่มีระบบส่งแบบฟอร์มหรือฐานข้อมูลรับคำขอ คุณต้องคัดลอกข้อความและนำไปส่งใน LINE ด้วยตนเอง</p><h2>รายการโชว์ที่สนใจ</h2><p>เว็บไซต์จดจำเฉพาะรหัสโชว์ที่เลือกใน sessionStorage ของแท็บนี้ เพื่อให้คุณกลับมาเลือกต่อได้ รายการนี้ไม่มีชื่อหรือเบอร์โทร หากเบราว์เซอร์ไม่อนุญาตให้จัดเก็บ คุณยังเลือกโชว์ในหน้าปัจจุบันและส่งต่อไปหน้าติดต่อได้</p><h2>บริการภายนอก</h2><p>เว็บไซต์โหลดแบบอักษรจาก Google Fonts และจะเชื่อมต่อ YouTube เมื่อคุณกดชมวิดีโอ การเปิด LINE หรือโซเชียลมีเดียจะพาคุณไปยังบริการนั้น ซึ่งมีนโยบายความเป็นส่วนตัวของตนเอง ผู้ให้บริการโฮสติ้งอาจประมวลผลข้อมูลการเชื่อมต่อเพื่อให้บริการเว็บไซต์</p><h2>ติดต่อเรื่องข้อมูล</h2><p>สอบถามได้ผ่านช่องทางใน <a href="/contact/">หน้าติดต่อ</a> โดยแจ้งว่าเป็นคำถามเกี่ยวกับเว็บไซต์ Velin</p></section>'''
-    render('/privacy/','การใช้ข้อมูลและความเป็นส่วนตัว | Velin Magic','การใช้ข้อมูลในแบบฟอร์ม รายการโชว์ที่สนใจ และบริการภายนอกของเว็บไซต์ Velin Magic',privacy)
-    render('/404/','ไม่พบหน้านี้ | Velin Magic','กลับไปเลือกการแสดงหรือหน้าหลักของ Velin',intro('A SMALL DETOUR','หน้านี้อาจย้ายไปแล้ว','กลับไปค้นหาโชว์ที่ใช่สำหรับคุณ')+'<div class="section"><a class="button button--dark" href="/shows/">ดูรูปแบบโชว์ →</a></div>',noindex=True)
-    (ROOT/'404.html').write_text((ROOT/'404/index.html').read_text(encoding='utf-8'),encoding='utf-8')
-    (ROOT/'sitemap.xml').write_text('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+''.join(f'  <url><loc>{base+p}</loc></url>\n' for p in pages)+'</urlset>\n',encoding='utf-8')
-    (ROOT/'robots.txt').write_text(f'User-agent: *\nAllow: /\nDisallow: /archive/\nDisallow: /tools/\nDisallow: /docs/\nSitemap: {base}/sitemap.xml\n',encoding='utf-8')
-    print(f'Built {len(pages)} indexable pages + 404. No prices or automatic publication.')
+    # ── gallery
+    crumbs, crumbs_ld = breadcrumb(site, [("ภาพการแสดง", "/gallery/")])
+    groups = "".join(
+        f'<section class="gallery-group" data-group="{s["slug"]}" aria-labelledby="g-{s["slug"]}">'
+        f'<div class="gallery-head"><h2 id="g-{s["slug"]}">{html.escape(s["th"])}</h2>'
+        f'<a class="link-arrow" href="{s["url"]}">ดูรายละเอียดและราคา</a></div><div class="gallery-grid">'
+        + "".join(f'<a class="gallery-item" href="{p.largest}" data-lightbox="all" data-caption="{html.escape(p.alt, quote=True)}">'
+                  f'{p.tag("(max-width: 640px) 46vw, (max-width: 1024px) 31vw, 280px")}</a>' for p in [s["cover"], *s["gallery"]])
+        + "</div></section>" for s in shows)
+    gallery_chips = '<button type="button" class="chip" data-gallery-filter="all" aria-pressed="true">ทั้งหมด</button>' + "".join(
+        f'<button type="button" class="chip" data-gallery-filter="{s["slug"]}" aria-pressed="false">{html.escape(s["th"])}</button>' for s in shows)
+    total_photos = sum(len(s["gallery"]) + 1 for s in shows)
+    page("/gallery/", "ภาพการแสดงมายากล", f"รวม {total_photos} ภาพตัวอย่างการแสดงมายากล บับเบิ้ลโชว์ จั๊กกลิ้ง และอิลลูชัน แยกตามรูปแบบการแสดง",
+         fragment("page-gallery", common, crumbs=crumbs, groups=groups, galleryChips=gallery_chips, totalPhotos=total_photos),
+         og_image=shows[6]["cover"].og("gallery"), ld=[crumbs_ld])
+
+    # ── faq
+    crumbs, crumbs_ld = breadcrumb(site, [("คำถามที่พบบ่อย", "/faq/")])
+    page("/faq/", "คำถามที่พบบ่อยเรื่องการจ้างนักมายากล", "ราคา ค่าเดินทาง การเลือกหลายโชว์ และขั้นตอนการจองการแสดงมายากลกับ Velin Magic",
+         fragment("page-faq", common, crumbs=crumbs, faqHtml=faq_html(faqs)),
+         og_image=shows[1]["cover"].og("faq"), ld=[faq_ld(faqs), crumbs_ld])
+
+    # ── contact
+    crumbs, crumbs_ld = breadcrumb(site, [("ขอใบเสนอราคา", "/contact/")])
+    occ_options = "".join(f'<option value="{html.escape(o["label"])}">{html.escape(o["label"])}</option>' for o in occasions)
+    page("/contact/", "ขอใบเสนอราคาการแสดงมายากล", f"ส่งรายละเอียดงานและโชว์ที่สนใจทาง LINE หรือโทร {site['contact']['phone']} เพื่อรับใบเสนอราคาการแสดงมายากล",
+         fragment("page-contact", common, crumbs=crumbs, occasionOptions=occ_options),
+         og_image=shows[0]["cover"].og("contact"), ld=[crumbs_ld], mobile_bar="contact")
+
+    # ── privacy, 404
+    crumbs, crumbs_ld = breadcrumb(site, [("ความเป็นส่วนตัว", "/privacy/")])
+    page("/privacy/", "การใช้ข้อมูลและความเป็นส่วนตัว",
+         "วิธีที่เว็บไซต์ Velin Magic ใช้ข้อมูลในแบบฟอร์มขอใบเสนอราคา รายการโชว์ที่เลือก และบริการภายนอกอย่าง Google Fonts และ YouTube",
+         fragment("page-privacy", common, crumbs=crumbs), og_image=shows[0]["cover"].og("home"), ld=[crumbs_ld])
+    page("/404.html", "ไม่พบหน้านี้", "หน้าที่คุณหาอาจถูกย้ายไปแล้ว", fragment("page-404", common, showGrid=show_grid(shows[:3])),
+         og_image=shows[0]["cover"].og("home"), index=False)
+
+    # ── sitemap, robots
+    write("sitemap.xml", '<?xml version="1.0" encoding="UTF-8"?>\n'
+          '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+          + "".join(f"  <url><loc>{u}</loc><lastmod>{TODAY}</lastmod></url>\n" for u in sitemap) + "</urlset>\n")
+    write("robots.txt", f"User-agent: *\nAllow: /\n\nSitemap: {base}/sitemap.xml\n")
+
+    # ── remove anything this run did not produce (old photos, old hashed assets)
+    removed = 0
+    for path in sorted(OUT.rglob("*"), key=lambda p: len(p.parts), reverse=True):
+        if path.is_file() and path not in written:
+            path.unlink()
+            removed += 1
+        elif path.is_dir() and not any(path.iterdir()):
+            path.rmdir()
+
+    photos = sum(1 for p in written if "/img/" in p.as_posix())
+    print(f"✓ สร้างเว็บเสร็จ: {len(sitemap)} หน้า · {len(shows)} โชว์ · {photos} ไฟล์ภาพ · ลบไฟล์เก่า {removed} ไฟล์")
+    print(f"  ผลลัพธ์อยู่ที่ {OUT.relative_to(ROOT)}/")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8")
     build()

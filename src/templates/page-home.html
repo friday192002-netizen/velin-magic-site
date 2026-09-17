@@ -1,0 +1,97 @@
+<section class="hero" aria-labelledby="hero-title">
+  <div class="hero-glow" aria-hidden="true"></div>
+  {{{heroImg}}}
+  <div class="hero-shade" aria-hidden="true"></div>
+  <div class="container hero-inner">
+    <div class="hero-copy">
+      <p class="kicker kicker-gold">MAGICIAN · PERFORMER · BANGKOK</p>
+      <h1 id="hero-title">
+        <span class="wordmark">VELIN</span>
+        <span class="hero-h1">การแสดงมายากล<br>สำหรับทุกช่วงเวลาสำคัญของงาน</span>
+      </h1>
+      <p class="hero-lede">งานบริษัท เปิดตัวสินค้า งานแต่ง และงานเด็ก เลือกได้ {{showCount}} รูปแบบ พร้อมราคาชัดเจนตั้งแต่ {{minPrice}}</p>
+      <div class="hero-actions">
+        <a class="btn btn-light btn-lg" href="/shows/">ดูรูปแบบโชว์ &amp; ราคา <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        <a class="btn btn-outline-light btn-lg" href="/contact/">ขอใบเสนอราคา</a>
+      </div>
+      <dl class="hero-stats">{{{statsHtml}}}</dl>
+    </div>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="occ-title">
+  <div class="container">
+    <div class="section-head">
+      <p class="kicker">STEP 01 · YOUR OCCASION</p>
+      <h2 id="occ-title">งานของคุณคืองานแบบไหน?</h2>
+      <p class="section-sub">เลือกประเภทงาน เราคัดโชว์ที่เหมาะไว้ให้แล้ว</p>
+    </div>
+    <div class="occ-grid">{{{occasionTiles}}}</div>
+  </div>
+</section>
+
+<section class="section section-sand" aria-labelledby="shows-title">
+  <div class="container">
+    <div class="section-head section-head-row">
+      <div>
+        <p class="kicker">STEP 02 · CHOOSE YOUR MAGIC</p>
+        <h2 id="shows-title">{{showCount}} รูปแบบการแสดง</h2>
+        <p class="section-sub">กด “เลือก” เก็บโชว์ที่สนใจไว้ได้หลายรายการ แล้วส่งให้เราทีเดียว</p>
+      </div>
+      <a class="link-arrow" href="/shows/">เปรียบเทียบราคาทั้งหมด</a>
+    </div>
+    {{{showGrid}}}
+  </div>
+</section>
+
+<section class="section" aria-labelledby="process-title">
+  <div class="container">
+    <div class="section-head">
+      <p class="kicker">STEP 03 · SIMPLE BOOKING</p>
+      <h2 id="process-title">จองง่าย ใน 3 ขั้นตอน</h2>
+    </div>
+    <ol class="steps">{{{processHtml}}}</ol>
+  </div>
+</section>
+
+<section class="section section-night performer" aria-labelledby="performer-title">
+  <div class="container performer-grid">
+    <div class="performer-art">{{{portraitImg}}}</div>
+    <div class="performer-copy">
+      <p class="kicker kicker-gold">THE PERFORMER</p>
+      <p class="serif-quote">{{site.performer.kicker}}</p>
+      <h2 id="performer-title">{{site.performer.title}}</h2>
+      {{{performerParagraphs}}}
+      <p class="performer-sign"><span class="signature">{{site.performer.name}}</span><span>{{site.performer.role}}</span></p>
+      <a class="link-arrow link-light" href="/about/">รู้จัก Velin</a>
+    </div>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="film-title">
+  <div class="container film">
+    <div class="film-copy">
+      <p class="kicker">IN MOTION</p>
+      <h2 id="film-title">บางความรู้สึก<br>ต้องดูด้วยตาตัวเอง</h2>
+      <p class="section-sub">ชมไฮไลต์การแสดงจริงก่อนตัดสินใจ</p>
+      <p class="fine">{{site.video.caption}}</p>
+    </div>
+    <button type="button" class="film-poster" data-video="{{site.video.youtubeId}}" aria-label="เล่นวิดีโอไฮไลต์การแสดง">
+      {{{filmPoster}}}
+      <span class="play"><svg class="icon" aria-hidden="true"><use href="#i-play"/></svg></span>
+    </button>
+  </div>
+</section>
+
+<section class="section section-sand" aria-labelledby="faq-title">
+  <div class="container faq-wrap">
+    <div class="section-head">
+      <p class="kicker">GOOD TO KNOW</p>
+      <h2 id="faq-title">คำถามที่พบบ่อย</h2>
+      <a class="link-arrow" href="/faq/">ดูคำถามทั้งหมด</a>
+    </div>
+    <div class="faq-list">{{{faqHtml}}}</div>
+  </div>
+</section>
+
+{{> cta-band}}

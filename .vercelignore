@@ -1,6 +1,8 @@
+# Vercel serves public/ only (see vercel.json). Nothing builds on Vercel, so the
+# sources and originals below never need uploading.
 archive/
 docs/
+photos/
 screens/
 uploads/
 .claude/
-README.md

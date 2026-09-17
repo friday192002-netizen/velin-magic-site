@@ -1,0 +1,96 @@
+<section class="page-hero" aria-labelledby="page-title">
+  <div class="container">
+    {{{crumbs}}}
+    <p class="kicker">REQUEST A QUOTE</p>
+    <h1 id="page-title">ขอใบเสนอราคา</h1>
+    <p class="page-lede">ตรวจรายการโชว์ที่เลือก กรอกรายละเอียดงานสั้น ๆ แล้วกดส่งทาง LINE เราจะสรุประยะเวลา ทีม และราคาที่แน่นอนให้</p>
+  </div>
+</section>
+
+<section class="section section-tight">
+  <div class="container contact-grid">
+    <div class="contact-main">
+
+      <div class="panel" aria-labelledby="picked-title">
+        <div class="panel-head">
+          <h2 id="picked-title" class="h-small"><span class="step-dot">1</span> โชว์ที่เลือกไว้</h2>
+          <a class="link-arrow" href="/shows/">เพิ่ม / เปลี่ยนโชว์</a>
+        </div>
+        <div data-shortlist-panel>
+          <p class="empty">ยังไม่ได้เลือกโชว์ — <a href="/shows/">ดูรูปแบบการแสดง</a> แล้วกด “เลือก” หรือข้ามขั้นนี้ไปเล่ารายละเอียดงานได้เลย</p>
+        </div>
+      </div>
+
+      <form class="panel quote-form" data-quote-form novalidate aria-labelledby="form-title">
+        <h2 id="form-title" class="h-small"><span class="step-dot">2</span> รายละเอียดงาน</h2>
+        <div class="form-grid">
+          <label class="field">
+            <span class="field-label">ชื่อผู้ติดต่อ <b aria-hidden="true">*</b></span>
+            <input name="name" type="text" autocomplete="name" required>
+            <span class="field-error" data-error></span>
+          </label>
+          <label class="field">
+            <span class="field-label">เบอร์โทร <b aria-hidden="true">*</b></span>
+            <input name="phone" type="tel" autocomplete="tel" inputmode="tel" required>
+            <span class="field-error" data-error></span>
+          </label>
+          <label class="field">
+            <span class="field-label">วันที่จัดงาน</span>
+            <input name="date" type="date">
+          </label>
+          <label class="field">
+            <span class="field-label">ประเภทงาน</span>
+            <select name="occasion">
+              <option value="">— เลือกประเภทงาน —</option>
+              {{{occasionOptions}}}
+              <option value="อื่น ๆ">อื่น ๆ</option>
+            </select>
+          </label>
+          <label class="field">
+            <span class="field-label">สถานที่ / จังหวัด</span>
+            <input name="place" type="text" placeholder="เช่น โรงแรมในกรุงเทพฯ">
+          </label>
+          <label class="field">
+            <span class="field-label">จำนวนผู้ชมโดยประมาณ</span>
+            <input name="guests" type="number" min="1" inputmode="numeric" placeholder="เช่น 150">
+          </label>
+          <label class="field field-wide">
+            <span class="field-label">รายละเอียดเพิ่มเติม</span>
+            <textarea name="details" rows="3" placeholder="ธีมงาน ช่วงเวลาที่อยากให้แสดง หรือสิ่งที่อยากให้เกิดขึ้น"></textarea>
+          </label>
+        </div>
+        <button type="submit" class="btn btn-primary btn-lg btn-block">สร้างข้อความสำหรับส่ง <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+        <p class="fine">ข้อมูลจะถูกใช้สร้างข้อความในเบราว์เซอร์ของคุณเท่านั้น ไม่มีการส่งหรือบันทึกไว้บนเว็บไซต์ — <a href="/privacy/">อ่านเพิ่มเติม</a></p>
+      </form>
+
+      <div class="panel quote-output" data-quote-output hidden tabindex="-1" aria-labelledby="out-title">
+        <h2 id="out-title" class="h-small"><span class="step-dot">3</span> ส่งข้อความทาง LINE</h2>
+        <p>กด “คัดลอกและเปิด LINE” แล้ววางข้อความในแชทได้ทันที</p>
+        <textarea class="message" readonly rows="10" data-quote-message aria-label="ข้อความที่จะส่ง"></textarea>
+        <div class="out-actions">
+          <a class="btn btn-line btn-lg" href="{{site.contact.line}}" target="_blank" rel="noopener" data-copy-open><svg class="icon" aria-hidden="true"><use href="#i-line"/></svg> คัดลอกและเปิด LINE</a>
+          <button type="button" class="btn btn-ghost btn-lg" data-copy>คัดลอกข้อความ</button>
+        </div>
+      </div>
+    </div>
+
+    <aside class="contact-side">
+      <div class="panel panel-night">
+        <p class="kicker kicker-gold">TALK TO US DIRECTLY</p>
+        <h2 class="h-small">คุยกับเราโดยตรง</h2>
+        <a class="btn btn-line btn-lg btn-block" href="{{site.contact.line}}" target="_blank" rel="noopener"><svg class="icon" aria-hidden="true"><use href="#i-line"/></svg> LINE {{site.contact.lineName}}</a>
+        <a class="btn btn-outline-light btn-lg btn-block" href="tel:{{site.contact.telephone}}"><svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg> {{site.contact.phone}}</a>
+        <p class="fine fine-light">{{site.contact.note}}</p>
+        <div class="socials socials-light">
+          <a href="{{site.social.instagram}}" target="_blank" rel="noopener" aria-label="Instagram"><svg class="icon" aria-hidden="true"><use href="#i-ig"/></svg></a>
+          <a href="{{site.social.facebook}}" target="_blank" rel="noopener" aria-label="Facebook"><svg class="icon" aria-hidden="true"><use href="#i-fb"/></svg></a>
+          <a href="{{site.social.tiktok}}" target="_blank" rel="noopener" aria-label="TikTok"><svg class="icon" aria-hidden="true"><use href="#i-tt"/></svg></a>
+        </div>
+      </div>
+      <div class="panel">
+        <h2 class="h-small">หลังจากส่งข้อความ</h2>
+        <ol class="mini-steps">{{{processHtml}}}</ol>
+      </div>
+    </aside>
+  </div>
+</section>

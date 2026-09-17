@@ -1,0 +1,102 @@
+<article class="show-page" data-slug="{{show.slug}}">
+  <section class="show-hero" aria-labelledby="page-title">
+    <div class="container">
+      {{{crumbs}}}
+      <div class="show-hero-grid">
+        <div class="show-hero-media">
+          {{{show.coverImg}}}
+          <a class="media-count" href="#gallery">{{show.photoCount}} ภาพจากการแสดง</a>
+        </div>
+        <div class="show-hero-copy">
+          <p class="kicker"><span class="kicker-num">{{show.num}}</span> {{show.en}}</p>
+          <h1 id="page-title">{{show.th}}</h1>
+          <p class="show-tagline">{{show.tagline}}</p>
+          <p class="performed"><span class="dot" aria-hidden="true"></span>{{show.performedLabel}}</p>
+
+          <div class="price-box">
+            <p class="price price-lg">{{#show.priceFrom}}<span class="price-from">ราคาเริ่มต้น</span>{{/show.priceFrom}}{{^show.priceFrom}}<span class="price-from">ราคา</span>{{/show.priceFrom}}<span class="price-amount">{{show.priceText}}</span></p>
+            <div class="price-actions">
+              <button type="button" class="pick pick-lg" data-pick="{{show.slug}}" aria-pressed="false" aria-label="เลือก {{show.th}}">
+                <svg class="icon icon-plus" aria-hidden="true"><use href="#i-plus"/></svg>
+                <svg class="icon icon-check" aria-hidden="true"><use href="#i-check"/></svg>
+                <span data-pick-label>เลือกโชว์นี้</span>
+              </button>
+              <a class="btn btn-line" href="{{site.contact.line}}" target="_blank" rel="noopener"><svg class="icon" aria-hidden="true"><use href="#i-line"/></svg> สอบถามโชว์นี้</a>
+            </div>
+            <p class="fine">{{#show.priceFrom}}{{site.priceNote}}{{/show.priceFrom}}{{^show.priceFrom}}{{site.estimateNote}}{{/show.priceFrom}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="about-show">
+    <div class="container detail-grid">
+      <div class="detail-main">
+        <h2 id="about-show">รายละเอียดการแสดง</h2>
+        {{{show.bodyHtml}}}
+        <blockquote class="highlight"><p>{{show.highlight}}</p></blockquote>
+      </div>
+      <aside class="detail-side">
+        <h2 class="h-small">เหมาะสำหรับ</h2>
+        <ul class="tag-list">{{{show.fitsHtml}}}</ul>
+        <h2 class="h-small">ดูโชว์ตามประเภทงาน</h2>
+        <ul class="link-list">{{{show.occasionLinks}}}</ul>
+      </aside>
+    </div>
+  </section>
+
+  <section class="section section-sand" id="gallery" aria-labelledby="gallery-title">
+    <div class="container">
+      <div class="section-head section-head-row">
+        <div>
+          <p class="kicker">GALLERY</p>
+          <h2 id="gallery-title">ภาพจากการแสดง{{show.th}}</h2>
+        </div>
+        <p class="fine">{{site.performer.photoCredit}} · กดที่ภาพเพื่อดูขนาดเต็ม</p>
+      </div>
+      <div class="gallery-grid">{{{show.galleryHtml}}}</div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="plan-title">
+    <div class="container plan-grid">
+      <div class="plan-card">
+        <p class="kicker">BEFORE THE SHOW</p>
+        <h2 id="plan-title">สิ่งที่ควรเตรียม</h2>
+        <ul class="check-list">{{{show.prepareHtml}}}</ul>
+      </div>
+      <div class="plan-card plan-card-dark">
+        <p class="kicker kicker-gold">IN YOUR QUOTE</p>
+        <h2>สิ่งที่เราสรุปให้ในใบเสนอราคา</h2>
+        <ul class="check-list">{{{quoteIncludes}}}</ul>
+        {{^show.isVelin}}<p class="fine">{{site.performer.teamNote}}</p>{{/show.isVelin}}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-sand" aria-labelledby="related-title">
+    <div class="container">
+      <div class="section-head section-head-row">
+        <div>
+          <p class="kicker">PAIRS WELL WITH</p>
+          <h2 id="related-title">โชว์อื่นที่เข้ากับงานแบบเดียวกัน</h2>
+        </div>
+        <a class="link-arrow" href="/shows/">ดูทั้งหมด</a>
+      </div>
+      {{{relatedGrid}}}
+    </div>
+  </section>
+</article>
+
+{{> cta-band}}
+
+<div class="mobile-bar mobile-bar-show">
+  <p class="mb-price">{{#show.priceFrom}}<small>เริ่มต้น</small>{{/show.priceFrom}}{{show.priceText}}</p>
+  <button type="button" class="pick pick-bar" data-pick="{{show.slug}}" aria-pressed="false" aria-label="เลือก {{show.th}}">
+    <svg class="icon icon-plus" aria-hidden="true"><use href="#i-plus"/></svg>
+    <svg class="icon icon-check" aria-hidden="true"><use href="#i-check"/></svg>
+    <span data-pick-label>เลือก</span>
+  </button>
+  <a class="mb-btn mb-line" href="{{site.contact.line}}" target="_blank" rel="noopener"><svg class="icon" aria-hidden="true"><use href="#i-line"/></svg><span>LINE</span></a>
+</div>

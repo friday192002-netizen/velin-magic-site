@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>{{page.title}}</title>
+<meta name="description" content="{{page.description}}">
+<meta name="robots" content="{{page.robots}}">
+<link rel="canonical" href="{{page.canonical}}">
+<meta name="theme-color" content="#120D0A">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="{{site.name}}">
+<meta property="og:locale" content="{{site.locale}}">
+<meta property="og:title" content="{{page.title}}">
+<meta property="og:description" content="{{page.description}}">
+<meta property="og:url" content="{{page.canonical}}">
+<meta property="og:image" content="{{page.ogImage}}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=IBM+Plex+Sans+Thai:wght@300;400;500;600&display=swap">
+<link rel="stylesheet" href="{{cssUrl}}">
+{{{page.jsonld}}}
+</head>
+<body class="{{page.bodyClass}}">
+
+<svg class="sprite" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+  <symbol id="i-line" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2.5C6.5 2.5 2 6.1 2 10.6c0 4 3.6 7.4 8.4 8 .3.1.8.2.9.5.1.3.1.7 0 .9l-.1.9c0 .3-.2 1 .9.5 1-.4 5.8-3.4 7.9-5.9 1.5-1.6 2-3.2 2-5C22 6.1 17.5 2.5 12 2.5Zm-4.2 10.6H5.9a.5.5 0 0 1-.5-.5V8.8a.5.5 0 0 1 1 0v3.3h1.4a.5.5 0 0 1 0 1Zm2-.5a.5.5 0 0 1-1 0V8.8a.5.5 0 0 1 1 0v3.8Zm4.6 0a.5.5 0 0 1-.9.3l-2-2.7v2.4a.5.5 0 0 1-1 0V8.8a.5.5 0 0 1 .9-.3l2 2.7V8.8a.5.5 0 0 1 1 0v3.8Zm3.1-2.4a.5.5 0 0 1 0 1h-1.4v.9h1.4a.5.5 0 0 1 0 1h-1.9a.5.5 0 0 1-.5-.5V8.8c0-.3.2-.5.5-.5h1.9a.5.5 0 0 1 0 1h-1.4v.9h1.4Z"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" d="M6 3.5h3l1.5 4-2 1.5a11 11 0 0 0 5.5 5.5l1.5-2 4 1.5v3A1.7 1.7 0 0 1 17.8 19 15 15 0 0 1 4.3 5.3 1.7 1.7 0 0 1 6 3.5Z"/></symbol>
+  <symbol id="i-list" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1.3" fill="currentColor"/><circle cx="4.5" cy="12" r="1.3" fill="currentColor"/><circle cx="4.5" cy="18" r="1.3" fill="currentColor"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-5-5 5 5-5 5"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M6 6l12 12M18 6 6 18"/></symbol>
+  <symbol id="i-chevron" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path fill="currentColor" d="M8 5.5v13a.8.8 0 0 0 1.2.7l10.3-6.5a.8.8 0 0 0 0-1.4L9.2 4.8A.8.8 0 0 0 8 5.5Z"/></symbol>
+  <symbol id="i-ig" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="5" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="12" r="3.8" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="17.2" cy="6.8" r="1.1" fill="currentColor"/></symbol>
+  <symbol id="i-fb" viewBox="0 0 24 24"><path fill="currentColor" d="M14.5 8.3V6.8c0-.7.2-1.2 1.3-1.2h1.5V3a20 20 0 0 0-2.2-.1c-2.2 0-3.7 1.3-3.7 3.8v1.6H9v2.9h2.4V21h3.1v-9.8h2.4l.4-2.9h-2.8Z"/></symbol>
+  <symbol id="i-tt" viewBox="0 0 24 24"><path fill="currentColor" d="M16.3 2.5h-3v13a2.6 2.6 0 1 1-2.2-2.6v-3.1a5.7 5.7 0 1 0 5.2 5.7V9.1a7 7 0 0 0 4 1.3V7.3a4.1 4.1 0 0 1-4-4.1v-.7Z"/></symbol>
+</svg>
+
+<a class="skip" href="#main">ข้ามไปยังเนื้อหา</a>
+
+<header class="header" data-header>
+  <div class="header-inner">
+    <a class="brand" href="/" aria-label="{{site.name}} หน้าแรก">velin<span aria-hidden="true">✳</span></a>
+
+    <nav class="nav" id="site-nav" aria-label="เมนูหลัก" data-nav>
+      <ul class="nav-list">
+        <li><a href="/shows/">รูปแบบโชว์ &amp; ราคา</a></li>
+        <li class="has-menu">
+          <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="menu-occasions" data-submenu>
+            เลือกตามประเภทงาน <svg class="icon" aria-hidden="true"><use href="#i-chevron"/></svg>
+          </button>
+          <ul class="submenu" id="menu-occasions">{{{navOccasions}}}</ul>
+        </li>
+        <li><a href="/gallery/">ภาพการแสดง</a></li>
+        <li><a href="/about/">เกี่ยวกับ Velin</a></li>
+        <li><a href="/faq/">คำถามที่พบบ่อย</a></li>
+      </ul>
+      <div class="nav-foot">
+        <a class="btn btn-line" href="{{site.contact.line}}" target="_blank" rel="noopener"><svg class="icon" aria-hidden="true"><use href="#i-line"/></svg> คุยทาง LINE</a>
+        <a class="btn btn-ghost" href="tel:{{site.contact.telephone}}"><svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg> {{site.contact.phone}}</a>
+      </div>
+    </nav>
+
+    <div class="header-actions">
+      <a class="shortlist-link" href="/contact/" aria-label="รายการโชว์ที่เลือก">
+        <svg class="icon" aria-hidden="true"><use href="#i-list"/></svg>
+        <span class="shortlist-label">รายการที่เลือก</span>
+        <span class="badge" data-shortlist-count hidden>0</span>
+      </a>
+      <a class="btn btn-primary header-cta" href="/contact/">ขอใบเสนอราคา</a>
+      <button type="button" class="menu-button" aria-expanded="false" aria-controls="site-nav" data-menu-button>
+        <span></span><span></span><span class="sr">เมนู</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+{{{content}}}
+</main>
+
+<footer class="footer">
+  <div class="container footer-top">
+    <div class="footer-brand">
+      <a class="brand brand-lg" href="/">velin<span aria-hidden="true">✳</span></a>
+      <p>{{site.tagline}}</p>
+      <div class="footer-contact">
+        <a href="tel:{{site.contact.telephone}}">{{site.contact.phone}}</a>
+        <a href="{{site.contact.line}}" target="_blank" rel="noopener">LINE {{site.contact.lineName}}</a>
+      </div>
+      <div class="socials">
+        <a href="{{site.social.instagram}}" target="_blank" rel="noopener" aria-label="Instagram"><svg class="icon" aria-hidden="true"><use href="#i-ig"/></svg></a>
+        <a href="{{site.social.facebook}}" target="_blank" rel="noopener" aria-label="Facebook"><svg class="icon" aria-hidden="true"><use href="#i-fb"/></svg></a>
+        <a href="{{site.social.tiktok}}" target="_blank" rel="noopener" aria-label="TikTok"><svg class="icon" aria-hidden="true"><use href="#i-tt"/></svg></a>
+      </div>
+    </div>
+    <nav class="footer-col" aria-label="รูปแบบการแสดง">
+      <h2>รูปแบบการแสดง</h2>
+      <ul>{{{footerShows}}}</ul>
+    </nav>
+    <nav class="footer-col" aria-label="ประเภทงาน">
+      <h2>ประเภทงาน</h2>
+      <ul>{{{footerOccasions}}}</ul>
+    </nav>
+    <nav class="footer-col" aria-label="ข้อมูล">
+      <h2>ข้อมูล</h2>
+      <ul>
+        <li><a href="/about/">เกี่ยวกับ Velin</a></li>
+        <li><a href="/gallery/">ภาพการแสดง</a></li>
+        <li><a href="/faq/">คำถามที่พบบ่อย</a></li>
+        <li><a href="/contact/">ขอใบเสนอราคา</a></li>
+        <li><a href="/privacy/">ความเป็นส่วนตัว</a></li>
+      </ul>
+    </nav>
+  </div>
+  <div class="container footer-bottom">
+    <span>© {{year}} {{site.name}}</span>
+    <span>{{site.contact.note}}</span>
+  </div>
+</footer>
+
+{{#mobileBarDefault}}
+<div class="mobile-bar" data-mobile-bar>
+  <a class="mb-btn mb-line" href="{{site.contact.line}}" target="_blank" rel="noopener"><svg class="icon" aria-hidden="true"><use href="#i-line"/></svg><span>LINE</span></a>
+  <a class="mb-btn" href="tel:{{site.contact.telephone}}"><svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg><span>โทร</span></a>
+  <a class="mb-btn mb-primary" href="/contact/"><span>ขอใบเสนอราคา</span><span class="badge badge-light" data-shortlist-count hidden>0</span></a>
+</div>
+{{/mobileBarDefault}}
+
+<div class="toast" role="status" aria-live="polite" data-toast></div>
+
+<dialog class="lightbox" data-lightbox-dialog aria-label="ภาพการแสดง">
+  <button type="button" class="lb-close" data-lb-close aria-label="ปิด"><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button>
+  <button type="button" class="lb-nav lb-prev" data-lb-prev aria-label="ภาพก่อนหน้า"><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+  <figure class="lb-figure"><img alt="" data-lb-img><figcaption data-lb-caption></figcaption></figure>
+  <button type="button" class="lb-nav lb-next" data-lb-next aria-label="ภาพถัดไป"><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+</dialog>
+
+<script type="application/json" id="show-data">{{{showData}}}</script>
+<script src="{{jsUrl}}" defer></script>
+</body>
+</html>

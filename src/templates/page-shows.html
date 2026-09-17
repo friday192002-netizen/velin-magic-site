@@ -1,0 +1,67 @@
+<section class="page-hero page-hero-night" aria-labelledby="page-title">
+  <div class="container">
+    {{{crumbs}}}
+    <div class="page-hero-grid">
+      <div>
+        <p class="kicker kicker-gold">MAGIC SHOW · DISCOVER THE ART OF MAGIC</p>
+        <h1 id="page-title">รูปแบบการแสดงมายากล</h1>
+        <p class="page-lede">เติมความมหัศจรรย์ให้กับทุกช่วงเวลาของงาน ด้วยการแสดงที่ออกแบบให้เหมาะกับบรรยากาศ ผู้ชม และรูปแบบของงาน ไม่ว่าจะเป็นงานเปิดตัวสินค้า งานเลี้ยงบริษัท งานแต่งงาน อีเวนต์ หรือกิจกรรมสำหรับเด็ก</p>
+      </div>
+      <dl class="hero-stats hero-stats-boxed">{{{statsHtml}}}</dl>
+    </div>
+  </div>
+</section>
+
+<section class="section chooser" aria-labelledby="chooser-title" data-filter-scope>
+  <div class="container">
+    <div class="chooser-head">
+      <h2 id="chooser-title" class="h-small">เลือกตามลักษณะงาน</h2>
+      <p class="chooser-count" data-filter-count aria-live="polite">ทั้งหมด {{showCount}} รูปแบบการแสดง</p>
+    </div>
+    <div class="chips" role="group" aria-label="กรองตามประเภทงาน">{{{chips}}}</div>
+    {{{showGrid}}}
+  </div>
+</section>
+
+<section class="section section-sand" aria-labelledby="prices-title">
+  <div class="container narrow">
+    <div class="section-head">
+      <p class="kicker">PRICE SUMMARY</p>
+      <h2 id="prices-title">ราคาทั้งหมดในที่เดียว</h2>
+    </div>
+    <div class="table-wrap">
+      <table class="price-table">
+        <caption class="sr">ราคาการแสดงมายากลแต่ละรูปแบบ</caption>
+        <thead><tr><th scope="col">รูปแบบการแสดง</th><th scope="col" class="pr-price">ราคา</th><th scope="col"><span class="sr">เลือก</span></th></tr></thead>
+        <tbody>{{{priceRows}}}</tbody>
+      </table>
+    </div>
+    <p class="note">{{site.priceNote}}</p>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="team-title">
+  <div class="container performer-card">
+    <div class="performer-card-art">{{{portraitImg}}}</div>
+    <div>
+      <p class="kicker">PERFORMER</p>
+      <h2 id="team-title">นักแสดงของเรา</h2>
+      <p class="performer-card-name"><span class="signature">{{site.performer.name}}</span> <span class="role">{{site.performer.role}}</span></p>
+      {{{performerParagraphs}}}
+      <p class="note">{{site.performer.teamNote}}</p>
+      <a class="link-arrow" href="/about/">รู้จัก Velin</a>
+    </div>
+  </div>
+</section>
+
+<section class="section section-sand" aria-labelledby="process-title">
+  <div class="container">
+    <div class="section-head">
+      <p class="kicker">HOW TO BOOK</p>
+      <h2 id="process-title">จองง่าย ใน 3 ขั้นตอน</h2>
+    </div>
+    <ol class="steps">{{{processHtml}}}</ol>
+  </div>
+</section>
+
+{{> cta-band}}

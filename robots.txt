@@ -1,6 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /archive/
-Disallow: /tools/
-Disallow: /docs/
-Sitemap: https://velin-magic-site.vercel.app/sitemap.xml

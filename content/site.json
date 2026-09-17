@@ -1,19 +1,60 @@
 {
+  "_help": "ข้อมูลหลักของเว็บ: ชื่อแบรนด์ ช่องทางติดต่อ และข้อความ SEO พื้นฐาน แก้แล้วรัน update-site.cmd",
+
   "name": "Velin Magic",
+  "shortName": "Velin",
   "url": "https://velin-magic-site.vercel.app",
-  "phone": "062-092-5274",
-  "telephone": "0620925274",
-  "line": "https://lin.ee/gEOLM00",
-  "lineName": "@untitled.magic",
-  "instagram": "https://www.instagram.com/untitled.magic",
-  "facebook": "https://www.facebook.com/profile.php?id=61585347494807",
-  "tiktok": "https://www.tiktok.com/@velin.untitledmagic",
-  "video": "xO9P8aOmR5c",
-  "categories": {
-    "corporate": "งานบริษัท",
-    "launch": "เปิดตัวสินค้า",
-    "wedding": "งานแต่ง & ปาร์ตี้",
-    "kids": "เด็ก & ครอบครัว",
-    "festival": "อีเวนต์ & เทศกาล"
+  "locale": "th_TH",
+  "tagline": "Magic, made personal.",
+  "description": "Velin Magic รับแสดงมายากลสำหรับงานบริษัท งานเปิดตัวสินค้า งานแต่งงาน งานเด็ก และอีเวนต์ 7 รูปแบบ ตั้งแต่มายากลโคลสอัพไปจนถึงอิลลูชันบนเวทีใหญ่ พร้อมราคาชัดเจน",
+  "areaServed": "Thailand",
+
+  "contact": {
+    "phone": "062-092-5274",
+    "telephone": "+66620925274",
+    "line": "https://lin.ee/gEOLM00",
+    "lineName": "@untitled.magic",
+    "note": "ช่องทางติดต่อร่วมกับ Untitled Magic — แจ้งว่าต้องการจองการแสดงของ Velin ได้เลย"
+  },
+
+  "social": {
+    "instagram": "https://www.instagram.com/untitled.magic",
+    "facebook": "https://www.facebook.com/profile.php?id=61585347494807",
+    "tiktok": "https://www.tiktok.com/@velin.untitledmagic"
+  },
+
+  "video": {
+    "youtubeId": "xO9P8aOmR5c",
+    "caption": "บันทึกจากผลงานภายใต้ชื่อ Untitled Magic"
+  },
+
+  "stats": [
+    { "value": "7", "label": "รูปแบบการแสดง" },
+    { "value": "฿8,000", "label": "ราคาเริ่มต้น" },
+    { "value": "เฉพาะงาน", "label": "ออกแบบชุดโชว์ให้" }
+  ],
+
+  "priceNote": "รายการที่ระบุ “เริ่มต้น” ขึ้นอยู่กับขนาดงาน เวที และรูปแบบการแสดงที่ออกแบบร่วมกัน ทักมาบอกรายละเอียดงานได้เลย เราจะจัดชุดการแสดงและเสนอราคาที่แน่นอนให้",
+  "estimateNote": "ราคาประเมินก่อนหักส่วนลดและค่าเดินทาง (ถ้ามี) — ราคาที่แน่นอนอยู่ในใบเสนอราคา",
+
+  "process": [
+    { "title": "เลือกโชว์ที่สนใจ", "text": "ดูตามประเภทงาน แล้วกด “เลือก” เก็บไว้ได้หลายรายการ หรือให้เราช่วยแนะนำ" },
+    { "title": "เล่ารายละเอียดงาน", "text": "วันงาน สถานที่ และจำนวนผู้ชมโดยประมาณ ส่งทาง LINE หรือโทรคุยได้เลย" },
+    { "title": "รับใบเสนอราคา", "text": "สรุประยะเวลา ทีม อุปกรณ์ และราคาที่แน่นอน ก่อนยืนยันการจอง" }
+  ],
+
+  "quoteIncludes": ["ระยะเวลาการแสดง", "จำนวนนักแสดง", "พื้นที่ที่ต้องใช้", "อุปกรณ์ที่เราเตรียมให้", "เวลาเซ็ตอัพ"],
+
+  "performer": {
+    "name": "Velin",
+    "role": "MAGICIAN & PERFORMER",
+    "kicker": "A moment of wonder. A memory that stays.",
+    "title": "ศิลปะที่เกิดขึ้นระหว่างผมกับคุณ",
+    "paragraphs": [
+      "สำหรับผม มายากลไม่ได้จบลงตอนที่กลสำเร็จ แต่มันอยู่ในแววตา รอยยิ้ม และคำถามที่ผู้ชมพกกลับไปด้วย",
+      "Velin คือพื้นที่ของตัวตนและการแสดงของผม ตั้งแต่ความเงียบบนเวทีก่อนเรื่องราวจะเริ่ม ไปจนถึงความประหลาดใจที่เกิดขึ้นใกล้แค่ปลายนิ้ว ผมอยากให้ทุกการพบกันมีบางอย่างให้จดจำ"
+    ],
+    "teamNote": "รูปแบบโชว์ที่ต้องใช้ผู้เชี่ยวชาญเฉพาะทาง เช่น บับเบิ้ลโชว์ จั๊กกลิ้ง และโบโซ่ จะแจ้งทีมร่วมแสดงให้ชัดเจนก่อนจองทุกครั้ง",
+    "photoCredit": "ภาพตัวอย่างการแสดงจากผลงานของทีม"
   }
 }

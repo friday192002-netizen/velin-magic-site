@@ -1,25 +1,34 @@
-# VELIN — Magic, made personal.
+# Velin Magic — เว็บไซต์
 
-Static artist portfolio. No build step or client-side framework.
+เว็บรับแสดงมายากลของ Velin · https://velin-magic-site.vercel.app
 
-## Preview
-```powershell
-python -m http.server 4322 --bind 127.0.0.1
+## ใช้งานเร็ว ๆ
+
+| อยากทำอะไร | แก้ที่ไหน |
+| --- | --- |
+| เพิ่ม/เปลี่ยนรูปโชว์ | วางไฟล์ใน `photos/shows/<ชื่อโชว์>/` → ดู [photos/README.md](photos/README.md) |
+| เปลี่ยนราคา ข้อความโชว์ | `content/shows.json` |
+| เปลี่ยนเบอร์โทร LINE โซเชียล | `content/site.json` |
+| แก้ข้อความหน้าประเภทงาน | `content/occasions.json` |
+| แก้คำถามที่พบบ่อย | `content/faq.json` |
+| เปลี่ยนหน้าตา/สี/ฟอนต์ | `src/css/site.css` (สีอยู่ด้านบนสุดของไฟล์) |
+
+แก้เสร็จแล้ว **ดับเบิลคลิก `update-site.cmd`** — ระบบจะสร้างเว็บใหม่และเปิดตัวอย่างให้ดูที่ http://localhost:4321
+
+> ห้ามแก้ไฟล์ในโฟลเดอร์ `public/` โดยตรง — เป็นไฟล์ที่ระบบสร้างให้ จะถูกเขียนทับทุกครั้ง
+
+## ขึ้นเว็บจริง
+
+โปรเจคเชื่อม GitHub → Vercel ไว้แล้ว push ขึ้น branch `main` เมื่อไหร่ เว็บจริงอัปเดตเองภายในไม่กี่นาที
+
+## สำหรับ AI ที่มาช่วยทำงานต่อ
+
+อ่าน [AGENTS.md](AGENTS.md) ก่อนเริ่ม — มีโครงสร้างโปรเจค กฎ และขั้นตอนทั้งหมด
+
+## คำสั่ง (สำหรับคนเขียนโค้ด)
+
+```bash
+python -m pip install --user Pillow
+python tools/build.py
+python -m http.server 4321 --directory public
 ```
-Open http://127.0.0.1:4322/.
-
-## Edit
-- Page/content: index.html
-- Styling: assets/css/site.css
-- Behaviour: assets/js/site.js
-- Photos: assets/images/
-- Contact links: index.html (search for lin.ee or tel:)
-- Source attribution: docs/asset-sources.json
-- Handoff and limitations: docs/HANDOFF.md
-
-Previous implementation is preserved in archive/previous-site and excluded from Vercel deployments. Legacy scripts and the design canvas are preserved under archive/. Untitled Magic remains a separate untouched project.
-
-## Deployment
-Existing public repository: https://github.com/friday192002-netizen/velin-magic-site
-Existing production: https://velin-magic-site.vercel.app/
-Push main only when publication is requested; Vercel deploys automatically. This redesign is currently local and not published.
