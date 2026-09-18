@@ -366,6 +366,8 @@
   if (lb && typeof lb.showModal === 'function') {
     const img = $('[data-lb-img]', lb);
     const cap = $('[data-lb-caption]', lb);
+    const count = $('[data-lb-count]', lb);
+    const strip = $('[data-lb-strip]', lb);
     let group = [];
     let index = 0;
     let opener = null;
@@ -374,17 +376,35 @@
       const a = group[index];
       img.src = a.href;
       img.alt = a.dataset.caption || '';
-      cap.textContent = `${a.dataset.caption || ''} · ${index + 1}/${group.length}`;
+      cap.textContent = a.dataset.caption || '';
+      count.textContent = `${index + 1} / ${group.length}`;
+      $$('button', strip).forEach((b, n) => {
+        if (n === index) { b.setAttribute('aria-current', 'true'); b.scrollIntoView({ block: 'nearest', inline: 'center', behavior: calm.matches ? 'auto' : 'smooth' }); }
+        else b.removeAttribute('aria-current');
+      });
+      // warm the neighbours so swiping feels instant
+      [index + 1, index - 1].forEach((n) => { const b = group[(n + group.length) % group.length]; if (b) new Image().src = b.href; });
       if (img.animate && !calm.matches) img.animate([{ opacity: 0, transform: 'scale(.98)' }, { opacity: 1, transform: 'none' }], { duration: 320, easing: 'ease-out' });
     };
+    // thumbnail strip: the whole set at a glance inside the viewer
+    const buildStrip = () => {
+      strip.innerHTML = group.map((a, n) => {
+        const t = $('img', a);
+        const src = t ? (t.currentSrc || t.src) : a.href;
+        return `<button type="button" class="lb-thumb" data-lb-go="${n}" aria-label="ภาพที่ ${n + 1}"><img src="${src}" alt="" loading="lazy"></button>`;
+      }).join('');
+      strip.hidden = group.length < 2;
+    };
+    strip.addEventListener('click', (e) => { const b = e.target.closest('[data-lb-go]'); if (b) show(Number(b.dataset.lbGo)); });
     document.addEventListener('click', (e) => {
       const a = e.target.closest('[data-lightbox]');
       if (!a) return;
       e.preventDefault();
       opener = a;
       group = $$(`[data-lightbox="${a.dataset.lightbox}"]`).filter((x) => !x.closest('[hidden]'));
-      show(group.indexOf(a));
+      buildStrip();
       lb.showModal();
+      show(group.indexOf(a));
     });
     $('[data-lb-next]', lb).addEventListener('click', () => show(index + 1));
     $('[data-lb-prev]', lb).addEventListener('click', () => show(index - 1));
@@ -405,6 +425,23 @@
       startX = null;
     });
   }
+
+  /* ─────────────────────────── show page photo grid: first rows, then everything */
+
+  $$('[data-mosaic-more]').forEach((btn) => btn.addEventListener('click', () => {
+    const grid = btn.closest('.container').querySelector('[data-mosaic]');
+    const open = !grid.classList.contains('is-all');
+    grid.classList.toggle('is-all', open);
+    btn.setAttribute('aria-expanded', String(open));
+    btn.firstChild.textContent = open ? 'ย่อภาพ ' : `ดูภาพทั้งหมด ${grid.children.length} ภาพ `;
+    if (open) {
+      $$('.m-more', grid).forEach((el, n) => {
+        if (el.animate && !calm.matches) el.animate([{ opacity: 0, transform: 'translateY(14px)' }, { opacity: 1, transform: 'none' }], { duration: 500, delay: Math.min(n, 12) * 40, easing: 'cubic-bezier(.16,1,.3,1)', fill: 'backwards' });
+      });
+    } else {
+      grid.scrollIntoView({ block: 'start', behavior: calm.matches ? 'auto' : 'smooth' });
+    }
+  }));
 
   /* ─────────────────────────── video (YouTube loads only on request) */
 

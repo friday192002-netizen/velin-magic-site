@@ -39,7 +39,21 @@
     </div>
   </section>
 
-  <section class="section section-ivory" aria-labelledby="about-show">
+  <section class="section section-ivory section-photos" aria-labelledby="photos-title">
+    <div class="container">
+      <div class="section-head section-head-row" data-reveal>
+        <div>
+          <p class="kicker">GALLERY · {{show.photoTotal}} PHOTOS</p>
+          <h2 id="photos-title">ภาพจากงานจริง</h2>
+          <p class="section-sub">กดที่ภาพเพื่อดูขนาดใหญ่ แล้วปัดหรือกดลูกศรเพื่อดูภาพถัดไป</p>
+        </div>
+      </div>
+      <div class="mosaic" data-mosaic>{{{show.mosaic}}}</div>
+      {{#show.mosaicMore}}<div class="mosaic-foot"><button type="button" class="btn btn-ghost btn-lg" data-mosaic-more aria-expanded="false">ดูภาพทั้งหมด {{show.photoTotal}} ภาพ <svg class="icon" aria-hidden="true"><use href="#i-chevron"/></svg></button></div>{{/show.mosaicMore}}
+    </div>
+  </section>
+
+  <section class="section section-linen" aria-labelledby="about-show">
     <div class="container detail-grid">
       <div class="detail-main" data-reveal>
         <p class="kicker">ABOUT THIS SHOW</p>
@@ -70,20 +84,6 @@
       </div>
     </div>
   </section>
-
-  {{#pairFlow}}
-  <section class="section section-linen" aria-labelledby="pair-title">
-    <div class="container">
-      <div class="section-head section-head-row" data-reveal>
-        <div>
-          <p class="kicker">RUN OF SHOW</p>
-          <h2 id="pair-title">ตัวอย่างการใช้คู่กับโชว์อื่นใน{{pairLabel}}</h2>
-        </div>
-      </div>
-      <div class="flow-card" data-reveal>{{{pairFlow}}}</div>
-    </div>
-  </section>
-  {{/pairFlow}}
 
   <section class="section section-ivory" aria-labelledby="related-title">
     <div class="container">

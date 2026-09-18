@@ -179,6 +179,9 @@ class Photo:
         return "/" + rel
 
 
+MOSAIC_FIRST = 9   # photos shown in the show-page grid before "ดูภาพทั้งหมด"
+
+
 def show_photos(slug: str, show_name: str, cover_alt: str, photo_alts: dict | None = None) -> tuple[Photo, list[Photo]]:
     folder = PHOTOS / "shows" / slug
     files = sorted(p for p in folder.iterdir() if p.suffix.lower() in IMAGE_EXT) if folder.exists() else []
@@ -187,11 +190,27 @@ def show_photos(slug: str, show_name: str, cover_alt: str, photo_alts: dict | No
     covers = [p for p in files if p.stem.lower() == "cover"]
     cover_file = covers[0] if covers else files[0]
     cover = Photo(cover_file, cover_alt)
+    # a gallery file that is the cover again (often the same shot re-exported)
+    # would show twice in the carousel and the grid, so it is skipped
+    cover_print = fingerprint(cover_file)
+    rest = [p for p in files if p != cover_file and not looks_same(fingerprint(p), cover_print)]
     gallery = [
         Photo(p, (photo_alts or {}).get(p.name, f"ภาพตัวอย่างการแสดง{show_name} ภาพที่ {i}"))
-        for i, p in enumerate((p for p in files if p != cover_file), start=1)
+        for i, p in enumerate(rest, start=1)
     ]
     return cover, gallery
+
+
+def fingerprint(path: Path) -> int:
+    """Difference hash: survives resizing and recompression, not a different photo."""
+    with Image.open(path) as im:
+        small = ImageOps.exif_transpose(im).convert("L").resize((9, 8), Image.LANCZOS)
+        px = small.tobytes()
+    return sum(1 << (r * 8 + c) for r in range(8) for c in range(8) if px[r * 9 + c] > px[r * 9 + c + 1])
+
+
+def looks_same(a: int, b: int) -> bool:
+    return bin(a ^ b).count("1") <= 6
 
 
 # ─────────────────────────────────────────────────────────────── helpers
@@ -529,18 +548,27 @@ def build() -> None:
         thumbs = "".join(
             f'<button type="button" class="thumb" data-slide="{i}" aria-label="ภาพที่ {i + 1}"{current if i == 0 else ""}>'
             f'{p.tag("96px", alt="")}</button>' for i, p in enumerate(s["photos"]))
-        occasion_flows = [o for o in occasions if any(st["show"] == s["slug"] for st in o.get("flow", []))]
+        # overview grid: every photo at a glance; tiles take their shape from the photo
+        def tile_class(i: int, ph: Photo) -> str:
+            ratio = ph.width / ph.height
+            shape = "m-feature" if i == 0 else "m-tall" if ratio < .85 else "m-wide" if ratio > 1.6 else ""
+            return " ".join(x for x in ("mosaic-item", shape, "m-more" if i >= MOSAIC_FIRST else "") if x)
+        mosaic = "".join(
+            f'<a class="{tile_class(i, ph)}" href="{ph.largest}" data-lightbox="{s["slug"]}-grid" data-caption="{esc(ph.alt, quote=True)}" '
+            f'aria-label="เปิดภาพที่ {i + 1} จาก {len(s["photos"])}: {esc(ph.alt, quote=True)}">'
+            f'{ph.tag("(max-width: 640px) 50vw, (max-width: 1100px) 33vw, 300px" if i else "(max-width: 640px) 100vw, 600px", alt=ph.alt)}'
+            f'<span class="mosaic-zoom" aria-hidden="true"><svg class="icon"><use href="#i-expand"/></svg></span></a>'
+            for i, ph in enumerate(s["photos"]))
         body = fragment("page-show", common, crumbs=crumbs, show={
             **s,
-            "slides": slides, "thumbs": thumbs, "photoTotal": len(s["photos"]),
+            "slides": slides, "thumbs": thumbs, "photoTotal": len(s["photos"]), "mosaic": mosaic,
+            "mosaicMore": max(0, len(s["photos"]) - MOSAIC_FIRST),
             "bodyHtml": "".join(f"<p>{esc(t)}</p>" for t in s["body"]),
             "fitsHtml": "".join(f"<li>{esc(t)}</li>" for t in s["fits"]),
             "occasionLinks": "".join(f'<li><a href="{occ_by_slug[o]["url"]}">{esc(occ_by_slug[o]["label"])}</a></li>'
                                      for o in s["occasions"]),
             "prepareHtml": "".join(f"<li>{esc(t)}</li>" for t in s["prepare"]),
-        }, relatedGrid=show_grid(related, rail=True),
-            pairFlow=flow_html(occasion_flows[0]) if occasion_flows else "",
-            pairLabel=occasion_flows[0]["label"] if occasion_flows else "")
+        }, relatedGrid=show_grid(related, rail=True))
         price_spec = {"@type": "PriceSpecification", "priceCurrency": "THB",
                       **({"minPrice": s["price"]} if s["priceFrom"] else {"price": s["price"]})}
         service = {

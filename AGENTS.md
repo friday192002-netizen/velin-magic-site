@@ -10,6 +10,9 @@ Read this before editing. CLAUDE.md points here.
 - Customers choose shows, describe the event and request a quotation. No backend booking or automatic message sending exists.
 - Never invent reviews, awards, clients, durations, availability or team identities.
 - Source photos illustrate show formats; not every performer pictured is Velin.
+- Show galleries mix the 171 set (cover, 01…) with photos copied from the Untitled Magic site (u01…, 18 September 2026). Each u* file has a scene description in shows.json -> photoAlts. The build skips any gallery file that looks identical to the cover.
+- Typography is minimal sans: Anuphan for headings/accents, IBM Plex Sans Thai for body. No serif or italic faces.
+- Show pages: hero carousel plus a photo grid (first 9 tiles, then "ดูภาพทั้งหมด") that opens the lightbox with a thumbnail strip. The "use with other shows" run-of-show section was removed from show pages at the owner's request; flows remain on home, catalogue and occasion pages.
 - Never edit the other owner projects (Untitled/171) when adapting assets.
 - Thai first; respect reduced motion and keyboard use.
 - Do not push/deploy unless the owner asks. Pushing main auto-deploys to Vercel.
