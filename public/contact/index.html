@@ -27,7 +27,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=IBM+Plex+Sans+Thai:wght@300;400;500;600&family=Noto+Serif+Thai:wght@500;600&display=swap">
-<link rel="stylesheet" href="/assets/site.87adf5d7.css">
+<link rel="stylesheet" href="/assets/site.2d59fa22.css">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"หน้าแรก","item":"https://velin-magic-site.vercel.app/"},{"@type":"ListItem","position":2,"name":"ขอใบเสนอราคา","item":"https://velin-magic-site.vercel.app/contact/"}]}</script>
 </head>
 <body class="has-dark-top">
@@ -57,7 +57,7 @@
 
 <header class="header" data-header>
   <div class="header-inner">
-    <a class="brand" href="/" aria-label="Velin Magic หน้าแรก">velin<span aria-hidden="true">✳</span></a>
+    <a class="brand" href="/" aria-label="Velin Magic หน้าแรก"><img src="/velin-wordmark-v1.svg" width="652" height="156" alt="Velin" decoding="async"></a>
 
     <nav class="nav" id="site-nav" aria-label="เมนูหลัก" data-nav>
       <ul class="nav-list">
@@ -82,11 +82,6 @@
     </nav>
 
     <div class="header-actions">
-      <button type="button" class="bag" data-sheet-open aria-label="รายการโชว์ที่เลือก" data-fly-target>
-        <svg class="icon" aria-hidden="true"><use href="#i-bag"/></svg>
-        <span class="bag-label">รายการที่เลือก</span>
-        <span class="badge" data-shortlist-count hidden>0</span>
-      </button>
       <a class="btn btn-gold header-cta" href="/contact/">ขอใบเสนอราคา</a>
       <button type="button" class="menu-button" aria-expanded="false" aria-controls="site-nav" data-menu-button>
         <span></span><span></span><span class="sr">เมนู</span>
@@ -104,13 +99,9 @@
       <div>
         <p class="kicker">REQUEST A QUOTE</p>
         <h1 id="page-title">ขอใบเสนอราคา</h1>
-        <p class="page-lede">ใช้เวลาไม่ถึง 1 นาที ตรวจโชว์ที่เลือก กรอกรายละเอียดงานสั้น ๆ แล้วส่งทาง LINE</p>
+        <p class="page-lede">ใช้เวลาไม่ถึง 1 นาที กรอกรายละเอียดงานสั้น ๆ แล้วส่งทาง LINE</p>
       </div>
-      <ol class="stepper" aria-label="ขั้นตอน" data-stepper>
-        <li class="is-active"><span>1</span>โชว์ที่เลือก</li>
-        <li><span>2</span>รายละเอียดงาน</li>
-        <li><span>3</span>ส่งทาง LINE</li>
-      </ol>
+      <ol class="stepper" aria-label="ขั้นตอน" data-stepper><li class="is-active"><span>1</span>รายละเอียดงาน</li><li><span>2</span>ส่งทาง LINE</li></ol>
     </div>
   </div>
 </section>
@@ -119,19 +110,10 @@
   <div class="container contact-grid">
     <div class="contact-main">
 
-      <div class="panel" aria-labelledby="picked-title" data-step="1">
-        <div class="panel-head">
-          <h2 id="picked-title" class="h-small"><span class="step-dot">1</span> โชว์ที่เลือกไว้</h2>
-          <a class="link-arrow" href="/shows/">เพิ่ม / เปลี่ยนโชว์</a>
-        </div>
-        <div data-shortlist-panel>
-          <p class="empty">ยังไม่ได้เลือกโชว์ — <a href="/shows/">ดูรูปแบบการแสดง</a> แล้วกด “เลือก” หรือข้ามขั้นนี้ไปเล่ารายละเอียดงานได้เลย</p>
-        </div>
-      </div>
-
-      <form class="panel quote-form" data-quote-form novalidate aria-labelledby="form-title" data-step="2">
-        <h2 id="form-title" class="h-small"><span class="step-dot">2</span> รายละเอียดงาน</h2>
+      <form class="panel quote-form" data-quote-form novalidate aria-labelledby="form-title" data-step="1">
+        <h2 id="form-title" class="h-small"><span class="step-dot">1</span> รายละเอียดงาน</h2>
         <div class="form-grid">
+<label class="field field-wide"><span class="field-label">โชว์ที่สนใจ (ถ้ามี)</span><input name="show" type="text" placeholder="ระบุชื่อโชว์ หรือให้เราช่วยแนะนำ"></label>
           <label class="field">
             <span class="field-label">ชื่อผู้ติดต่อ <b aria-hidden="true">*</b></span>
             <input name="name" type="text" autocomplete="name" required enterkeyhint="next">
@@ -171,7 +153,7 @@
         <p class="fine">ข้อมูลใช้สร้างข้อความในเบราว์เซอร์ของคุณเท่านั้น ไม่มีการส่งหรือบันทึกไว้บนเว็บไซต์ — <a href="/privacy/">อ่านเพิ่มเติม</a></p>
       </form>
 
-      <div class="panel quote-output" data-quote-output hidden tabindex="-1" aria-labelledby="out-title" data-step="3">
+      <div class="panel quote-output" data-quote-output hidden tabindex="-1" aria-labelledby="out-title" data-step="2">
         <div class="out-head">
           <span class="out-check" aria-hidden="true"><svg class="icon"><use href="#i-check"/></svg></span>
           <div>
@@ -196,7 +178,7 @@
       </div>
       <div class="panel">
         <h2 class="h-small">หลังจากส่งข้อความ</h2>
-        <ol class="mini-steps"><li class="step" data-reveal style="--i:0"><span class="step-n">01</span><h3>เลือกโชว์ที่สนใจ</h3><p>ดูตามประเภทงาน แล้วกด “เลือก” เก็บไว้ได้หลายรายการ หรือให้เราช่วยแนะนำ</p></li><li class="step" data-reveal style="--i:1"><span class="step-n">02</span><h3>เล่ารายละเอียดงาน</h3><p>วันงาน สถานที่ และจำนวนผู้ชมโดยประมาณ ส่งทาง LINE หรือโทรคุยได้เลย</p></li><li class="step" data-reveal style="--i:2"><span class="step-n">03</span><h3>รับใบเสนอราคา</h3><p>สรุประยะเวลา ทีม อุปกรณ์ และราคาที่แน่นอน ก่อนยืนยันการจอง</p></li></ol>
+        <ol class="mini-steps"><li class="step" data-reveal style="--i:0"><span class="step-n">01</span><h3>เลือกโชว์ที่สนใจ</h3><p>ดูการแสดงตามประเภทงาน หรือให้เราช่วยแนะนำรูปแบบที่เหมาะกับคุณ</p></li><li class="step" data-reveal style="--i:1"><span class="step-n">02</span><h3>เล่ารายละเอียดงาน</h3><p>วันงาน สถานที่ และจำนวนผู้ชมโดยประมาณ ส่งทาง LINE หรือโทรคุยได้เลย</p></li><li class="step" data-reveal style="--i:2"><span class="step-n">03</span><h3>รับใบเสนอราคา</h3><p>สรุประยะเวลา ทีม อุปกรณ์ และราคาที่แน่นอน ก่อนยืนยันการจอง</p></li></ol>
       </div>
     </aside>
   </div>
@@ -207,7 +189,7 @@
 <footer class="footer">
   <div class="container footer-top">
     <div class="footer-brand">
-      <a class="brand brand-lg" href="/">velin<span aria-hidden="true">✳</span></a>
+      <a class="brand brand-lg" href="/"><img src="/velin-wordmark-v1.svg" width="652" height="156" alt="Velin" decoding="async"></a>
       <p class="footer-tagline">Magic, made personal.</p>
       <div class="footer-contact">
         <a href="tel:+66620925274"><svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg>062-092-5274</a>
@@ -246,26 +228,6 @@
 
 
 
-<div class="sheet-backdrop" data-sheet-backdrop hidden></div>
-<aside class="sheet" data-sheet role="dialog" aria-modal="true" aria-labelledby="sheet-title" hidden>
-  <div class="sheet-grip" aria-hidden="true" data-sheet-grip></div>
-  <div class="sheet-head">
-    <div>
-      <p class="kicker">YOUR SHORTLIST</p>
-      <h2 id="sheet-title">โชว์ที่เลือกไว้</h2>
-    </div>
-    <button type="button" class="icon-btn" data-sheet-close aria-label="ปิด"><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button>
-  </div>
-  <div class="sheet-body" data-sheet-body></div>
-  <div class="sheet-foot" data-sheet-foot>
-    <a class="btn btn-gold btn-lg btn-block" href="/contact/">ขอใบเสนอราคา <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
-    <div class="sheet-foot-row">
-      <a class="btn btn-line" href="https://lin.ee/gEOLM00" target="_blank" rel="noopener"><svg class="icon" aria-hidden="true"><use href="#i-line"/></svg> LINE</a>
-      <a class="btn btn-glass" href="tel:+66620925274"><svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg> 062-092-5274</a>
-    </div>
-  </div>
-</aside>
-
 <div class="toast" role="status" aria-live="polite" data-toast></div>
 
 <dialog class="lightbox" data-lightbox-dialog aria-label="ภาพการแสดง">
@@ -276,6 +238,6 @@
 </dialog>
 
 <script type="application/json" id="show-data">[{"slug":"opening","th":"มายากลเปิดตัว","en":"GRAND MAGIC OPENING","price":40000,"from":true,"url":"/shows/opening/","thumb":"/img/shows/opening/cover-42a4bd79-480.webp","tagline":"เปิดงานให้โดดเด่นและสร้างความประทับใจตั้งแต่วินาทีแรก","occasions":["launch","corporate"],"moods":["stage","spectacle"],"velin":false},{"slug":"closeup","th":"มายากลโคลสอัพ","en":"CLOSE-UP MAGIC","price":17000,"from":false,"url":"/shows/closeup/","thumb":"/img/shows/closeup/cover-50adc325-480.webp","tagline":"มายากลระยะประชิดที่เกิดขึ้นตรงหน้าคุณ","occasions":["corporate","wedding","launch"],"moods":["intimate"],"velin":true},{"slug":"stage","th":"มายากลเวที","en":"STAGE MAGIC SHOW","price":17000,"from":false,"url":"/shows/stage/","thumb":"/img/shows/stage/cover-4650c638-480.webp","tagline":"การแสดงมายากลเต็มรูปแบบบนเวที สำหรับผู้ชมจำนวนมาก","occasions":["corporate","kids","festival","wedding"],"moods":["stage"],"velin":true},{"slug":"bubble","th":"บับเบิ้ลโชว์","en":"BUBBLE MAGIC","price":8000,"from":false,"url":"/shows/bubble/","thumb":"/img/shows/bubble/cover-9ccb39f0-480.webp","tagline":"เมื่อ “ฟองสบู่” กลายเป็นเวทมนตร์","occasions":["kids","festival"],"moods":["family"],"velin":false},{"slug":"juggling","th":"จั๊กกลิ้ง","en":"JUGGLING SHOW","price":8000,"from":false,"url":"/shows/juggling/","thumb":"/img/shows/juggling/cover-1ffedbb8-480.webp","tagline":"ศิลปะการควบคุมวัตถุที่ผสมผสานความสามารถ ความแม่นยำ และความตื่นเต้น","occasions":["festival","kids","launch"],"moods":["family"],"velin":false},{"slug":"bozo","th":"โบโซ่ & ลูกโป่ง","en":"BOZO & BALLOON MAGIC","price":8000,"from":false,"url":"/shows/bozo/","thumb":"/img/shows/bozo/cover-1f39bf29-480.webp","tagline":"ความสนุกที่ผสมผสานมายากลและศิลปะลูกโป่งเข้าด้วยกัน","occasions":["kids","festival"],"moods":["family"],"velin":false},{"slug":"illusion","th":"มายากลอิลลูชัน","en":"GRAND ILLUSION","price":30000,"from":true,"url":"/shows/illusion/","thumb":"/img/shows/illusion/cover-7e1993cd-480.webp","tagline":"ก้าวข้ามขีดจำกัดของมายากลด้วยการแสดง Illusion ขนาดใหญ่","occasions":["corporate","launch","festival"],"moods":["spectacle","stage"],"velin":false}]</script>
-<script src="/assets/site.e3c1a217.js" defer></script>
+<script src="/assets/site.80f1b6fb.js" defer></script>
 </body>
 </html>

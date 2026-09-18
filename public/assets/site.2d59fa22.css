@@ -244,8 +244,9 @@ em { font-style: normal; }
 .header-inner { display: flex; align-items: center; gap: 28px; height: var(--header-h); max-width: 1360px; margin-inline: auto; padding-inline: var(--gutter); }
 
 .brand { position: relative; font-family: var(--serif); font-size: 32px; font-weight: 600; line-height: 1; letter-spacing: -.02em; text-decoration: none; color: var(--on-dark); }
-.brand span { display: inline-block; margin-left: 3px; font-family: var(--font); font-size: .5em; vertical-align: super; color: var(--champagne); transition: transform .8s var(--ease-out); }
-.brand:hover span { transform: rotate(180deg); }
+.brand { display: inline-flex; flex-shrink: 0; align-items: center; min-height: 44px; }
+.brand img { display: block; width: 124px; height: auto; }
+.brand-lg img { width: 182px; }
 .brand-lg { font-size: 48px; }
 
 .nav { margin-left: auto; }
@@ -364,11 +365,6 @@ em { font-style: normal; }
 .kicker-line { width: 36px; height: 1px; background: var(--gold); }
 .hero-title { display: grid; gap: 14px; font-family: var(--display); font-size: inherit; }
 .wordmark { display: flex; font-family: var(--serif); font-size: clamp(76px, 12vw, 156px); font-weight: 600; line-height: .82; letter-spacing: .015em; }
-.wordmark span { display: inline-block; background: linear-gradient(180deg, #FFF8EC 0%, #F1DDBC 55%, #C99D6C 100%); -webkit-background-clip: text; background-clip: text; color: transparent; animation: letter 1.1s var(--ease-out) both; }
-.wordmark span:nth-child(2) { animation-delay: .07s; }
-.wordmark span:nth-child(3) { animation-delay: .14s; }
-.wordmark span:nth-child(4) { animation-delay: .21s; }
-.wordmark span:nth-child(5) { animation-delay: .28s; }
 @keyframes letter { from { opacity: 0; transform: translateY(.35em); filter: blur(8px); } }
 .hero-h1 { font-size: clamp(26px, 3.2vw, 42px); line-height: 1.35; color: var(--on-dark); animation: fade-up 1s var(--ease-out) .35s both; }
 @keyframes fade-up { from { opacity: 0; transform: translateY(18px); } }
@@ -1258,3 +1254,18 @@ td.pr-price .price-amount { font-size: 19px; }
   .marquee-track { animation: none; }
   .hero-dust { display: none; }
 }
+
+/* Outlined Velin wordmark: image artwork, independent of installed fonts. */
+.wordmark img { display: block; width: min(100%, 510px); height: auto; margin-block: -4px 8px; }
+.marquee .marquee-separator { display: inline-block; width: 28px; height: 1px; background: currentColor; opacity: .45; flex: 0 0 28px; }
+@media (max-width: 600px) { .brand img { width: 108px; } .brand-lg img { width: 164px; } .wordmark img { width: min(100%, 360px); } }
+
+/* Direct enquiries replace basket controls. */
+.card-foot { flex-wrap: wrap; gap: 12px; }
+.card-foot .btn, .fr-foot .btn, .price-row .btn { min-height: 44px; }
+.dock-show > .btn { flex-shrink: 0; min-height: 48px; }
+.menu-button { min-width: 48px; min-height: 48px; }
+@media (max-width: 380px) { .container { min-width: 0; } .hero-actions { flex-wrap: wrap; } .hero-actions .btn { padding-inline: 18px; } .filter-row { flex-wrap: wrap; } }
+
+.finder-steps, .finder-step, .finder-result, .fr-body { min-width: 0; }
+@media (max-width: 400px) { .finder-options, .finder-moods { grid-template-columns: repeat(2, minmax(0, 1fr)); } .finder-options .chip, .finder-moods .mood { white-space: normal; min-width: 0; overflow-wrap: anywhere; } .fr-foot { flex-wrap: wrap; } }

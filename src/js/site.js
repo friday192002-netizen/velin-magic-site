@@ -23,7 +23,7 @@
   const onScroll = () => {
     const y = scrollY;
     header?.classList.toggle('is-scrolled', y > 24);
-    const busy = body.classList.contains('menu-open') || body.classList.contains('sheet-open');
+    const busy = body.classList.contains('menu-open');
     const hide = !busy && y > 420 && y > lastY + 4;
     const show = y < lastY - 4 || y < 420;
     if (hide) { header?.classList.add('is-hidden'); body.classList.add('header-hidden'); }
@@ -56,7 +56,7 @@
     }
   };
   fabToggle?.addEventListener('click', () => setFab(!fab.classList.contains('is-open')));
-  fabPanel?.addEventListener('click', (e) => { if (e.target.closest('a, [data-sheet-open]')) setFab(false, false); });
+  fabPanel?.addEventListener('click', (e) => { if (e.target.closest('a')) setFab(false, false); });
   document.addEventListener('click', (e) => { if (fab && !fab.contains(e.target)) setFab(false, false); });
 
   // on the home page the hero already carries the main buttons — the contact button arrives once they scroll away
@@ -89,24 +89,8 @@
     if (!e.target.closest('.has-menu')) $$('[data-submenu]').forEach((b) => b.setAttribute('aria-expanded', 'false'));
   });
 
-  /* ─────────────────────────── shortlist store
-     The visitor's choices survive page changes so the journey can go
-     finder → show page → occasion page → contact without losing anything. */
-
-  const KEY = 'velin:shortlist';
-  let memory = [];
-  const readList = () => {
-    try { return JSON.parse(localStorage.getItem(KEY) || '[]').filter((s) => bySlug[s]); }
-    catch { return memory.filter((s) => bySlug[s]); }
-  };
-  const writeList = (list) => {
-    memory = [...new Set(list)];
-    try { localStorage.setItem(KEY, JSON.stringify(memory)); } catch { /* private mode — memory only */ }
-  };
-
-  // a ?shows=a,b link (e.g. shared in chat) seeds the list
-  const seeded = new URLSearchParams(location.search).get('shows');
-  if (seeded) writeList([...readList(), ...seeded.split(',').filter((s) => bySlug[s])]);
+  // Retire the old basket; enquiries carry only an optional show in the URL.
+  try { localStorage.removeItem('velin:shortlist'); } catch {}
 
   const toast = $('[data-toast]');
   let toastTimer;
@@ -118,214 +102,8 @@
     toastTimer = setTimeout(() => toast.classList.remove('is-visible'), 2600);
   };
 
-  const summary = (list) => {
-    const items = list.map((s) => bySlug[s]);
-    return { items, total: items.reduce((n, s) => n + s.price, 0), approx: items.some((s) => s.from) };
-  };
-
-  let lastCount = null;
-  const paint = () => {
-    const list = readList();
-    $$('[data-pick]').forEach((btn) => {
-      const on = list.includes(btn.dataset.pick);
-      btn.setAttribute('aria-pressed', String(on));
-      const label = $('[data-pick-label]', btn);
-      if (label) label.textContent = on ? 'เลือกแล้ว' : (btn.classList.contains('pick-lg') ? 'เลือกโชว์นี้' : 'เลือก');
-      btn.closest('.show-card')?.classList.toggle('is-picked', on);
-    });
-    $$('[data-pick-set]').forEach((btn) => {
-      const set = btn.dataset.pickSet.split(',');
-      const done = set.every((s) => list.includes(s));
-      btn.classList.toggle('is-done', done);
-      const label = $('[data-set-label]', btn);
-      if (label) label.textContent = done ? 'เลือกแล้ว · ดูรายการ' : 'เลือกทั้งชุด';
-      const use = $('use', btn);
-      use?.setAttribute('href', done ? '#i-check' : '#i-plus');
-    });
-    $$('[data-shortlist-count]').forEach((el) => {
-      el.textContent = list.length;
-      el.hidden = list.length === 0;
-      if (lastCount !== null && list.length > lastCount) {
-        el.classList.remove('is-bump'); void el.offsetWidth; el.classList.add('is-bump');
-      }
-    });
-    const fabShortlist = $('[data-fab-shortlist]');
-    if (fabShortlist) {
-      fabShortlist.hidden = !list.length;
-      $('[data-fab-summary]', fabShortlist).textContent = `โชว์ที่เลือกไว้ ${list.length} รายการ · รวมประมาณ ${baht(summary(list).total)}`;
-    }
-    lastCount = list.length;
-    renderSheet(list);
-    renderPanel(list);
-  };
-
-  /* a small gold dot travels from the button to the bag — the eye learns where choices go */
-  const fly = (from) => {
-    if (calm.matches || !from || !Element.prototype.animate) return;
-    const target = $$('[data-fly-target]').find((el) => el.getClientRects().length && !el.closest('.is-away') && getComputedStyle(el).visibility !== 'hidden'
-      && el.getBoundingClientRect().bottom > 0 && el.getBoundingClientRect().top < innerHeight);
-    if (!target) return;
-    const a = from.getBoundingClientRect();
-    const b = target.getBoundingClientRect();
-    const x0 = a.left + a.width / 2, y0 = a.top + a.height / 2;
-    const x1 = b.left + b.width / 2, y1 = b.top + b.height / 2;
-    const dot = document.createElement('span');
-    dot.className = 'fly-dot';
-    dot.style.left = x0 + 'px'; dot.style.top = y0 + 'px';
-    body.append(dot);
-    const dx = x1 - x0, dy = y1 - y0, lift = Math.min(-80, dy / 2 - 90);
-    dot.animate([
-      { transform: 'translate(0,0) scale(1)', opacity: 1 },
-      { transform: `translate(${dx * 0.5}px, ${lift}px) scale(1.15)`, opacity: 1, offset: 0.45 },
-      { transform: `translate(${dx}px, ${dy}px) scale(.35)`, opacity: 0.3 },
-    ], { duration: 720, easing: 'cubic-bezier(.5,0,.3,1)', fill: 'forwards' });
-    setTimeout(() => dot.remove(), 740);
-  };
-
-  document.addEventListener('click', (e) => {
-    const btn = e.target.closest('[data-pick]');
-    if (btn) {
-      const slug = btn.dataset.pick;
-      const list = readList();
-      const on = !list.includes(slug);
-      writeList(on ? [...list, slug] : list.filter((s) => s !== slug));
-      paint();
-      if (on) {
-        fly(btn);
-        if (!location.pathname.startsWith('/contact')) {
-          const n = readList().length;
-          showToast(`<span>เพิ่ม <b>${esc(bySlug[slug].th)}</b> · ${n} รายการ</span>`);
-        }
-      }
-      return;
-    }
-    const set = e.target.closest('[data-pick-set]');
-    if (set) {
-      const slugs = set.dataset.pickSet.split(',').filter((s) => bySlug[s]);
-      const list = readList();
-      if (slugs.every((s) => list.includes(s))) { openSheet(set); return; }
-      writeList([...list, ...slugs]);
-      paint();
-      fly(set);
-      showToast(`<span>เพิ่มทั้งชุด ${slugs.length} โชว์แล้ว · รวม ${readList().length} รายการ</span>`);
-    }
-  });
-
-  addEventListener('storage', (e) => { if (e.key === KEY) paint(); });
-
-  /* ─────────────────────────── shortlist sheet (bottom sheet on phones, drawer on desktop) */
-
-  const sheet = $('[data-sheet]');
-  const sheetBody = $('[data-sheet-body]');
-  const backdrop = $('[data-sheet-backdrop]');
-  let sheetOpener = null;
-  let sheetTimer;
-
-  const itemRows = (items) => '<ul class="sl-list">' + items.map((s, i) => `
-    <li class="sl-item" style="animation-delay:${i * 40}ms">
-      <img class="sl-thumb" src="${s.thumb}" alt="" width="64" height="64" loading="lazy">
-      <span class="sl-name"><small>${esc(s.en)}</small><a href="${s.url}">${esc(s.th)}</a></span>
-      <span class="sl-price">${s.from ? '<small>เริ่มต้น</small>' : ''}${baht(s.price)}</span>
-      <button type="button" class="sl-remove" data-remove="${s.slug}" aria-label="เอา ${esc(s.th)} ออก">${icon('i-close')}</button>
-    </li>`).join('') + '</ul>';
-
-  const totalRow = ({ total, approx }) => `
-    <div class="sl-total">
-      <div><span class="fine">รวมประมาณ</span><strong>${baht(total)}</strong>
-        <span class="fine">${approx ? 'บางรายการเป็นราคาเริ่มต้น — ราคาจริงสรุปในใบเสนอราคา' : 'ราคาจริงสรุปในใบเสนอราคา'}</span></div>
-      <button type="button" class="sl-clear" data-clear>ล้างรายการ</button>
-    </div>`;
-
-  function renderSheet(list) {
-    if (!sheetBody) return;
-    if (!list.length) {
-      sheetBody.innerHTML = `
-        <div class="sheet-empty">
-          ${icon('i-bag')}
-          <p>ยังไม่ได้เลือกโชว์<br>กด “เลือก” ที่โชว์ที่สนใจ แล้วส่งให้เราทีเดียว</p>
-          <a class="btn btn-dark" href="/shows/">ดูรูปแบบโชว์ &amp; ราคา</a>
-        </div>`;
-      return;
-    }
-    sheetBody.innerHTML = itemRows(summary(list).items) + totalRow(summary(list));
-  }
-
-  const focusables = () => $$('a[href], button:not([disabled]), input, select, textarea', sheet).filter((el) => el.getClientRects().length);
-
-  function openSheet(opener) {
-    if (!sheet) return;
-    clearTimeout(sheetTimer);
-    sheetOpener = opener?.closest('[data-fab]') ? fabToggle : (opener || document.activeElement);
-    setMenu(false);
-    setFab(false, false);
-    sheet.hidden = false; backdrop.hidden = false;
-    sheet.style.transform = '';
-    void sheet.offsetWidth;
-    sheet.classList.add('is-open'); backdrop.classList.add('is-open');
-    body.classList.add('sheet-open');
-    $('[data-sheet-close]', sheet)?.focus({ preventScroll: true });
-  }
-  function closeSheet() {
-    if (!sheet || sheet.hidden) return;
-    sheet.classList.remove('is-open'); backdrop.classList.remove('is-open');
-    sheet.style.transform = '';
-    body.classList.remove('sheet-open');
-    sheetTimer = setTimeout(() => { sheet.hidden = true; backdrop.hidden = true; }, calm.matches ? 0 : 520);
-    sheetOpener?.focus?.({ preventScroll: true });
-  }
-
-  document.addEventListener('click', (e) => {
-    const opener = e.target.closest('[data-sheet-open]');
-    if (opener) { e.preventDefault(); openSheet(opener); }
-  });
-  $('[data-sheet-close]')?.addEventListener('click', closeSheet);
-  backdrop?.addEventListener('click', closeSheet);
-  sheet?.addEventListener('click', (e) => {
-    const rm = e.target.closest('[data-remove]');
-    if (rm) {
-      const row = rm.closest('.sl-item');
-      const done = () => { writeList(readList().filter((s) => s !== rm.dataset.remove)); paint(); };
-      if (row && row.animate && !calm.matches) {
-        row.animate([{ opacity: 1 }, { opacity: 0, transform: 'translateX(24px)' }], { duration: 200, fill: 'forwards' });
-        setTimeout(done, 200);
-      } else done();
-    }
-    if (e.target.closest('[data-clear]')) { writeList([]); paint(); }
-    if (e.target.closest('a[href]')) closeSheet();
-  });
-  sheet?.addEventListener('keydown', (e) => {
-    if (e.key !== 'Tab') return;
-    const f = focusables();
-    if (!f.length) return;
-    if (e.shiftKey && document.activeElement === f[0]) { e.preventDefault(); f[f.length - 1].focus(); }
-    else if (!e.shiftKey && document.activeElement === f[f.length - 1]) { e.preventDefault(); f[0].focus(); }
-  });
-
-  // drag the sheet down to dismiss (phones)
-  if (sheet) {
-    let startY = null, dy = 0;
-    const handle = (e) => e.target.closest('[data-sheet-grip], .sheet-head');
-    sheet.addEventListener('touchstart', (e) => {
-      if (!handle(e) || innerWidth > 767) return;
-      startY = e.touches[0].clientY; dy = 0;
-      sheet.style.transition = 'none';
-    }, { passive: true });
-    sheet.addEventListener('touchmove', (e) => {
-      if (startY === null) return;
-      dy = Math.max(0, e.touches[0].clientY - startY);
-      sheet.style.transform = `translateY(${dy}px)`;
-    }, { passive: true });
-    sheet.addEventListener('touchend', () => {
-      if (startY === null) return;
-      startY = null;
-      sheet.style.transition = '';
-      if (dy > 90) closeSheet(); else sheet.style.transform = '';
-    });
-  }
-
   document.addEventListener('keydown', (e) => {
     if (e.key !== 'Escape') return;
-    if (sheet && !sheet.hidden) { closeSheet(); return; }
     if (fab?.classList.contains('is-open')) { setFab(false); return; }
     $$('[data-submenu][aria-expanded="true"]').forEach((b) => { b.setAttribute('aria-expanded', 'false'); b.focus(); });
     if (nav?.classList.contains('is-open')) { setMenu(false); menuButton.focus(); }
@@ -372,18 +150,14 @@
               <small>${esc(x.s.tagline)}</small>
               <div class="fr-foot">
                 <span class="fr-price">${x.s.from ? '<small>เริ่มต้น</small>' : ''}${baht(x.s.price)}</span>
-                <button type="button" class="pick pick-sm" data-pick="${x.s.slug}" aria-pressed="false" aria-label="เลือก ${esc(x.s.th)}">
-                  <span class="pick-icon" aria-hidden="true">${icon('i-plus', 'icon icon-plus')}${icon('i-check', 'icon icon-check')}</span>
-                  <span data-pick-label>เลือก</span>
-                </button>
+                <a class="btn btn-gold" href="/contact/?show=${x.s.slug}">สอบถามโชว์นี้</a>
               </div>
             </div>
           </li>`).join('')}</ul>
         <div class="finder-actions">
-          ${picks.length > 1 ? `<button type="button" class="btn btn-gold" data-pick-set="${picks.map((x) => x.s.slug).join(',')}">${icon('i-plus')}<span data-set-label>เลือกทั้งชุด</span></button>` : ''}
           ${state.occasion ? `<a class="link-arrow" href="/occasions/${state.occasion}/">ไอเดียจัดโชว์สำหรับ${esc(occLabel(state.occasion))}</a>` : '<a class="link-arrow" href="/shows/">ดูทุกรูปแบบ</a>'}
         </div>`;
-      paint();
+
     };
 
     finder.addEventListener('click', (e) => {
@@ -662,26 +436,11 @@
     if (typeof dlg.showModal === 'function') dlg.showModal(); else window.open(watch, '_blank', 'noopener');
   }));
 
-  /* ─────────────────────────── contact page: shortlist panel */
-
-  const panel = $('[data-shortlist-panel]');
-  function renderPanel(list) {
-    if (!panel) return;
-    if (!list.length) {
-      panel.innerHTML = '<p class="empty">ยังไม่ได้เลือกโชว์ — <a href="/shows/">ดูรูปแบบการแสดง</a> แล้วกด “เลือก” หรือข้ามขั้นนี้ไปเล่ารายละเอียดงานได้เลย</p>';
-      return;
-    }
-    panel.innerHTML = itemRows(summary(list).items) + totalRow(summary(list));
-  }
-  panel?.addEventListener('click', (e) => {
-    const rm = e.target.closest('[data-remove]');
-    if (rm) { writeList(readList().filter((s) => s !== rm.dataset.remove)); paint(); }
-    if (e.target.closest('[data-clear]')) { writeList([]); paint(); }
-  });
-
   /* ─────────────────────────── contact page: message composer & stepper */
 
   const form = $('[data-quote-form]');
+  const enquiry = bySlug[new URLSearchParams(location.search).get('show')];
+  if (form && enquiry) form.elements.show.value = enquiry.th;
   const output = $('[data-quote-output]');
   const message = $('[data-quote-message]');
   const stepper = $('[data-stepper]');
@@ -718,14 +477,9 @@
   }
 
   const composeMessage = (data) => {
-    const { items, total, approx } = summary(readList());
     const lines = ['สวัสดีครับ สนใจจองการแสดงของ Velin Magic', ''];
-    if (items.length) {
-      lines.push('โชว์ที่สนใจ:');
-      items.forEach((s) => lines.push(`• ${s.th} — ${s.from ? 'เริ่มต้น ' : ''}${baht(s.price)}`));
-      lines.push(`รวมประมาณ ${baht(total)}${approx ? ' (ราคาประเมิน)' : ''}`, '');
-    }
     const rows = [
+      ['โชว์ที่สนใจ', data.get('show')],
       ['ชื่อ', data.get('name')], ['เบอร์โทร', data.get('phone')], ['วันที่จัดงาน', formatDate(data.get('date'))],
       ['ประเภทงาน', data.get('occasion')], ['สถานที่', data.get('place')], ['จำนวนผู้ชม', data.get('guests') && data.get('guests') + ' คน'],
       ['รายละเอียด', data.get('details')],
@@ -754,7 +508,7 @@
 
     message.value = composeMessage(new FormData(form));
     output.hidden = false;
-    setStep(3);
+    setStep(2);
     output.scrollIntoView({ behavior: calm.matches ? 'auto' : 'smooth', block: 'start' });
     output.focus({ preventScroll: true });
   });
@@ -762,13 +516,13 @@
   // editing after generating means the message on screen is stale
   form?.addEventListener('input', (e) => {
     if (e.target.closest('.field')?.classList.contains('has-error')) setError(e.target, '');
-    if (output && !output.hidden) { output.hidden = true; setStep(2); }
+    if (output && !output.hidden) { output.hidden = true; setStep(1); }
   });
 
   $('[data-copy]')?.addEventListener('click', async (e) => {
     const btn = e.currentTarget;
     const ok = await copyText(message.value);
-    btn.textContent = ok ? 'คัดลอกแล้ว ✓' : 'คัดลอกไม่สำเร็จ — กดค้างที่ข้อความเพื่อคัดลอก';
+    btn.textContent = ok ? 'คัดลอกแล้ว' : 'คัดลอกไม่สำเร็จ — กดค้างที่ข้อความเพื่อคัดลอก';
   });
   $('[data-copy-open]')?.addEventListener('click', async () => {
     // the link still opens LINE even if copying is refused
@@ -776,5 +530,4 @@
     showToast(ok ? '<span>คัดลอกข้อความแล้ว วางในแชท LINE ได้เลย</span>' : '<span>คัดลอกไม่สำเร็จ — คัดลอกข้อความด้วยตนเอง</span>');
   });
 
-  paint();
 })();

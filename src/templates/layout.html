@@ -57,7 +57,7 @@
 
 <header class="header" data-header>
   <div class="header-inner">
-    <a class="brand" href="/" aria-label="{{site.name}} หน้าแรก">velin<span aria-hidden="true">✳</span></a>
+    <a class="brand" href="/" aria-label="{{site.name}} หน้าแรก"><img src="/velin-wordmark-v1.svg" width="652" height="156" alt="Velin" decoding="async"></a>
 
     <nav class="nav" id="site-nav" aria-label="เมนูหลัก" data-nav>
       <ul class="nav-list">
@@ -82,11 +82,6 @@
     </nav>
 
     <div class="header-actions">
-      <button type="button" class="bag" data-sheet-open aria-label="รายการโชว์ที่เลือก" data-fly-target>
-        <svg class="icon" aria-hidden="true"><use href="#i-bag"/></svg>
-        <span class="bag-label">รายการที่เลือก</span>
-        <span class="badge" data-shortlist-count hidden>0</span>
-      </button>
       <a class="btn btn-gold header-cta" href="/contact/">ขอใบเสนอราคา</a>
       <button type="button" class="menu-button" aria-expanded="false" aria-controls="site-nav" data-menu-button>
         <span></span><span></span><span class="sr">เมนู</span>
@@ -102,7 +97,7 @@
 <footer class="footer">
   <div class="container footer-top">
     <div class="footer-brand">
-      <a class="brand brand-lg" href="/">velin<span aria-hidden="true">✳</span></a>
+      <a class="brand brand-lg" href="/"><img src="/velin-wordmark-v1.svg" width="652" height="156" alt="Velin" decoding="async"></a>
       <p class="footer-tagline">{{site.tagline}}</p>
       <div class="footer-contact">
         <a href="tel:{{site.contact.telephone}}"><svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg>{{site.contact.phone}}</a>
@@ -151,42 +146,16 @@
     <p class="fab-divider"><span>{{site.channels.followLabel}}</span></p>
     <div class="fab-socials">{{{fabSocials}}}</div>
     <div class="fab-foot">
-      <button type="button" class="fab-shortlist" data-sheet-open data-fab-shortlist hidden>
-        <svg class="icon" aria-hidden="true"><use href="#i-bag"/></svg>
-        <span data-fab-summary>โชว์ที่เลือกไว้</span>
-        <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg>
-      </button>
       <a class="btn btn-gold btn-block" href="/contact/">ขอใบเสนอราคา <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
     </div>
   </div>
-  <button type="button" class="fab-button" aria-expanded="false" aria-controls="fab-panel" aria-label="ติดต่อเรา" data-fab-toggle data-fly-target>
+  <button type="button" class="fab-button" aria-expanded="false" aria-controls="fab-panel" aria-label="ติดต่อเรา" data-fab-toggle>
     <span class="fab-pulse" aria-hidden="true"></span>
     <svg class="icon fab-i-chat" aria-hidden="true"><use href="#i-chat"/></svg>
     <svg class="icon fab-i-close" aria-hidden="true"><use href="#i-close"/></svg>
-    <span class="badge" data-shortlist-count hidden>0</span>
   </button>
 </div>
 {{/fab}}
-
-<div class="sheet-backdrop" data-sheet-backdrop hidden></div>
-<aside class="sheet" data-sheet role="dialog" aria-modal="true" aria-labelledby="sheet-title" hidden>
-  <div class="sheet-grip" aria-hidden="true" data-sheet-grip></div>
-  <div class="sheet-head">
-    <div>
-      <p class="kicker">YOUR SHORTLIST</p>
-      <h2 id="sheet-title">โชว์ที่เลือกไว้</h2>
-    </div>
-    <button type="button" class="icon-btn" data-sheet-close aria-label="ปิด"><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button>
-  </div>
-  <div class="sheet-body" data-sheet-body></div>
-  <div class="sheet-foot" data-sheet-foot>
-    <a class="btn btn-gold btn-lg btn-block" href="/contact/">ขอใบเสนอราคา <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
-    <div class="sheet-foot-row">
-      <a class="btn btn-line" href="{{site.contact.line}}" target="_blank" rel="noopener"><svg class="icon" aria-hidden="true"><use href="#i-line"/></svg> LINE</a>
-      <a class="btn btn-glass" href="tel:{{site.contact.telephone}}"><svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg> {{site.contact.phone}}</a>
-    </div>
-  </div>
-</aside>
 
 <div class="toast" role="status" aria-live="polite" data-toast></div>
 

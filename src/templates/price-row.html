@@ -2,9 +2,6 @@
   <th scope="row"><a href="{{show.url}}"><span class="pr-num">{{show.num}}</span><span class="pr-name"><span class="pr-th">{{show.th}}</span><span class="pr-en">{{show.en}}</span></span></a></th>
   <td class="pr-price">{{#show.priceFrom}}<span class="price-from">เริ่มต้น</span>{{/show.priceFrom}}<span class="price-amount">{{show.priceText}}</span></td>
   <td class="pr-pick">
-    <button type="button" class="pick pick-sm" data-pick="{{show.slug}}" aria-pressed="false" aria-label="เลือก {{show.th}}">
-      <span class="pick-icon" aria-hidden="true"><svg class="icon icon-plus"><use href="#i-plus"/></svg><svg class="icon icon-check"><use href="#i-check"/></svg></span>
-      <span data-pick-label>เลือก</span>
-    </button>
+    <a class="btn btn-gold" href="/contact/?show={{show.slug}}">สอบถาม</a>
   </td>
 </tr>

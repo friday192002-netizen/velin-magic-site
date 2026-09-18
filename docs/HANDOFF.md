@@ -1,3 +1,5 @@
+> ข้อกำหนดล่าสุด (18 ก.ย. 2026): **แสดงราคาบนเว็บ** เจ้าของยกเลิกคำสั่งไม่แสดงราคาของวันที่ 17 ก.ย. ดู [RELEASE-2026-09-18](RELEASE-2026-09-18.md) และ [AGENTS.md](../AGENTS.md) ก่อนทำงาน
+
 # Handoff — Velin Magic site
 
 Last major change: 17 September 2026 — premium redesign (espresso & champagne

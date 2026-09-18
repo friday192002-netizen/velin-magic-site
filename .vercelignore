@@ -6,3 +6,11 @@ photos/
 screens/
 uploads/
 .claude/
+
+# Local editing tools never ship to hosting.
+tools/
+content/
+src/
+AGENTS.md
+CLAUDE.md
+*.cmd

@@ -6,13 +6,9 @@
       <div>
         <p class="kicker">REQUEST A QUOTE</p>
         <h1 id="page-title">ขอใบเสนอราคา</h1>
-        <p class="page-lede">ใช้เวลาไม่ถึง 1 นาที ตรวจโชว์ที่เลือก กรอกรายละเอียดงานสั้น ๆ แล้วส่งทาง LINE</p>
+        <p class="page-lede">ใช้เวลาไม่ถึง 1 นาที กรอกรายละเอียดงานสั้น ๆ แล้วส่งทาง LINE</p>
       </div>
-      <ol class="stepper" aria-label="ขั้นตอน" data-stepper>
-        <li class="is-active"><span>1</span>โชว์ที่เลือก</li>
-        <li><span>2</span>รายละเอียดงาน</li>
-        <li><span>3</span>ส่งทาง LINE</li>
-      </ol>
+      <ol class="stepper" aria-label="ขั้นตอน" data-stepper><li class="is-active"><span>1</span>รายละเอียดงาน</li><li><span>2</span>ส่งทาง LINE</li></ol>
     </div>
   </div>
 </section>
@@ -21,19 +17,10 @@
   <div class="container contact-grid">
     <div class="contact-main">
 
-      <div class="panel" aria-labelledby="picked-title" data-step="1">
-        <div class="panel-head">
-          <h2 id="picked-title" class="h-small"><span class="step-dot">1</span> โชว์ที่เลือกไว้</h2>
-          <a class="link-arrow" href="/shows/">เพิ่ม / เปลี่ยนโชว์</a>
-        </div>
-        <div data-shortlist-panel>
-          <p class="empty">ยังไม่ได้เลือกโชว์ — <a href="/shows/">ดูรูปแบบการแสดง</a> แล้วกด “เลือก” หรือข้ามขั้นนี้ไปเล่ารายละเอียดงานได้เลย</p>
-        </div>
-      </div>
-
-      <form class="panel quote-form" data-quote-form novalidate aria-labelledby="form-title" data-step="2">
-        <h2 id="form-title" class="h-small"><span class="step-dot">2</span> รายละเอียดงาน</h2>
+      <form class="panel quote-form" data-quote-form novalidate aria-labelledby="form-title" data-step="1">
+        <h2 id="form-title" class="h-small"><span class="step-dot">1</span> รายละเอียดงาน</h2>
         <div class="form-grid">
+<label class="field field-wide"><span class="field-label">โชว์ที่สนใจ (ถ้ามี)</span><input name="show" type="text" placeholder="ระบุชื่อโชว์ หรือให้เราช่วยแนะนำ"></label>
           <label class="field">
             <span class="field-label">ชื่อผู้ติดต่อ <b aria-hidden="true">*</b></span>
             <input name="name" type="text" autocomplete="name" required enterkeyhint="next">
@@ -73,7 +60,7 @@
         <p class="fine">ข้อมูลใช้สร้างข้อความในเบราว์เซอร์ของคุณเท่านั้น ไม่มีการส่งหรือบันทึกไว้บนเว็บไซต์ — <a href="/privacy/">อ่านเพิ่มเติม</a></p>
       </form>
 
-      <div class="panel quote-output" data-quote-output hidden tabindex="-1" aria-labelledby="out-title" data-step="3">
+      <div class="panel quote-output" data-quote-output hidden tabindex="-1" aria-labelledby="out-title" data-step="2">
         <div class="out-head">
           <span class="out-check" aria-hidden="true"><svg class="icon"><use href="#i-check"/></svg></span>
           <div>

@@ -24,10 +24,7 @@
               <a class="price-help" href="#plan">ราคานี้รวมอะไร?</a>
             </div>
             <div class="price-actions">
-              <button type="button" class="pick pick-lg" data-pick="{{show.slug}}" aria-pressed="false" aria-label="เลือก {{show.th}}">
-                <span class="pick-icon" aria-hidden="true"><svg class="icon icon-plus"><use href="#i-plus"/></svg><svg class="icon icon-check"><use href="#i-check"/></svg></span>
-                <span data-pick-label>เลือกโชว์นี้</span>
-              </button>
+              <a class="btn btn-gold" href="/contact/?show={{show.slug}}">สอบถามโชว์นี้</a>
               <a class="btn btn-line btn-lg" href="{{site.contact.line}}" target="_blank" rel="noopener"><svg class="icon" aria-hidden="true"><use href="#i-line"/></svg> สอบถามทาง LINE</a>
             </div>
             <p class="fine">{{#show.priceFrom}}{{site.priceNote}}{{/show.priceFrom}}{{^show.priceFrom}}{{site.estimateNote}}{{/show.priceFrom}}</p>
@@ -104,14 +101,7 @@
 
 {{> cta-band}}
 
-<nav class="dock dock-show" aria-label="เลือกโชว์นี้">
+<nav class="dock dock-show" aria-label="สอบถามการแสดง">
   <p class="dock-price">{{#show.priceFrom}}<small>เริ่มต้น</small>{{/show.priceFrom}}{{^show.priceFrom}}<small>ราคา</small>{{/show.priceFrom}}{{show.priceText}}</p>
-  <button type="button" class="dock-btn dock-pick" data-pick="{{show.slug}}" aria-pressed="false" aria-label="เลือก {{show.th}}">
-    <span class="pick-icon" aria-hidden="true"><svg class="icon icon-plus"><use href="#i-plus"/></svg><svg class="icon icon-check"><use href="#i-check"/></svg></span>
-    <span data-pick-label>เลือก</span>
-  </button>
-  <button type="button" class="dock-btn dock-bag" data-sheet-open data-fly-target aria-label="รายการที่เลือก">
-    <svg class="icon" aria-hidden="true"><use href="#i-bag"/></svg>
-    <span class="badge badge-light" data-shortlist-count hidden>0</span>
-  </button>
+  <a class="btn btn-gold" href="/contact/?show={{show.slug}}">สอบถามโชว์นี้</a>
 </nav>

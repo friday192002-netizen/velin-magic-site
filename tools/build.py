@@ -179,7 +179,7 @@ class Photo:
         return "/" + rel
 
 
-def show_photos(slug: str, show_name: str, cover_alt: str) -> tuple[Photo, list[Photo]]:
+def show_photos(slug: str, show_name: str, cover_alt: str, photo_alts: dict | None = None) -> tuple[Photo, list[Photo]]:
     folder = PHOTOS / "shows" / slug
     files = sorted(p for p in folder.iterdir() if p.suffix.lower() in IMAGE_EXT) if folder.exists() else []
     if not files:
@@ -188,7 +188,7 @@ def show_photos(slug: str, show_name: str, cover_alt: str) -> tuple[Photo, list[
     cover_file = covers[0] if covers else files[0]
     cover = Photo(cover_file, cover_alt)
     gallery = [
-        Photo(p, f"ภาพตัวอย่างการแสดง{show_name} ภาพที่ {i}")
+        Photo(p, (photo_alts or {}).get(p.name, f"ภาพตัวอย่างการแสดง{show_name} ภาพที่ {i}"))
         for i, p in enumerate((p for p in files if p != cover_file), start=1)
     ]
     return cover, gallery
@@ -241,6 +241,7 @@ def build() -> None:
     occasions = load("occasions.json")["occasions"]
     faqs = load("faq.json")["faq"]
     base = site["url"].rstrip("/")
+    written.clear()
     OUT.mkdir(exist_ok=True)
 
     # ── static assets, fingerprinted so they can be cached for a year
@@ -272,7 +273,7 @@ def build() -> None:
         s["moodTags"] = " ".join(s.get("moods", []))
         s["isVelin"] = s["performedBy"] == "velin"
         s["performedLabel"] = "แสดงโดย Velin" if s["isVelin"] else "Velin ร่วมกับทีมผู้เชี่ยวชาญ"
-        s["cover"], s["gallery"] = show_photos(s["slug"], s["th"], s["coverAlt"])
+        s["cover"], s["gallery"] = show_photos(s["slug"], s["th"], s["coverAlt"], s.get("photoAlts"))
         s["photos"] = [s["cover"], *s["gallery"]]
         unknown = [o for o in s["occasions"] if o not in occ_by_slug]
         if unknown:
@@ -420,8 +421,7 @@ def build() -> None:
         return (f'<ol class="flow">{items}</ol>'
                 f'<div class="flow-foot"><p class="flow-total"><span>รวมประมาณ{" (บางรายการเป็นราคาเริ่มต้น)" if approx else ""}</span>'
                 f'<strong>{baht(total)}</strong></p>'
-                f'<button type="button" class="btn btn-gold" data-pick-set="{slugs}">'
-                f'<svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg><span data-set-label>เลือกทั้งชุด</span></button></div>')
+                '<a class="btn btn-gold" href="/contact/">ปรึกษาการจัดโชว์</a></div>')
 
     def flow_tabs(prefix: str) -> str:
         tabs, panels = [], []
@@ -450,7 +450,7 @@ def build() -> None:
         finderOccasions="".join(f'<button type="button" class="chip chip-lg" data-finder-occasion="{o["slug"]}" aria-pressed="false">{esc(o["label"])}</button>' for o in occasions),
         finderMoods="".join(f'<button type="button" class="mood" data-finder-mood="{m["slug"]}" aria-pressed="false"><b>{esc(m["label"])}</b><small>{esc(m["hint"])}</small></button>' for m in site["finder"]["moods"]))
 
-    marquee_words = "".join(f'<span>{esc(s["en"].title())}</span><span class="marquee-star" aria-hidden="true">✳</span>' for s in shows)
+    marquee_words = "".join(f'<span>{esc(s["en"].title())}</span><span class="marquee-separator" aria-hidden="true"></span>' for s in shows)
     process_html = "".join(
         f'<li class="step" data-reveal style="--i:{i}"><span class="step-n">{i + 1:02d}</span><h3>{esc(p["title"])}</h3><p>{esc(p["text"])}</p></li>'
         for i, p in enumerate(site["process"]))
@@ -620,7 +620,7 @@ def build() -> None:
     # ── privacy, 404
     crumbs, crumbs_ld = breadcrumb(site, [("ความเป็นส่วนตัว", "/privacy/")])
     page("/privacy/", "การใช้ข้อมูลและความเป็นส่วนตัว",
-         "วิธีที่เว็บไซต์ Velin Magic ใช้ข้อมูลในแบบฟอร์มขอใบเสนอราคา รายการโชว์ที่เลือก และบริการภายนอกอย่าง Google Fonts และ YouTube",
+         "วิธีที่เว็บไซต์ Velin Magic ใช้ข้อมูลในแบบฟอร์มขอใบเสนอราคา และบริการภายนอกอย่าง Google Fonts และ YouTube",
          fragment("page-privacy", common, crumbs=crumbs), og_image=shows[0]["cover"].og("home"), ld=[crumbs_ld],
          body_class="has-dark-top")
     page("/404.html", "ไม่พบหน้านี้", "หน้าที่คุณหาอาจถูกย้ายไปแล้ว", fragment("page-404", common, showGrid=show_grid(shows[:3])),
