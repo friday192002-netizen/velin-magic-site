@@ -383,6 +383,7 @@ def build() -> None:
     )
 
     sitemap: list[str] = []
+    sitemap_images: dict[str, list[tuple[str, str]]] = {}
 
     # ── fragments ────────────────────────────────────────────────
 
@@ -424,36 +425,6 @@ def build() -> None:
         return {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [
             {"@type": "Question", "name": f["q"], "acceptedAnswer": {"@type": "Answer", "text": f["a"]}} for f in items]}
 
-    def flow_html(o: dict) -> str:
-        steps = [(st, show_by_slug[st["show"]]) for st in o.get("flow", [])]
-        if not steps:
-            return ""
-        total = sum(s["price"] for _, s in steps)
-        approx = any(s["priceFrom"] for _, s in steps)
-        items = "".join(
-            f'<li class="flow-step" style="--i:{i}"><span class="flow-moment"><span class="flow-dot" aria-hidden="true"></span>{esc(st["moment"])}</span>'
-            f'<a class="flow-show" href="{s["url"]}">{s["cover"].tag("88px", cls="flow-thumb")}'
-            f'<span class="flow-text"><b>{esc(s["th"])}</b><small>{esc(st["note"])}</small></span>'
-            f'<span class="flow-price">{"<small>เริ่มต้น</small>" if s["priceFrom"] else ""}{s["priceText"]}</span></a></li>'
-            for i, (st, s) in enumerate(steps))
-        slugs = ",".join(s["slug"] for _, s in steps)
-        return (f'<ol class="flow">{items}</ol>'
-                f'<div class="flow-foot"><p class="flow-total"><span>รวมประมาณ{" (บางรายการเป็นราคาเริ่มต้น)" if approx else ""}</span>'
-                f'<strong>{baht(total)}</strong></p>'
-                '<a class="btn btn-gold" href="/contact/">ปรึกษาการจัดโชว์</a></div>')
-
-    def flow_tabs(prefix: str) -> str:
-        tabs, panels = [], []
-        for i, o in enumerate(o for o in occasions if o.get("flow")):
-            sel = i == 0
-            tabs.append(f'<button type="button" role="tab" class="tab" id="{prefix}-tab-{o["slug"]}" aria-controls="{prefix}-panel-{o["slug"]}" '
-                        f'aria-selected="{str(sel).lower()}" tabindex="{0 if sel else -1}">{esc(o["label"])}</button>')
-            panels.append(f'<div class="tab-panel" role="tabpanel" id="{prefix}-panel-{o["slug"]}" aria-labelledby="{prefix}-tab-{o["slug"]}"'
-                          f'{"" if sel else " hidden"}>{flow_html(o)}'
-                          f'<a class="link-arrow" href="{o["url"]}">ดูโชว์ทั้งหมดสำหรับ{esc(o["label"])}</a></div>')
-        return (f'<div class="tabs" data-tabs><div class="tab-list" role="tablist" aria-label="ประเภทงาน">{"".join(tabs)}</div>'
-                f'{"".join(panels)}</div>')
-
     icons = {"tag": "i-tag", "layers": "i-layers", "spark": "i-spark", "mask": "i-mask", "doc": "i-doc", "chat": "i-chat"}
     why_html = "".join(
         f'<li class="why-item" data-reveal style="--i:{i}"><span class="why-icon"><svg class="icon" aria-hidden="true"><use href="#{icons.get(w["icon"], "i-spark")}"/></svg></span>'
@@ -476,7 +447,7 @@ def build() -> None:
 
     common.update(
         processHtml=process_html, statsHtml="".join(stat_html(x) for x in site["stats"]),
-        whyHtml=why_html, finderHtml=finder_html, flowTabs=flow_tabs("home"),
+        whyHtml=why_html, finderHtml=finder_html,
         marquee=f'<div class="marquee" aria-hidden="true"><div class="marquee-track">{marquee_words}{marquee_words}</div></div>',
         performerParagraphs="".join(f"<p>{esc(p)}</p>" for p in site["performer"]["paragraphs"]),
         portraitImg=portrait.tag("(max-width: 800px) 64vw, 420px", cls="portrait-img"),
@@ -485,7 +456,8 @@ def build() -> None:
 
     def page(path: str, title: str, description: str, body: str, *, og_image: str,
              ld: list | None = None, body_class: str = "", dock: str = "default",
-             index: bool = True, full_title: bool = False, preload: str = "") -> None:
+             index: bool = True, full_title: bool = False, preload: str = "",
+             images: list | None = None) -> None:
         canonical = base + path
         ctx = {
             **common,
@@ -505,6 +477,9 @@ def build() -> None:
         write(rel, render(template("layout"), ctx))
         if index:
             sitemap.append(canonical)
+            # image sitemap entries: Google Images is a real source of enquiries
+            for ph in (images or [])[:12]:
+                sitemap_images.setdefault(canonical, []).append((base + ph.largest, ph.alt))
 
     # ── home
     home_occ = "".join(fragment("occasion-tile", common, occ={
@@ -515,19 +490,18 @@ def build() -> None:
                     occasionTiles=home_occ, showGrid=show_grid(shows, rail=True),
                     faqHtml=faq_html([f for f in faqs if f.get("home")]),
                     filmPoster=film_poster.tag("(max-width: 900px) 92vw, 640px", cls="film-img"))
-    page("/", f"{site['name']} — รับแสดงมายากล งานบริษัท งานเปิดตัว งานแต่ง และงานเด็ก",
+    page("/", f"รับแสดงมายากล จ้างนักมายากล งานบริษัท งานแต่ง | {site['name']}",
          fit(site["description"]), home, og_image=shows[0]["cover"].og("home"),
          ld=[organization, {"@context": "https://schema.org", "@type": "WebSite", "name": site["name"], "url": base + "/"},
              faq_ld([f for f in faqs if f.get("home")])],
-         body_class="has-dark-hero is-home", full_title=True,
+         body_class="has-dark-hero is-home", full_title=True, images=[hero, *(x["cover"] for x in shows)],
          preload=f'<link rel="preload" as="image" imagesrcset="{hero_srcset}" imagesizes="(max-width: 1024px) 118vw, 58vw" fetchpriority="high">')
 
     # ── catalogue (the 171 Magic Club structure)
     crumbs, crumbs_ld = breadcrumb(site, [("รูปแบบการแสดง", "/shows/")])
     price_rows = "".join(fragment("price-row", common, show=s) for s in shows)
     catalogue = fragment("page-shows", common, crumbs=crumbs, chips=chips(),
-                         showGrid=show_grid(shows, "h2", " data-filter-grid"), priceRows=price_rows,
-                         flowTabsShows=flow_tabs("shows"))
+                         showGrid=show_grid(shows, "h2", " data-filter-grid"), priceRows=price_rows)
     item_list = {"@context": "https://schema.org", "@type": "ItemList", "name": "รูปแบบการแสดงมายากล",
                  "itemListElement": [{"@type": "ListItem", "position": i + 1, "url": base + s["url"], "name": s["th"]}
                                      for i, s in enumerate(shows)]}
@@ -584,7 +558,7 @@ def build() -> None:
         page(s["url"], f'{s["th"]} ({s["en"].title()}) {price_label} {s["priceText"]}',
              fit(f'{s["th"]} {price_label} {s["priceText"]} — {s["tagline"]} {s["body"][0]}'),
              body, og_image=s["cover"].og(s["slug"]), ld=[service, crumbs_ld, organization], dock="show",
-             body_class="has-dark-top is-show")
+             body_class="has-dark-top is-show", images=s["photos"])
 
     # ── one page per occasion
     for o in occasions:
@@ -595,10 +569,10 @@ def build() -> None:
             "pointsHtml": "".join(f'<li data-reveal style="--i:{i}"><span class="point-n">{i + 1:02d}</span><h3>{esc(p["title"])}</h3><p>{esc(p["text"])}</p></li>'
                                   for i, p in enumerate(o["points"])),
             "showGrid": show_grid(o["shows"], rail=True), "otherLinks": others,
-            "fromPrice": baht(min(s["price"] for s in o["shows"])), "flowHtml": flow_html(o),
+            "fromPrice": baht(min(s["price"] for s in o["shows"])),
         }, faqHtml=faq_html([f for f in faqs if f.get("home")][:3]))
         page(o["url"], o["seoTitle"], fit(o["seoDescription"]), body, og_image=o["cover"].og("occasion-" + o["slug"]),
-             body_class="has-dark-top",
+             body_class="has-dark-top", images=[x["cover"] for x in o["shows"]],
              ld=[crumbs_ld, {"@context": "https://schema.org", "@type": "ItemList", "name": o["seoTitle"],
                              "itemListElement": [{"@type": "ListItem", "position": i + 1, "url": base + s["url"], "name": s["th"]}
                                                  for i, s in enumerate(o["shows"])]}])
@@ -628,7 +602,8 @@ def build() -> None:
     page("/gallery/", "ภาพการแสดงมายากล",
          fit(f"รวม {common['photoCount']} ภาพจากงานจริง ทั้งมายากลเวที โคลสอัพ บับเบิ้ลโชว์ จั๊กกลิ้ง และอิลลูชัน แยกตามรูปแบบการแสดง"),
          fragment("page-gallery", common, crumbs=crumbs, groups=groups, galleryChips=gallery_chips),
-         og_image=shows[6]["cover"].og("gallery"), ld=[crumbs_ld], body_class="has-dark-top")
+         og_image=shows[6]["cover"].og("gallery"), ld=[crumbs_ld], body_class="has-dark-top",
+         images=[ph for x in shows for ph in x["photos"][:2]])
 
     # ── faq
     crumbs, crumbs_ld = breadcrumb(site, [("คำถามที่พบบ่อย", "/faq/")])
@@ -655,9 +630,18 @@ def build() -> None:
          og_image=shows[0]["cover"].og("home"), index=False, body_class="has-dark-top")
 
     # ── sitemap, robots
+    def sitemap_url(u: str) -> str:
+        imgs = "".join(
+            f"    <image:image><image:loc>{esc(loc, quote=True)}</image:loc>"
+            f"<image:title>{esc(title, quote=True)}</image:title></image:image>\n"
+            for loc, title in sitemap_images.get(u, []))
+        head = f"  <url><loc>{u}</loc><lastmod>{TODAY}</lastmod>"
+        return f"{head}\n{imgs}  </url>\n" if imgs else f"{head}</url>\n"
+
     write("sitemap.xml", '<?xml version="1.0" encoding="UTF-8"?>\n'
-          '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
-          + "".join(f"  <url><loc>{u}</loc><lastmod>{TODAY}</lastmod></url>\n" for u in sitemap) + "</urlset>\n")
+          '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"'
+          ' xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n'
+          + "".join(sitemap_url(u) for u in sitemap) + "</urlset>\n")
     write("robots.txt", f"User-agent: *\nAllow: /\n\nSitemap: {base}/sitemap.xml\n")
 
     # ── remove anything this run did not produce (old photos, old hashed assets)

@@ -12,7 +12,10 @@ Read this before editing. CLAUDE.md points here.
 - Source photos illustrate show formats; not every performer pictured is Velin.
 - Show galleries mix the 171 set (cover, 01…) with photos copied from the Untitled Magic site (u01…, 18 September 2026). Each u* file has a scene description in shows.json -> photoAlts. The build skips any gallery file that looks identical to the cover.
 - Typography is minimal sans: Anuphan for headings/accents, IBM Plex Sans Thai for body. No serif or italic faces.
-- Show pages: hero carousel plus a photo grid (first 9 tiles, then "ดูภาพทั้งหมด") that opens the lightbox with a thumbnail strip. The "use with other shows" run-of-show section was removed from show pages at the owner's request; flows remain on home, catalogue and occasion pages.
+- Every photo needs a real scene description in shows.json -> photoAlts (no "ภาพที่ 1, 2"); the builder also emits an image sitemap from those alts.
+- Run-of-show / "ไอเดียจัดลำดับโชว์" sections were removed everywhere on 28 September 2026. The `flow` data stays in occasions.json but nothing renders it.
+- SEO direction, keyword map per page and the owner's to-do list: docs/SEO-PLAN.md. Velin targets show formats and occasions; untitledmagic.com keeps the generic "รับแสดงมายากล" terms so the two sites do not compete.
+- Show pages: hero carousel plus a photo grid (first 9 tiles, then "ดูภาพทั้งหมด") that opens the lightbox with a thumbnail strip.
 - Never edit the other owner projects (Untitled/171) when adapting assets.
 - Thai first; respect reduced motion and keyboard use.
 - Do not push/deploy unless the owner asks. Pushing main auto-deploys to Vercel.

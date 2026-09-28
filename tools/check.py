@@ -63,10 +63,12 @@ def check():
                 require(target.is_file(),'missing local file '+url)
     if len(titles)!=len(set(titles)): errors.append('Duplicate page titles')
     sitemap=ET.parse(PUBLIC/'sitemap.xml')
-    locs=[node.text for node in sitemap.findall('.//{*}loc')]
+    locs=[u.find('{*}loc').text for u in sitemap.findall('.//{*}url')]
+    images=sitemap.findall('.//{*}image/{*}loc')
     if len(locs)!=19: errors.append(f'Expected 19 sitemap pages, found {len(locs)}')
+    if len(images)<40: errors.append(f'Expected image sitemap entries, found {len(images)}')
     if errors: raise AssertionError('\n'.join(errors))
-    print(f'PASS: {len(files)} pages; H1, IDs, titles, descriptions, canonical, JSON-LD, local links, images, sitemap and show prices.')
+    print(f'PASS: {len(files)} pages; H1, IDs, titles, descriptions, canonical, JSON-LD, local links, images, sitemap with {len(images)} images and show prices.')
 
 
 if __name__=='__main__':

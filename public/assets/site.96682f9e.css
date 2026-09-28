@@ -1303,6 +1303,20 @@ td.pr-price .price-amount { font-size: 19px; }
 
 /* ─────────────────────────────────────────────── motion preferences */
 
+/* comfortable tap targets on phones: text links in lists and footers were
+   only 22–31px tall, which is easy to miss with a thumb */
+@media (max-width: 767px) {
+  .footer-col ul a, .footer-bottom a, .crumbs a, .crumbs li,
+  .link-list a, .link-arrow, .footer-contact a,
+  .help-phone, .price-help, .fine a, .prose a, .empty a {
+    display: inline-flex; align-items: center; min-height: 44px;
+  }
+  .footer-col ul { gap: 2px; }
+  .link-list a { padding-block: 14px; }
+  .crumbs ol { gap: 2px 0; }
+  .sl-remove, .icon-btn { min-width: 44px; min-height: 44px; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
