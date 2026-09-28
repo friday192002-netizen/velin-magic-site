@@ -40,6 +40,11 @@
       "source": "/occasions/wedding",
       "destination": "/occasions/party/",
       "permanent": true
+    },
+    {
+      "source": "/occasions/wedding/",
+      "destination": "/occasions/party/",
+      "permanent": true
     }
   ]
 }
