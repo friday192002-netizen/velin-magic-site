@@ -14,6 +14,7 @@ Read this before editing. CLAUDE.md points here.
 - Typography is minimal sans: Anuphan for headings/accents, IBM Plex Sans Thai for body. No serif or italic faces.
 - Every photo needs a real scene description in shows.json -> photoAlts (no "ภาพที่ 1, 2"); the builder also emits an image sitemap from those alts.
 - Run-of-show / "ไอเดียจัดลำดับโชว์" sections were removed everywhere on 28 September 2026. The `flow` data stays in occasions.json but nothing renders it.
+- Weddings are deliberately low priority (owner, 28 September 2026): the occasion page stays for search, but the home title, meta description and occasion order lead with corporate, launch, kids and festival.
 - SEO direction, keyword map per page and the owner's to-do list: docs/SEO-PLAN.md. Velin targets show formats and occasions; untitledmagic.com keeps the generic "รับแสดงมายากล" terms so the two sites do not compete.
 - Show pages: hero carousel plus a photo grid (first 9 tiles, then "ดูภาพทั้งหมด") that opens the lightbox with a thumbnail strip.
 - Never edit the other owner projects (Untitled/171) when adapting assets.
@@ -27,6 +28,7 @@ Read this before editing. CLAUDE.md points here.
 | content/shows.json | Seven shows, prices, copy, tags, SEO, preparation, optional photoAlts |
 | content/occasions.json | Five event types and suggested show sequences |
 | content/faq.json | FAQ copy |
+| content/guides.json | คู่มือเลือกโชว์: one /guides/<slug>/ page each, linked to shows and occasions |
 | photos/shows/<slug>/ | Source images: cover.* = cover; remaining files = gallery |
 | photos/velin/, photos/site/ | Hero and supporting imagery |
 | src/templates/ | Shared layout and page templates |
@@ -61,7 +63,7 @@ The manager binds only to 127.0.0.1, validates Host/Origin and a per-session tok
 ## Templates and SEO
 Templates support escaped {{key}}, trusted generated HTML {{{key}}}, partials {{> name}}, and conditional sections {{#key}} / {{^key}}.
 
-19 indexable pages: home, show catalogue, seven show pages, five occasion pages, about, gallery, FAQ, contact, privacy. A separate real 404 is noindex. The builder emits crawlable HTML, unique titles/descriptions, canonical links, responsive images, OG images, sitemap and structured data. Service schema carries the price as an Offer. Hashed assets use long caching.
+25 indexable pages: home, show catalogue, seven show pages, five occasion pages, the guides index and five guides, about, gallery, FAQ, contact, privacy. A separate real 404 is noindex. The builder emits crawlable HTML, unique titles/descriptions, canonical links, responsive images, OG images, sitemap and structured data. Service schema carries the price as an Offer. Hashed assets use long caching.
 
 Update content/site.json -> url when the canonical domain changes. SEO infrastructure does not guarantee rankings.
 

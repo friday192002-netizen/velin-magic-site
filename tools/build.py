@@ -259,6 +259,7 @@ def build() -> None:
     shows = load("shows.json")["shows"]
     occasions = load("occasions.json")["occasions"]
     faqs = load("faq.json")["faq"]
+    guides = load("guides.json")["guides"]
     base = site["url"].rstrip("/")
     written.clear()
     OUT.mkdir(exist_ok=True)
@@ -311,6 +312,13 @@ def build() -> None:
         for step in o.get("flow", []):
             if step["show"] not in show_by_slug:
                 sys.exit(f"occasions.json: flow ของ '{o['slug']}' อ้างถึงโชว์ที่ไม่มี: {step['show']}")
+
+    for g in guides:
+        g["url"] = f"/guides/{g['slug']}/"
+        bad = [x for x in g["relatedShows"] if x not in show_by_slug] + \
+              [x for x in g["relatedOccasions"] if x not in occ_by_slug]
+        if bad:
+            sys.exit(f"guides.json: '{g['slug']}' อ้างถึงรหัสที่ไม่มีใน shows.json/occasions.json: {bad}")
 
     min_price = min(s["price"] for s in shows)
     tokens = {"{showCount}": str(len(shows)), "{minPrice}": baht(min_price)}
@@ -490,7 +498,7 @@ def build() -> None:
                     occasionTiles=home_occ, showGrid=show_grid(shows, rail=True),
                     faqHtml=faq_html([f for f in faqs if f.get("home")]),
                     filmPoster=film_poster.tag("(max-width: 900px) 92vw, 640px", cls="film-img"))
-    page("/", f"รับแสดงมายากล จ้างนักมายากล งานบริษัท งานแต่ง | {site['name']}",
+    page("/", f"รับแสดงมายากล จ้างนักมายากล งานบริษัท เปิดตัวสินค้า | {site['name']}",
          fit(site["description"]), home, og_image=shows[0]["cover"].og("home"),
          ld=[organization, {"@context": "https://schema.org", "@type": "WebSite", "name": site["name"], "url": base + "/"},
              faq_ld([f for f in faqs if f.get("home")])],
@@ -619,6 +627,46 @@ def build() -> None:
          f"ส่งรายละเอียดงานและโชว์ที่สนใจทาง LINE หรือโทร {site['contact']['phone']} เพื่อรับใบเสนอราคาการแสดงมายากลที่สรุปครบก่อนจอง",
          fragment("page-contact", common, crumbs=crumbs, occasionOptions=occ_options),
          og_image=shows[0]["cover"].og("contact"), ld=[crumbs_ld], dock="none", body_class="has-dark-top")
+
+    # ── guides: search-facing advice pages that link back into the catalogue
+    crumbs, crumbs_ld = breadcrumb(site, [("คู่มือเลือกโชว์", "/guides/")])
+    guide_cards = "".join(
+        f'<li class="guide-card" data-reveal style="--i:{i}"><a href="{g["url"]}">'
+        f'<p class="kicker">{esc(g["kicker"])}</p><h2>{esc(g["title"])}</h2>'
+        f'<p>{esc(g["intro"])}</p><span class="link-arrow">อ่านบทความ</span></a></li>'
+        for i, g in enumerate(guides))
+    page("/guides/", "คู่มือเลือกโชว์มายากลสำหรับผู้จัดงาน",
+         fit("รวมคู่มือเลือกการแสดงมายากลให้เหมาะกับงาน ทั้งงานบริษัท งานแต่งงาน และงานเด็ก "
+             "พร้อมวิธีเตรียมสถานที่และวางคิวงาน"),
+         fragment("page-guides", common, crumbs=crumbs, guideCards=guide_cards),
+         og_image=shows[2]["cover"].og("guides"), ld=[crumbs_ld,
+         {"@context": "https://schema.org", "@type": "ItemList", "name": "คู่มือเลือกโชว์",
+          "itemListElement": [{"@type": "ListItem", "position": i + 1, "url": base + g["url"], "name": g["title"]}
+                              for i, g in enumerate(guides)]}],
+         body_class="has-dark-top")
+
+    for g in guides:
+        crumbs, crumbs_ld = breadcrumb(site, [("คู่มือเลือกโชว์", "/guides/"), (g["title"], g["url"])])
+        sections_html = "".join(
+            f'<section class="guide-section"><h2>{esc(sec["h"])}</h2>'
+            + "".join(f"<p>{esc(t)}</p>" for t in sec["ps"]) + "</section>" for sec in g["sections"])
+        more = [x for x in guides if x is not g][:3]
+        more_links = "".join(f'<li><a href="{x["url"]}">{esc(x["title"])}</a></li>' for x in more)
+        more_links += "".join(f'<li><a href="{occ_by_slug[o]["url"]}">โชว์สำหรับ{esc(occ_by_slug[o]["label"])}</a></li>'
+                              for o in g["relatedOccasions"])
+        article = {
+            "@context": "https://schema.org", "@type": "Article", "headline": g["title"],
+            "description": g["seoDescription"], "inLanguage": "th-TH",
+            "author": {"@id": base + "/#business"}, "publisher": {"@id": base + "/#business"},
+            "mainEntityOfPage": base + g["url"], "image": base + shows[0]["cover"].og("home"),
+        }
+        page(g["url"], g["seoTitle"], fit(g["seoDescription"]),
+             fragment("page-guide", common, crumbs=crumbs, guide={
+                 **g, "sectionsHtml": sections_html, "moreLinks": more_links,
+                 "showGrid": show_grid([show_by_slug[x] for x in g["relatedShows"]], "h3", rail=True)}),
+             og_image=show_by_slug[g["relatedShows"][0]]["cover"].og("guide-" + g["slug"]),
+             ld=[article, crumbs_ld], body_class="has-dark-top",
+             images=[show_by_slug[x]["cover"] for x in g["relatedShows"]])
 
     # ── privacy, 404
     crumbs, crumbs_ld = breadcrumb(site, [("ความเป็นส่วนตัว", "/privacy/")])

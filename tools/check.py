@@ -65,7 +65,8 @@ def check():
     sitemap=ET.parse(PUBLIC/'sitemap.xml')
     locs=[u.find('{*}loc').text for u in sitemap.findall('.//{*}url')]
     images=sitemap.findall('.//{*}image/{*}loc')
-    if len(locs)!=19: errors.append(f'Expected 19 sitemap pages, found {len(locs)}')
+    indexable=[f for f in files if 'noindex' not in f.read_text(encoding='utf-8')]
+    if len(locs)!=len(indexable): errors.append(f'Sitemap has {len(locs)} URLs but {len(indexable)} indexable pages')
     if len(images)<40: errors.append(f'Expected image sitemap entries, found {len(images)}')
     if errors: raise AssertionError('\n'.join(errors))
     print(f'PASS: {len(files)} pages; H1, IDs, titles, descriptions, canonical, JSON-LD, local links, images, sitemap with {len(images)} images and show prices.')

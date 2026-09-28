@@ -1171,6 +1171,25 @@ td.pr-price .price-amount { font-size: 19px; }
   .price-actions { grid-template-columns: 1fr; }
 }
 
+/* ─────────────────────────────────────────────── guides */
+
+.guide-body { display: grid; gap: clamp(28px, 4vw, 44px); font-size: 17px; color: var(--ink-2); }
+.guide-section { display: grid; gap: 14px; }
+.guide-section h2 { font-size: clamp(22px, 2.4vw, 28px); color: var(--ink); }
+.guide-section p { max-width: 68ch; }
+.guide-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(14px, 2vw, 20px); }
+.guide-card { display: flex; }
+.guide-card > a {
+  display: grid; align-content: start; gap: 10px; width: 100%; padding: clamp(24px, 3vw, 34px);
+  border: 1px solid var(--hair-l); border-radius: var(--r-xl); background: var(--card); text-decoration: none;
+  transition: transform .5s var(--ease-out), box-shadow .5s var(--ease-out), border-color .4s;
+}
+.guide-card > a:hover { transform: translateY(-4px); border-color: var(--hair-l2); box-shadow: var(--shadow-l); }
+.guide-card h2 { font-size: clamp(20px, 2vw, 24px); }
+.guide-card p { font-size: 15px; color: var(--ink-3); }
+.guide-card .link-arrow { margin-top: 6px; justify-self: start; }
+@media (max-width: 767px) { .guide-list { grid-template-columns: 1fr; } }
+
 .detail-grid { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 4fr); gap: clamp(32px, 6vw, 88px); align-items: start; }
 .detail-main { display: grid; gap: 18px; font-size: 17px; color: var(--ink-2); }
 .detail-main h2 { color: var(--ink); }

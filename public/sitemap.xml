@@ -108,10 +108,6 @@
     <image:image><image:loc>https://velin-magic-site.vercel.app/img/shows/juggling/cover-1ffedbb8-1000.webp</image:loc><image:title>นักแสดงจั๊กกลิ้งกำลังโยนห่วงสีขึ้นกลางอากาศบนเวที</image:title></image:image>
     <image:image><image:loc>https://velin-magic-site.vercel.app/img/shows/illusion/cover-7e1993cd-1000.webp</image:loc><image:title>การเปิดตัวรถยนต์บนเวทีขนาดใหญ่ด้วยอิลลูชัน ท่ามกลางไฟเวทีสีน้ำเงิน</image:title></image:image>
   </url>
-  <url><loc>https://velin-magic-site.vercel.app/occasions/wedding/</loc><lastmod>2026-09-28</lastmod>
-    <image:image><image:loc>https://velin-magic-site.vercel.app/img/shows/closeup/cover-50adc325-1000.webp</image:loc><image:title>นักมายากลแสดงห่วงระยะประชิดให้แขกสองคนที่กำลังหัวเราะดูตรงหน้า</image:title></image:image>
-    <image:image><image:loc>https://velin-magic-site.vercel.app/img/shows/stage/cover-4650c638-1000.webp</image:loc><image:title>นักมายากลบนเวทีกับร่มสีขาวและผ้าแดง หน้าฉากไฟสีทองเป็นรัศมี</image:title></image:image>
-  </url>
   <url><loc>https://velin-magic-site.vercel.app/occasions/kids/</loc><lastmod>2026-09-28</lastmod>
     <image:image><image:loc>https://velin-magic-site.vercel.app/img/shows/stage/cover-4650c638-1000.webp</image:loc><image:title>นักมายากลบนเวทีกับร่มสีขาวและผ้าแดง หน้าฉากไฟสีทองเป็นรัศมี</image:title></image:image>
     <image:image><image:loc>https://velin-magic-site.vercel.app/img/shows/bubble/cover-9ccb39f0-1000.webp</image:loc><image:title>นักแสดงบับเบิ้ลโชว์สร้างฟองสบู่ให้เด็กที่ยื่นมือรับด้วยความตื่นเต้น</image:title></image:image>
@@ -124,6 +120,10 @@
     <image:image><image:loc>https://velin-magic-site.vercel.app/img/shows/juggling/cover-1ffedbb8-1000.webp</image:loc><image:title>นักแสดงจั๊กกลิ้งกำลังโยนห่วงสีขึ้นกลางอากาศบนเวที</image:title></image:image>
     <image:image><image:loc>https://velin-magic-site.vercel.app/img/shows/bozo/cover-1f39bf29-1000.webp</image:loc><image:title>ตัวตลกถือลูกโป่งที่ปั้นเสร็จแล้วยืนคู่กับเด็กที่กำลังยิ้ม</image:title></image:image>
     <image:image><image:loc>https://velin-magic-site.vercel.app/img/shows/illusion/cover-7e1993cd-1000.webp</image:loc><image:title>การเปิดตัวรถยนต์บนเวทีขนาดใหญ่ด้วยอิลลูชัน ท่ามกลางไฟเวทีสีน้ำเงิน</image:title></image:image>
+  </url>
+  <url><loc>https://velin-magic-site.vercel.app/occasions/wedding/</loc><lastmod>2026-09-28</lastmod>
+    <image:image><image:loc>https://velin-magic-site.vercel.app/img/shows/closeup/cover-50adc325-1000.webp</image:loc><image:title>นักมายากลแสดงห่วงระยะประชิดให้แขกสองคนที่กำลังหัวเราะดูตรงหน้า</image:title></image:image>
+    <image:image><image:loc>https://velin-magic-site.vercel.app/img/shows/stage/cover-4650c638-1000.webp</image:loc><image:title>นักมายากลบนเวทีกับร่มสีขาวและผ้าแดง หน้าฉากไฟสีทองเป็นรัศมี</image:title></image:image>
   </url>
   <url><loc>https://velin-magic-site.vercel.app/about/</loc><lastmod>2026-09-28</lastmod></url>
   <url><loc>https://velin-magic-site.vercel.app/gallery/</loc><lastmod>2026-09-28</lastmod>
@@ -142,5 +142,32 @@
   </url>
   <url><loc>https://velin-magic-site.vercel.app/faq/</loc><lastmod>2026-09-28</lastmod></url>
   <url><loc>https://velin-magic-site.vercel.app/contact/</loc><lastmod>2026-09-28</lastmod></url>
+  <url><loc>https://velin-magic-site.vercel.app/guides/</loc><lastmod>2026-09-28</lastmod></url>
+  <url><loc>https://velin-magic-site.vercel.app/guides/choose-magic-show-corporate/</loc><lastmod>2026-09-28</lastmod>
+    <image:image><image:loc>https://velin-magic-site.vercel.app/img/shows/closeup/cover-50adc325-1000.webp</image:loc><image:title>นักมายากลแสดงห่วงระยะประชิดให้แขกสองคนที่กำลังหัวเราะดูตรงหน้า</image:title></image:image>
+    <image:image><image:loc>https://velin-magic-site.vercel.app/img/shows/stage/cover-4650c638-1000.webp</image:loc><image:title>นักมายากลบนเวทีกับร่มสีขาวและผ้าแดง หน้าฉากไฟสีทองเป็นรัศมี</image:title></image:image>
+    <image:image><image:loc>https://velin-magic-site.vercel.app/img/shows/opening/cover-42a4bd79-1000.webp</image:loc><image:title>การเปิดตัวบนเวทีงานกาลาดินเนอร์ พร้อมประกายทองและผู้บริหารร่วมพิธี</image:title></image:image>
+    <image:image><image:loc>https://velin-magic-site.vercel.app/img/shows/illusion/cover-7e1993cd-1000.webp</image:loc><image:title>การเปิดตัวรถยนต์บนเวทีขนาดใหญ่ด้วยอิลลูชัน ท่ามกลางไฟเวทีสีน้ำเงิน</image:title></image:image>
+  </url>
+  <url><loc>https://velin-magic-site.vercel.app/guides/magic-for-product-launch/</loc><lastmod>2026-09-28</lastmod>
+    <image:image><image:loc>https://velin-magic-site.vercel.app/img/shows/opening/cover-42a4bd79-1000.webp</image:loc><image:title>การเปิดตัวบนเวทีงานกาลาดินเนอร์ พร้อมประกายทองและผู้บริหารร่วมพิธี</image:title></image:image>
+    <image:image><image:loc>https://velin-magic-site.vercel.app/img/shows/illusion/cover-7e1993cd-1000.webp</image:loc><image:title>การเปิดตัวรถยนต์บนเวทีขนาดใหญ่ด้วยอิลลูชัน ท่ามกลางไฟเวทีสีน้ำเงิน</image:title></image:image>
+    <image:image><image:loc>https://velin-magic-site.vercel.app/img/shows/closeup/cover-50adc325-1000.webp</image:loc><image:title>นักมายากลแสดงห่วงระยะประชิดให้แขกสองคนที่กำลังหัวเราะดูตรงหน้า</image:title></image:image>
+  </url>
+  <url><loc>https://velin-magic-site.vercel.app/guides/closeup-vs-stage/</loc><lastmod>2026-09-28</lastmod>
+    <image:image><image:loc>https://velin-magic-site.vercel.app/img/shows/closeup/cover-50adc325-1000.webp</image:loc><image:title>นักมายากลแสดงห่วงระยะประชิดให้แขกสองคนที่กำลังหัวเราะดูตรงหน้า</image:title></image:image>
+    <image:image><image:loc>https://velin-magic-site.vercel.app/img/shows/stage/cover-4650c638-1000.webp</image:loc><image:title>นักมายากลบนเวทีกับร่มสีขาวและผ้าแดง หน้าฉากไฟสีทองเป็นรัศมี</image:title></image:image>
+  </url>
+  <url><loc>https://velin-magic-site.vercel.app/guides/kids-event-shows/</loc><lastmod>2026-09-28</lastmod>
+    <image:image><image:loc>https://velin-magic-site.vercel.app/img/shows/bubble/cover-9ccb39f0-1000.webp</image:loc><image:title>นักแสดงบับเบิ้ลโชว์สร้างฟองสบู่ให้เด็กที่ยื่นมือรับด้วยความตื่นเต้น</image:title></image:image>
+    <image:image><image:loc>https://velin-magic-site.vercel.app/img/shows/bozo/cover-1f39bf29-1000.webp</image:loc><image:title>ตัวตลกถือลูกโป่งที่ปั้นเสร็จแล้วยืนคู่กับเด็กที่กำลังยิ้ม</image:title></image:image>
+    <image:image><image:loc>https://velin-magic-site.vercel.app/img/shows/juggling/cover-1ffedbb8-1000.webp</image:loc><image:title>นักแสดงจั๊กกลิ้งกำลังโยนห่วงสีขึ้นกลางอากาศบนเวที</image:title></image:image>
+    <image:image><image:loc>https://velin-magic-site.vercel.app/img/shows/stage/cover-4650c638-1000.webp</image:loc><image:title>นักมายากลบนเวทีกับร่มสีขาวและผ้าแดง หน้าฉากไฟสีทองเป็นรัศมี</image:title></image:image>
+  </url>
+  <url><loc>https://velin-magic-site.vercel.app/guides/prepare-venue-for-magic-show/</loc><lastmod>2026-09-28</lastmod>
+    <image:image><image:loc>https://velin-magic-site.vercel.app/img/shows/stage/cover-4650c638-1000.webp</image:loc><image:title>นักมายากลบนเวทีกับร่มสีขาวและผ้าแดง หน้าฉากไฟสีทองเป็นรัศมี</image:title></image:image>
+    <image:image><image:loc>https://velin-magic-site.vercel.app/img/shows/illusion/cover-7e1993cd-1000.webp</image:loc><image:title>การเปิดตัวรถยนต์บนเวทีขนาดใหญ่ด้วยอิลลูชัน ท่ามกลางไฟเวทีสีน้ำเงิน</image:title></image:image>
+    <image:image><image:loc>https://velin-magic-site.vercel.app/img/shows/opening/cover-42a4bd79-1000.webp</image:loc><image:title>การเปิดตัวบนเวทีงานกาลาดินเนอร์ พร้อมประกายทองและผู้บริหารร่วมพิธี</image:title></image:image>
+  </url>
   <url><loc>https://velin-magic-site.vercel.app/privacy/</loc><lastmod>2026-09-28</lastmod></url>
 </urlset>
