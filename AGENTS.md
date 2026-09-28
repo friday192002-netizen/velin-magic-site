@@ -14,7 +14,7 @@ Read this before editing. CLAUDE.md points here.
 - Typography is minimal sans: Anuphan for headings/accents, IBM Plex Sans Thai for body. No serif or italic faces.
 - Every photo needs a real scene description in shows.json -> photoAlts (no "ภาพที่ 1, 2"); the builder also emits an image sitemap from those alts.
 - Run-of-show / "ไอเดียจัดลำดับโชว์" sections were removed everywhere on 28 September 2026. The `flow` data stays in occasions.json but nothing renders it.
-- Weddings are deliberately low priority (owner, 28 September 2026): the occasion page stays for search, but the home title, meta description and occasion order lead with corporate, launch, kids and festival.
+- Weddings were dropped entirely (owner, 28 September 2026). The fifth occasion is now ปาร์ตี้ส่วนตัว (slug `party`); /occasions/wedding redirects to it in vercel.json. Do not reintroduce wedding copy.
 - SEO direction, keyword map per page and the owner's to-do list: docs/SEO-PLAN.md. Velin targets show formats and occasions; untitledmagic.com keeps the generic "รับแสดงมายากล" terms so the two sites do not compete.
 - Show pages: hero carousel plus a photo grid (first 9 tiles, then "ดูภาพทั้งหมด") that opens the lightbox with a thumbnail strip.
 - Never edit the other owner projects (Untitled/171) when adapting assets.

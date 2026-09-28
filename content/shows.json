@@ -65,7 +65,6 @@
       "highlight": "ไม่มีเวที ไม่มีระยะห่าง — ความมหัศจรรย์เกิดขึ้นตรงหน้าคุณ",
       "fits": [
         "งานเลี้ยงบริษัท",
-        "งานแต่งงาน",
         "Cocktail Party",
         "งานเปิดตัวสินค้า",
         "Private Party",
@@ -73,7 +72,7 @@
       ],
       "occasions": [
         "corporate",
-        "wedding",
+        "party",
         "launch"
       ],
       "moods": [
@@ -128,7 +127,7 @@
         "corporate",
         "kids",
         "festival",
-        "wedding"
+        "party"
       ],
       "moods": [
         "stage"

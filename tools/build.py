@@ -636,7 +636,7 @@ def build() -> None:
         f'<p>{esc(g["intro"])}</p><span class="link-arrow">อ่านบทความ</span></a></li>'
         for i, g in enumerate(guides))
     page("/guides/", "คู่มือเลือกโชว์มายากลสำหรับผู้จัดงาน",
-         fit("รวมคู่มือเลือกการแสดงมายากลให้เหมาะกับงาน ทั้งงานบริษัท งานแต่งงาน และงานเด็ก "
+         fit("รวมคู่มือเลือกการแสดงมายากลให้เหมาะกับงาน ทั้งงานบริษัท งานเปิดตัวสินค้า และงานเด็ก "
              "พร้อมวิธีเตรียมสถานที่และวางคิวงาน"),
          fragment("page-guides", common, crumbs=crumbs, guideCards=guide_cards),
          og_image=shows[2]["cover"].og("guides"), ld=[crumbs_ld,
