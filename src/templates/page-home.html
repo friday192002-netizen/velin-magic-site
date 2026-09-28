@@ -13,35 +13,24 @@
       </h1>
       <p class="hero-lede">งานบริษัท เปิดตัวสินค้า งานเด็ก และอีเวนต์ เลือกได้ {{showCount}} รูปแบบ ราคาชัดเจนตั้งแต่ {{minPrice}}</p>
       <div class="hero-actions">
-        <a class="btn btn-gold btn-xl" href="#finder">หาโชว์ที่ใช่ <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        <a class="btn btn-gold btn-xl" href="#shows">ดูรูปแบบการแสดง <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
         <a class="btn btn-glass btn-xl hero-secondary" href="/shows/">ดูราคาทั้งหมด</a>
       </div>
       <dl class="hero-stats">{{{statsHtml}}}</dl>
     </div>
   </div>
-  <a class="scroll-cue" href="#finder" aria-label="เลื่อนลงไปหาโชว์ที่ใช่"><span></span></a>
+  <a class="scroll-cue" href="#shows" aria-label="เลื่อนลงดูรูปแบบการแสดง"><span></span></a>
 </section>
 
 {{{marquee}}}
 
-<section class="section section-dark finder-section" id="finder" aria-labelledby="finder-title">
-  <div class="container">
-    <div class="section-head section-head-center" data-reveal>
-      <p class="kicker">SHOW FINDER</p>
-      <h2 id="finder-title">{{site.finder.title}}</h2>
-      <p class="section-sub">ตอบ 2 ข้อ แล้วดูโชว์ที่แนะนำพร้อมราคาได้ทันที</p>
-    </div>
-    <div data-reveal>{{{finderHtml}}}</div>
-  </div>
-</section>
-
-<section class="section section-ivory" aria-labelledby="shows-title">
+<section class="section section-ivory" id="shows" aria-labelledby="shows-title">
   <div class="container">
     <div class="section-head section-head-row" data-reveal>
       <div>
         <p class="kicker">{{showCount}} WAYS TO AMAZE</p>
         <h2 id="shows-title">รูปแบบการแสดงทั้งหมด</h2>
-        <p class="section-sub">ดูรายละเอียดการแสดง แล้วสอบถามรูปแบบที่เหมาะกับงานของคุณ</p>
+        <p class="section-sub">กดเข้าไปดูรายละเอียด ภาพจากงานจริง และสิ่งที่ต้องเตรียมของแต่ละแบบ</p>
       </div>
       <a class="link-arrow" href="/shows/">เปรียบเทียบราคา</a>
     </div>
@@ -60,6 +49,32 @@
     </div>
     <div class="occ-grid" data-rail>{{{occasionTiles}}}</div>
     <div class="rail-progress occ-progress" aria-hidden="true"><span data-rail-bar></span></div>
+  </div>
+</section>
+
+<section class="section section-deep" id="clips" aria-labelledby="film-title">
+  <div class="container">
+    <div class="section-head section-head-row" data-reveal>
+      <div>
+        <p class="kicker">IN MOTION</p>
+        <h2 id="film-title">ดูการแสดงจริงก่อนตัดสินใจ</h2>
+        <p class="section-sub">คลิปสั้นจากงานจริง และภาพจากงานอีก {{photoCount}} ภาพ</p>
+      </div>
+      <a class="link-arrow" href="/gallery/">ดูภาพการแสดงทั้งหมด</a>
+    </div>
+    {{{reelsHtml}}}
+    <p class="fine reels-credit">{{site.video.caption}}</p>
+  </div>
+</section>
+
+<section class="section section-dark finder-section" id="finder" aria-labelledby="finder-title">
+  <div class="container">
+    <div class="section-head section-head-center" data-reveal>
+      <p class="kicker">SHOW FINDER</p>
+      <h2 id="finder-title">{{site.finder.title}}</h2>
+      <p class="section-sub">ตอบ 2 ข้อ แล้วเราจะแนะนำโชว์ที่เหมาะกับงานของคุณให้ทันที</p>
+    </div>
+    <div data-reveal>{{{finderHtml}}}</div>
   </div>
 </section>
 
@@ -85,29 +100,6 @@
       <a class="link-arrow" href="/about/">รู้จัก Velin</a>
     </div>
   </div>
-</section>
-
-<section class="section section-deep" aria-labelledby="film-title">
-  <div class="container film">
-    <div class="film-copy" data-reveal>
-      <p class="kicker">IN MOTION</p>
-      <h2 id="film-title">บางความรู้สึก<br>ต้องดูด้วยตาตัวเอง</h2>
-      <p class="section-sub">ชมไฮไลต์จากการแสดงจริง และภาพจากงานจริงอีก {{photoCount}} ภาพ</p>
-      <a class="link-arrow" href="/gallery/">ดูภาพการแสดงทั้งหมด</a>
-      <p class="fine">{{site.video.caption}}</p>
-    </div>
-    <button type="button" class="film-poster" data-video="{{site.video.youtubeId}}" aria-label="เล่นวิดีโอไฮไลต์การแสดง" data-reveal>
-      {{{filmPoster}}}
-      <span class="play"><svg class="icon" aria-hidden="true"><use href="#i-play"/></svg></span>
-      <span class="film-label">ชมไฮไลต์การแสดง</span>
-    </button>
-  </div>
-  {{#reelsHtml}}
-  <div class="container reels-block" aria-labelledby="reels-title">
-    <h3 id="reels-title" class="reels-heading" data-reveal>{{reelsTitle}}</h3>
-    {{{reelsHtml}}}
-  </div>
-  {{/reelsHtml}}
 </section>
 
 <section class="section section-ivory" aria-labelledby="process-title">

@@ -12,6 +12,8 @@ Read this before editing. CLAUDE.md points here.
 - Source photos illustrate show formats; not every performer pictured is Velin.
 - Show galleries mix the 171 set (cover, 01…) with photos copied from the Untitled Magic site (u01…, 18 September 2026). Each u* file has a scene description in shows.json -> photoAlts. The build skips any gallery file that looks identical to the cover.
 - Typography is minimal sans: Anuphan for headings/accents, IBM Plex Sans Thai for body. No serif or italic faces.
+- Home page order tells the story before asking questions: hero → shows → occasions → clips → finder → why → performer → booking steps → FAQ → CTA. Keep the finder below the visual sections.
+- Show cards and price rows link to the show page with "ดูรายละเอียด" (descriptive anchor for search, and a softer ask than a form). The quote button belongs on the show page and in the CTA band.
 - Vertical clips live in site.json -> reels.items: `id` (YouTube Shorts id), a Thai title, an honest `alt`, and the `shows`/`occasions` slugs that should show it. Save the poster frame to photos/site/reel-<id>.jpg (https://i.ytimg.com/vi/<id>/oardefault.jpg). YouTube is only contacted after a click; the home page also emits VideoObject data.
 - Every photo needs a real scene description in shows.json -> photoAlts (no "ภาพที่ 1, 2"); the builder also emits an image sitemap from those alts.
 - Run-of-show / "ไอเดียจัดลำดับโชว์" sections were removed everywhere on 28 September 2026. The `flow` data stays in occasions.json but nothing renders it.

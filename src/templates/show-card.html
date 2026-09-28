@@ -10,7 +10,8 @@
     <p class="card-text">{{show.tagline}}</p>
     <div class="card-foot">
       <p class="price">{{#show.priceFrom}}<span class="price-from">เริ่มต้น</span>{{/show.priceFrom}}<span class="price-amount">{{show.priceText}}</span></p>
-      <a class="btn btn-gold" href="/contact/?show={{show.slug}}">สอบถามโชว์นี้</a>
+      <a class="card-cta" href="{{show.url}}">ดูรายละเอียด<span class="sr">{{show.th}}</span>
+        <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
     </div>
   </div>
 </article>
