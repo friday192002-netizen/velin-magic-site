@@ -710,7 +710,35 @@ em { font-style: normal; }
 @media (max-width: 860px) { .film { grid-template-columns: 1fr; } }
 @media (max-width: 560px) { .play { width: 64px; height: 64px; } .play .icon { width: 24px; height: 24px; } .film-label { left: 14px; bottom: 12px; font-size: 12px; } }
 
+/* vertical clips (YouTube Shorts): poster first, player only after a click */
+.reels-block { display: grid; gap: clamp(20px, 3vw, 30px); margin-top: clamp(40px, 6vw, 72px); }
+.reels-heading { font-family: var(--display); font-size: clamp(20px, 2.2vw, 26px); font-weight: 500; }
+.section-deep .reels-heading, .section-dark .reels-heading { color: var(--on-dark); }
+.reel-row { display: flex; flex-wrap: wrap; gap: clamp(14px, 2vw, 22px); }
+.reel { display: grid; gap: 10px; width: 260px; max-width: 100%; }
+.reel-poster {
+  position: relative; overflow: hidden; display: block; width: 100%; aspect-ratio: 9 / 16; padding: 0;
+  border: 1px solid var(--hair-d); border-radius: var(--r-lg); background: var(--e-900); cursor: pointer;
+  box-shadow: var(--shadow-d); transition: transform .5s var(--ease-out), border-color .4s;
+}
+.reel-poster:hover { transform: translateY(-4px); border-color: var(--hair-d2); }
+.reel-poster::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 55%, rgba(11, 8, 6, .55)); }
+.reel-img { width: 100%; height: 100%; object-fit: cover; transition: transform 1.2s var(--ease-out), opacity .4s; opacity: .92; }
+.reel-poster:hover .reel-img { transform: scale(1.04); opacity: 1; }
+.play-sm { width: 56px; height: 56px; }
+.play-sm .icon { width: 20px; height: 20px; }
+.reel-title { font-size: 15px; font-weight: 400; line-height: 1.5; color: var(--ink-3); }
+.section-deep .reel-title, .section-dark .reel-title { color: var(--on-dark-2); }
+@media (max-width: 640px) {
+  .reel-row { flex-wrap: nowrap; overflow-x: auto; scroll-snap-type: x mandatory; margin-inline: calc(var(--gutter) * -1); padding: 2px var(--gutter) 6px; scrollbar-width: none; }
+  .reel-row::-webkit-scrollbar { display: none; }
+  .reel { flex: 0 0 62%; scroll-snap-align: start; }
+  .reel-poster:hover { transform: none; }
+}
+
 .video-dialog { width: min(1080px, 94vw); padding: 0; border: 0; border-radius: 16px; background: #000; overflow: visible; }
+.video-dialog.is-portrait { width: min(420px, 88vw); }
+.video-dialog.is-portrait .video-frame { aspect-ratio: 9 / 16; max-height: 82dvh; margin-inline: auto; }
 .video-dialog::backdrop { background: rgba(8, 6, 4, .9); backdrop-filter: blur(6px); }
 .video-frame { position: relative; aspect-ratio: 16 / 9; }
 .video-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; border-radius: 16px; }

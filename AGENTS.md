@@ -12,6 +12,7 @@ Read this before editing. CLAUDE.md points here.
 - Source photos illustrate show formats; not every performer pictured is Velin.
 - Show galleries mix the 171 set (cover, 01…) with photos copied from the Untitled Magic site (u01…, 18 September 2026). Each u* file has a scene description in shows.json -> photoAlts. The build skips any gallery file that looks identical to the cover.
 - Typography is minimal sans: Anuphan for headings/accents, IBM Plex Sans Thai for body. No serif or italic faces.
+- Vertical clips live in site.json -> reels.items: `id` (YouTube Shorts id), a Thai title, an honest `alt`, and the `shows`/`occasions` slugs that should show it. Save the poster frame to photos/site/reel-<id>.jpg (https://i.ytimg.com/vi/<id>/oardefault.jpg). YouTube is only contacted after a click; the home page also emits VideoObject data.
 - Every photo needs a real scene description in shows.json -> photoAlts (no "ภาพที่ 1, 2"); the builder also emits an image sitemap from those alts.
 - Run-of-show / "ไอเดียจัดลำดับโชว์" sections were removed everywhere on 28 September 2026. The `flow` data stays in occasions.json but nothing renders it.
 - Weddings were dropped entirely (owner, 28 September 2026). The fifth occasion is now ปาร์ตี้ส่วนตัว (slug `party`); /occasions/wedding redirects to it in vercel.json. Do not reintroduce wedding copy.

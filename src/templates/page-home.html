@@ -102,6 +102,12 @@
       <span class="film-label">ชมไฮไลต์การแสดง</span>
     </button>
   </div>
+  {{#reelsHtml}}
+  <div class="container reels-block" aria-labelledby="reels-title">
+    <h3 id="reels-title" class="reels-heading" data-reveal>{{reelsTitle}}</h3>
+    {{{reelsHtml}}}
+  </div>
+  {{/reelsHtml}}
 </section>
 
 <section class="section section-ivory" aria-labelledby="process-title">

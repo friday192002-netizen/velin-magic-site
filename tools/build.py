@@ -282,6 +282,9 @@ def build() -> None:
     portrait = Photo(PHOTOS / "velin" / "portrait-card.webp",
                      "ภาพวาด Velin บนไพ่แจ็กโพดำ", widths=(480, 1005))
     film_poster = Photo(PHOTOS / "site" / "opening.webp", "นักมายากลบนเวทีและผู้ชมในงาน", widths=(640, 1200))
+    reels = site["reels"]["items"]
+    for r in reels:
+        r["poster"] = Photo(PHOTOS / "site" / f"reel-{r['id']}.jpg", r["alt"], widths=(360, 720))
 
     occ_by_slug = {o["slug"]: o for o in occasions}
     mood_slugs = {m["slug"] for m in site["finder"]["moods"]}
@@ -438,6 +441,21 @@ def build() -> None:
         f'<li class="why-item" data-reveal style="--i:{i}"><span class="why-icon"><svg class="icon" aria-hidden="true"><use href="#{icons.get(w["icon"], "i-spark")}"/></svg></span>'
         f'<h3>{esc(fill(w["title"]))}</h3><p>{esc(fill(w["text"]))}</p></li>' for i, w in enumerate(site["why"]))
 
+    def reels_html(items: list[dict], heading: str = "h3") -> str:
+        """Vertical clips. YouTube only loads after a click, so nothing third-party
+        touches the page until the visitor asks for it."""
+        if not items:
+            return ""
+        cards = "".join(
+            f'<li class="reel" data-reveal style="--i:{i}">'
+            f'<button type="button" class="reel-poster" data-video="{r["id"]}" data-video-portrait '
+            f'aria-label="เล่นคลิป {esc(r["title"], quote=True)}">'
+            f'{r["poster"].tag("(max-width: 640px) 62vw, 260px", cls="reel-img")}'
+            f'<span class="play play-sm" aria-hidden="true"><svg class="icon"><use href="#i-play"/></svg></span>'
+            f'</button><{heading} class="reel-title">{esc(r["title"])}</{heading}></li>'
+            for i, r in enumerate(items))
+        return f'<ul class="reel-row">{cards}</ul>'
+
     def stat_html(x: dict) -> str:
         value = fill(x["value"])
         digits = re.sub(r"[^\d]", "", value)
@@ -497,10 +515,16 @@ def build() -> None:
                     heroImg=hero.tag("(max-width: 1024px) 118vw, 58vw", cls="hero-portrait", eager=True),
                     occasionTiles=home_occ, showGrid=show_grid(shows, rail=True),
                     faqHtml=faq_html([f for f in faqs if f.get("home")]),
-                    filmPoster=film_poster.tag("(max-width: 900px) 92vw, 640px", cls="film-img"))
+                    filmPoster=film_poster.tag("(max-width: 900px) 92vw, 640px", cls="film-img"),
+                    reelsTitle=site["reels"]["title"], reelsHtml=reels_html(reels, "h3"))
     page("/", f"รับแสดงมายากล จ้างนักมายากล งานบริษัท เปิดตัวสินค้า | {site['name']}",
          fit(site["description"]), home, og_image=shows[0]["cover"].og("home"),
          ld=[organization, {"@context": "https://schema.org", "@type": "WebSite", "name": site["name"], "url": base + "/"},
+             *[{"@context": "https://schema.org", "@type": "VideoObject", "name": r["title"],
+                "description": r["alt"], "thumbnailUrl": base + r["poster"].largest,
+                "embedUrl": f"https://www.youtube.com/embed/{r['id']}",
+                "contentUrl": f"https://www.youtube.com/shorts/{r['id']}",
+                "uploadDate": TODAY} for r in reels],
              faq_ld([f for f in faqs if f.get("home")])],
          body_class="has-dark-hero is-home", full_title=True, images=[hero, *(x["cover"] for x in shows)],
          preload=f'<link rel="preload" as="image" imagesrcset="{hero_srcset}" imagesizes="(max-width: 1024px) 118vw, 58vw" fetchpriority="high">')
@@ -550,6 +574,7 @@ def build() -> None:
             "occasionLinks": "".join(f'<li><a href="{occ_by_slug[o]["url"]}">{esc(occ_by_slug[o]["label"])}</a></li>'
                                      for o in s["occasions"]),
             "prepareHtml": "".join(f"<li>{esc(t)}</li>" for t in s["prepare"]),
+            "reelsHtml": reels_html([r for r in reels if s["slug"] in r["shows"]], "h3"),
         }, relatedGrid=show_grid(related, rail=True))
         price_spec = {"@type": "PriceSpecification", "priceCurrency": "THB",
                       **({"minPrice": s["price"]} if s["priceFrom"] else {"price": s["price"]})}
@@ -578,6 +603,7 @@ def build() -> None:
                                   for i, p in enumerate(o["points"])),
             "showGrid": show_grid(o["shows"], rail=True), "otherLinks": others,
             "fromPrice": baht(min(s["price"] for s in o["shows"])),
+            "reelsHtml": reels_html([r for r in reels if o["slug"] in r["occasions"]], "h3"),
         }, faqHtml=faq_html([f for f in faqs if f.get("home")][:3]))
         page(o["url"], o["seoTitle"], fit(o["seoDescription"]), body, og_image=o["cover"].og("occasion-" + o["slug"]),
              body_class="has-dark-top", images=[x["cover"] for x in o["shows"]],
@@ -609,7 +635,8 @@ def build() -> None:
         f'<button type="button" class="chip" data-gallery-filter="{s["slug"]}" aria-pressed="false">{esc(s["th"])}</button>' for s in shows)
     page("/gallery/", "ภาพการแสดงมายากล",
          fit(f"รวม {common['photoCount']} ภาพจากงานจริง ทั้งมายากลเวที โคลสอัพ บับเบิ้ลโชว์ จั๊กกลิ้ง และอิลลูชัน แยกตามรูปแบบการแสดง"),
-         fragment("page-gallery", common, crumbs=crumbs, groups=groups, galleryChips=gallery_chips),
+         fragment("page-gallery", common, crumbs=crumbs, groups=groups, galleryChips=gallery_chips,
+                  reelsTitle=site["reels"]["title"], reelsHtml=reels_html(reels, "h2")),
          og_image=shows[6]["cover"].og("gallery"), ld=[crumbs_ld], body_class="has-dark-top",
          images=[ph for x in shows for ph in x["photos"][:2]])
 

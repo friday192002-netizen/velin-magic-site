@@ -447,10 +447,11 @@
 
   $$('[data-video]').forEach((btn) => btn.addEventListener('click', () => {
     const id = btn.dataset.video;
-    const watch = `https://www.youtube.com/watch?v=${id}`;
+    const portrait = btn.hasAttribute('data-video-portrait');
+    const watch = portrait ? `https://www.youtube.com/shorts/${id}` : `https://www.youtube.com/watch?v=${id}`;
     const dlg = document.createElement('dialog');
-    dlg.className = 'video-dialog';
-    dlg.setAttribute('aria-label', 'วิดีโอไฮไลต์การแสดง');
+    dlg.className = 'video-dialog' + (portrait ? ' is-portrait' : '');
+    dlg.setAttribute('aria-label', btn.getAttribute('aria-label') || 'วิดีโอไฮไลต์การแสดง');
     dlg.innerHTML = `
       <button type="button" class="video-close" aria-label="ปิดวิดีโอ">${icon('i-close')}</button>
       <div class="video-frame"><iframe src="https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0" title="วิดีโอไฮไลต์การแสดง"

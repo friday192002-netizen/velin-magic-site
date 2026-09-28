@@ -53,6 +53,15 @@
     </div>
   </section>
 
+  {{#show.reelsHtml}}
+  <section class="section section-deep section-compact" aria-labelledby="show-reels">
+    <div class="container reels-block">
+      <h2 id="show-reels" class="reels-heading" data-reveal>คลิปจากงานจริง</h2>
+      {{{show.reelsHtml}}}
+    </div>
+  </section>
+  {{/show.reelsHtml}}
+
   <section class="section section-linen" aria-labelledby="about-show">
     <div class="container detail-grid">
       <div class="detail-main" data-reveal>
