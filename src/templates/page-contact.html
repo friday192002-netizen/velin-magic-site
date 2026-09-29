@@ -6,7 +6,7 @@
       <div>
         <p class="kicker">REQUEST A QUOTE</p>
         <h1 id="page-title">ขอใบเสนอราคา</h1>
-        <p class="page-lede">ใช้เวลาไม่ถึง 1 นาที กรอกรายละเอียดงานสั้น ๆ แล้วส่งทาง LINE</p>
+        <p class="page-lede">ทักทาง LINE ได้ทันที หรือกรอกข้อมูลสั้น ๆ 3 ช่อง แล้วเราเตรียมข้อความให้ส่งต่อ</p>
       </div>
       <ol class="stepper" aria-label="ขั้นตอน" data-stepper><li class="is-active"><span>1</span>รายละเอียดงาน</li><li><span>2</span>ส่งทาง LINE</li></ol>
     </div>
@@ -17,8 +17,17 @@
   <div class="container contact-grid">
     <div class="contact-main">
 
+      <div class="panel quote-quick quick-contact" data-reveal>
+        <h2 class="h-small">อยากคุยเลย ไม่ต้องกรอกก็ได้</h2>
+        <p>ทักมาเล่ารายละเอียดงานทาง LINE หรือโทรหาเราโดยตรง</p>
+        <div class="quick-row">
+          <a class="btn btn-line btn-lg" href="{{site.contact.line}}" target="_blank" rel="noopener"><svg class="icon" aria-hidden="true"><use href="#i-line"/></svg> LINE {{site.contact.lineName}}</a>
+          <a class="btn btn-ghost btn-lg" href="tel:{{site.contact.telephone}}"><svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg> {{site.contact.phone}}</a>
+        </div>
+      </div>
+
       <form class="panel quote-form" data-quote-form novalidate aria-labelledby="form-title" data-step="1">
-        <h2 id="form-title" class="h-small"><span class="step-dot">1</span> รายละเอียดงาน</h2>
+        <h2 id="form-title" class="h-small"><span class="step-dot">1</span> หรือกรอกสั้น ๆ ให้เราเตรียมข้อความให้</h2>
         <div class="form-grid">
 <label class="field field-wide"><span class="field-label">โชว์ที่สนใจ (ถ้ามี)</span><input name="show" type="text" placeholder="ระบุชื่อโชว์ หรือให้เราช่วยแนะนำ"></label>
           <label class="field">
@@ -43,6 +52,9 @@
               <option value="อื่น ๆ">อื่น ๆ</option>
             </select>
           </label>
+          <details class="more-fields">
+            <summary>เพิ่มรายละเอียด <small>ไม่บังคับ</small> <svg class="icon" aria-hidden="true"><use href="#i-chevron"/></svg></summary>
+            <div class="form-grid">
           <label class="field">
             <span class="field-label">สถานที่ / จังหวัด</span>
             <input name="place" type="text" placeholder="เช่น โรงแรมในกรุงเทพฯ" enterkeyhint="next">
@@ -55,8 +67,10 @@
             <span class="field-label">รายละเอียดเพิ่มเติม</span>
             <textarea name="details" rows="3" placeholder="ธีมงาน ช่วงเวลาที่อยากให้แสดง หรือสิ่งที่อยากให้เกิดขึ้น"></textarea>
           </label>
+            </div>
+          </details>
         </div>
-        <button type="submit" class="btn btn-dark btn-xl btn-block">สร้างข้อความสำหรับส่ง <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+        <button type="submit" class="btn btn-dark btn-xl btn-block">ถัดไป: เตรียมข้อความส่ง LINE <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></button>
         <p class="fine">ข้อมูลใช้สร้างข้อความในเบราว์เซอร์ของคุณเท่านั้น ไม่มีการส่งหรือบันทึกไว้บนเว็บไซต์ — <a href="/privacy/">อ่านเพิ่มเติม</a></p>
       </form>
 

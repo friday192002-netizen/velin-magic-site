@@ -575,6 +575,8 @@ def build() -> None:
                                      for o in s["occasions"]),
             "prepareHtml": "".join(f"<li>{esc(t)}</li>" for t in s["prepare"]),
             "reelsHtml": reels_html([r for r in reels if s["slug"] in r["shows"]], "h3"),
+            "guideLinks": "".join(f'<li><a href="{g["url"]}">{esc(g["title"])}</a></li>'
+                                  for g in guides if s["slug"] in g["relatedShows"]),
         }, relatedGrid=show_grid(related, rail=True))
         price_spec = {"@type": "PriceSpecification", "priceCurrency": "THB",
                       **({"minPrice": s["price"]} if s["priceFrom"] else {"price": s["price"]})}
@@ -604,6 +606,8 @@ def build() -> None:
             "showGrid": show_grid(o["shows"], rail=True), "otherLinks": others,
             "fromPrice": baht(min(s["price"] for s in o["shows"])),
             "reelsHtml": reels_html([r for r in reels if o["slug"] in r["occasions"]], "h3"),
+            "guideLinks": "".join(f'<li><a href="{g["url"]}">{esc(g["title"])}</a></li>'
+                                  for g in guides if o["slug"] in g["relatedOccasions"]),
         }, faqHtml=faq_html([f for f in faqs if f.get("home")][:3]))
         page(o["url"], o["seoTitle"], fit(o["seoDescription"]), body, og_image=o["cover"].og("occasion-" + o["slug"]),
              body_class="has-dark-top", images=[x["cover"] for x in o["shows"]],

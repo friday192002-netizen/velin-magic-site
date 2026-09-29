@@ -70,6 +70,16 @@
     }).observe(heroActions);
   }
 
+  // show pages: the price dock repeats the price box, so it only arrives once that box is off screen
+  const priceBox = $('.price-box');
+  const showDock = $('.dock-show');
+  if (priceBox && showDock && 'IntersectionObserver' in window) {
+    showDock.classList.add('is-away');
+    new IntersectionObserver(([en]) => {
+      showDock.classList.toggle('is-away', en.isIntersecting || en.boundingClientRect.top > 0);
+    }).observe(priceBox);
+  }
+
   const menuButton = $('[data-menu-button]');
   const nav = $('[data-nav]');
   const setMenu = (open) => {

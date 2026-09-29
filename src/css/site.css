@@ -742,7 +742,7 @@ em { font-style: normal; }
 .section-deep .reel-title, .section-dark .reel-title { color: var(--on-dark-2); }
 .reels-credit { margin-top: 22px; }
 @media (max-width: 640px) {
-  .reel-row { display: flex; flex-wrap: nowrap; overflow-x: auto; scroll-snap-type: x mandatory; margin-inline: calc(var(--gutter) * -1); padding: 2px var(--gutter) 6px; scrollbar-width: none; }
+  .reel-row { display: flex; flex-wrap: nowrap; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: var(--gutter); margin-inline: calc(var(--gutter) * -1); padding: 2px var(--gutter) 6px; scrollbar-width: none; }
   .reel-row::-webkit-scrollbar { display: none; }
   .reel { flex: 0 0 62%; scroll-snap-align: start; }
   .reel-poster:hover { transform: none; }
@@ -1360,18 +1360,42 @@ td.pr-price .price-amount { font-size: 19px; }
 .notfound { min-height: 64svh; display: grid; align-content: center; }
 .notfound .hero-actions { margin-top: 30px; }
 
+/* ─────────────────────────────────────────────── contact: quick start + short form */
+
+.quick-contact { display: grid; gap: 14px; }
+.quick-contact p { color: var(--ink-3); font-size: 15px; }
+.quick-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.more-fields { grid-column: 1 / -1; border-top: 1px solid var(--hair-l); padding-top: 6px; }
+.more-fields > summary {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 48px;
+  font-weight: 500; color: var(--ink-2); cursor: pointer; list-style: none;
+}
+.more-fields > summary::-webkit-details-marker { display: none; }
+.more-fields > summary small { font-weight: 400; color: var(--ink-3); }
+.more-fields > summary .icon { width: 18px; height: 18px; transition: transform .35s var(--ease-out); }
+.more-fields[open] > summary .icon { transform: rotate(180deg); }
+.more-fields .form-grid { padding-top: 10px; }
+@media (max-width: 420px) { .quick-row { grid-template-columns: 1fr; } }
+
+.pill-links + .h-small { margin-top: clamp(28px, 4vw, 40px); }
+.guide-links { display: grid; margin-top: 4px; }
+.guide-links a { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 48px; padding-block: 10px; border-bottom: 1px solid var(--hair-l); text-decoration: none; font-size: 15px; transition: color .3s; }
+.guide-links a::after { content: "→"; color: var(--ink-3); transition: transform .35s var(--ease-out); }
+.guide-links a:hover { color: var(--bronze); }
+.guide-links a:hover::after { transform: translateX(5px); }
+
 /* ─────────────────────────────────────────────── motion preferences */
 
 /* comfortable tap targets on phones: text links in lists and footers were
    only 22–31px tall, which is easy to miss with a thumb */
 @media (max-width: 767px) {
   .footer-col ul a, .footer-bottom a, .crumbs a, .crumbs li,
-  .link-list a, .link-arrow, .footer-contact a,
+  .link-arrow, .footer-contact a,
   .help-phone, .price-help, .fine a, .prose a, .empty a {
     display: inline-flex; align-items: center; min-height: 44px;
   }
   .footer-col ul { gap: 2px; }
-  .link-list a { padding-block: 14px; }
+  .link-list a { min-height: 48px; align-items: center; padding-block: 12px; }
   .crumbs ol { gap: 2px 0; }
   .sl-remove, .icon-btn { min-width: 44px; min-height: 44px; }
 }
