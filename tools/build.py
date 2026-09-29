@@ -182,7 +182,8 @@ class Photo:
 MOSAIC_FIRST = 9   # photos shown in the show-page grid before "ดูภาพทั้งหมด"
 
 
-def show_photos(slug: str, show_name: str, cover_alt: str, photo_alts: dict | None = None) -> tuple[Photo, list[Photo]]:
+def show_photos(slug: str, show_name: str, cover_alt: str, photo_alts: dict | None = None,
+                photo_order: list | None = None) -> tuple[Photo, list[Photo]]:
     folder = PHOTOS / "shows" / slug
     files = sorted(p for p in folder.iterdir() if p.suffix.lower() in IMAGE_EXT) if folder.exists() else []
     if not files:
@@ -194,6 +195,9 @@ def show_photos(slug: str, show_name: str, cover_alt: str, photo_alts: dict | No
     # would show twice in the carousel and the grid, so it is skipped
     cover_print = fingerprint(cover_file)
     rest = [p for p in files if p != cover_file and not looks_same(fingerprint(p), cover_print)]
+    # photoOrder (set by the image manager) decides the gallery order; new files follow by name
+    order = {name: i for i, name in enumerate(photo_order or [])}
+    rest.sort(key=lambda p: (order.get(p.name, len(order)), p.name))
     gallery = [
         Photo(p, (photo_alts or {}).get(p.name, f"ภาพตัวอย่างการแสดง{show_name} ภาพที่ {i}"))
         for i, p in enumerate(rest, start=1)
@@ -296,7 +300,7 @@ def build() -> None:
         s["moodTags"] = " ".join(s.get("moods", []))
         s["isVelin"] = s["performedBy"] == "velin"
         s["performedLabel"] = "แสดงโดย Velin" if s["isVelin"] else "Velin ร่วมกับทีมผู้เชี่ยวชาญ"
-        s["cover"], s["gallery"] = show_photos(s["slug"], s["th"], s["coverAlt"], s.get("photoAlts"))
+        s["cover"], s["gallery"] = show_photos(s["slug"], s["th"], s["coverAlt"], s.get("photoAlts"), s.get("photoOrder"))
         s["photos"] = [s["cover"], *s["gallery"]]
         unknown = [o for o in s["occasions"] if o not in occ_by_slug]
         if unknown:

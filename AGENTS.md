@@ -39,7 +39,7 @@ Read this before editing. CLAUDE.md points here.
 | src/js/site.js | Finder, filters, shortlist, media, local message composer |
 | src/static/ | Assets copied as-is |
 | tools/build.py | Python/Pillow static generator |
-| tools/media_server.py + media.html | Local-only image upload manager on 4323 |
+| tools/media_server.py + media.html | Local-only photo and clip manager on 4323, with a publish button |
 | tools/serve.py | Public-only preview on 4321 |
 | public/ | Generated deployable output: never edit manually |
 | uploads/ | Local originals and previous covers; excluded from Git/deployment |
@@ -57,9 +57,11 @@ Read this before editing. CLAUDE.md points here.
 Python with Pillow on this machine: %USERPROFILE%/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe. Other machines need Python 3.10+ and Pillow.
 
 ## Images
-Double-click เปิดจัดการภาพ.cmd or run python tools/media_server.py. Select the show, cover/gallery, files and a truthful description. Upload rebuilds locally. Originals and previous covers are retained in uploads/.
+Double-click เปิดจัดการภาพ.cmd or run python tools/media_server.py (http://127.0.0.1:4323/__media/). The manager can: drag-and-drop upload with one description per photo, edit any description, drag or ←/→ to reorder the gallery (saved as shows.json -> photoOrder), set any gallery photo as the cover (the old cover moves into the gallery), delete (moved to uploads/, never erased), flag gallery photos identical to the cover, and add/edit/remove YouTube clips (poster fetched automatically). Every action rebuilds public/ and is rolled back if the build fails.
 
-Manual option: put files in photos/shows/<slug>/ and rebuild. Keep exactly one cover.* per show. Gallery sorts by filename. Optional show.photoAlts maps filenames to descriptions; coverAlt describes the cover. The uploader maintains these fields.
+The gold "เผยแพร่ขึ้นเว็บจริง" button runs tools/check.py, then commits content/, photos/ and public/ only and pushes main. It refuses outside Git, off main, or when nothing changed. Pressing it is the owner asking to deploy.
+
+Manual option: put files in photos/shows/<slug>/ and rebuild. Keep exactly one cover.* per show. Gallery sorts by filename. Optional show.photoAlts maps filenames to descriptions, show.photoOrder sets the gallery order; coverAlt describes the cover. The manager maintains these fields.
 
 The manager binds only to 127.0.0.1, validates Host/Origin and a per-session token, and never ships to public/. Do not convert it into a public upload endpoint.
 
