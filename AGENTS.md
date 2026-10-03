@@ -18,7 +18,7 @@ Read this before editing. CLAUDE.md points here.
 - Every photo needs a real scene description in shows.json -> photoAlts (no "ภาพที่ 1, 2"); the builder also emits an image sitemap from those alts.
 - Run-of-show / "ไอเดียจัดลำดับโชว์" sections were removed everywhere on 28 September 2026. The `flow` data stays in occasions.json but nothing renders it.
 - Weddings were dropped entirely (owner, 28 September 2026). The fifth occasion is now ปาร์ตี้ส่วนตัว (slug `party`); /occasions/wedding redirects to it in vercel.json. Do not reintroduce wedding copy.
-- SEO direction, keyword map per page and the owner's to-do list: docs/SEO-PLAN.md. Velin targets show formats and occasions; untitledmagic.com keeps the generic "รับแสดงมายากล" terms so the two sites do not compete.
+- SEO direction, keyword map per page and the owner's to-do list: docs/SEO-PLAN.md. Answer pages target the phrases people actually search (Google autocomplete, Oct 2026): การแสดงงานเลี้ยงบริษัท/ปีใหม่/เกษียณ/รุ่น, มายากล ราคา, การแสดงวันเด็ก, การแสดงงานวันเกิด, จ้างเหมาการแสดง. Shows may set `seoTitle` (with {price:<slug>}) to carry synonyms such as จักกลิ้ง or โบโซ่บิดลูกโป่ง. Velin targets show formats and occasions; untitledmagic.com keeps the generic "รับแสดงมายากล" terms so the two sites do not compete.
 - Show pages: hero carousel plus a photo grid (first 9 tiles, then "ดูภาพทั้งหมด") that opens the lightbox with a thumbnail strip.
 - Never edit the other owner projects (Untitled/171) when adapting assets.
 - Thai first; respect reduced motion and keyboard use.
@@ -31,7 +31,7 @@ Read this before editing. CLAUDE.md points here.
 | content/shows.json | Seven shows, prices, copy, tags, SEO, preparation, optional photoAlts |
 | content/occasions.json | Five event types and suggested show sequences |
 | content/faq.json | FAQ copy |
-| content/guides.json | คู่มือเลือกโชว์: one /guides/<slug>/ page each, linked to shows and occasions |
+| content/guides.json | คู่มือเลือกโชว์ / answer pages: one /guides/<slug>/ each, linked to shows and occasions. Optional `faq` (rendered + FAQPage). Write prices only as {price:<slug>} or {minPrice}; the build fills them from shows.json and check.py fails on leftovers |
 | photos/shows/<slug>/ | Source images: cover.* = cover; remaining files = gallery |
 | photos/velin/, photos/site/ | Hero and supporting imagery |
 | src/templates/ | Shared layout and page templates |
@@ -68,7 +68,7 @@ The manager binds only to 127.0.0.1, validates Host/Origin and a per-session tok
 ## Templates and SEO
 Templates support escaped {{key}}, trusted generated HTML {{{key}}}, partials {{> name}}, and conditional sections {{#key}} / {{^key}}.
 
-25 indexable pages: home, show catalogue, seven show pages, five occasion pages, the guides index and five guides, about, gallery, FAQ, contact, privacy. A separate real 404 is noindex. The builder emits crawlable HTML, unique titles/descriptions, canonical links, responsive images, OG images, sitemap and structured data. Service schema carries the price as an Offer. Hashed assets use long caching.
+32 indexable pages: home, show catalogue, seven show pages, five occasion pages, the guides index and twelve guides, about, gallery, FAQ, contact, privacy. A separate real 404 is noindex. The builder emits crawlable HTML, unique titles/descriptions, canonical links, responsive images, OG images, sitemap and structured data. Service schema carries the price as an Offer. Hashed assets use long caching.
 
 Update content/site.json -> url when the canonical domain changes. SEO infrastructure does not guarantee rankings.
 

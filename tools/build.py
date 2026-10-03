@@ -330,9 +330,14 @@ def build() -> None:
     min_price = min(s["price"] for s in shows)
     tokens = {"{showCount}": str(len(shows)), "{minPrice}": baht(min_price)}
 
+    for s in shows:
+        tokens["{price:" + s["slug"] + "}"] = ("เริ่มต้น " if s["priceFrom"] else "") + baht(s["price"])
+
     def fill(text: str) -> str:
         for k, v in tokens.items():
             text = text.replace(k, v)
+        if "{price:" in text or "{minPrice" in text:
+            sys.exit(f"ข้อความมีรหัสราคาที่ไม่รู้จัก: {text[:80]}")
         return text
 
     # data the browser needs (prices live in one place: content/)
@@ -594,7 +599,7 @@ def build() -> None:
                        "url": base + s["url"]},
         }
         price_label = "ราคาเริ่มต้น" if s["priceFrom"] else "ราคา"
-        page(s["url"], f'{s["th"]} ({s["en"].title()}) {price_label} {s["priceText"]}',
+        page(s["url"], fill(s["seoTitle"]) if s.get("seoTitle") else f'{s["th"]} ({s["en"].title()}) {price_label} {s["priceText"]}',
              fit(f'{s["th"]} {price_label} {s["priceText"]} — {s["tagline"]} {s["body"][0]}'),
              body, og_image=s["cover"].og(s["slug"]), ld=[service, crumbs_ld, organization], dock="show",
              body_class="has-dark-top is-show", images=s["photos"])
@@ -668,7 +673,7 @@ def build() -> None:
     guide_cards = "".join(
         f'<li class="guide-card" data-reveal style="--i:{i}"><a href="{g["url"]}">'
         f'<p class="kicker">{esc(g["kicker"])}</p><h2>{esc(g["title"])}</h2>'
-        f'<p>{esc(g["intro"])}</p><span class="link-arrow">อ่านบทความ</span></a></li>'
+        f'<p>{esc(fill(g["intro"]))}</p><span class="link-arrow">อ่านบทความ</span></a></li>'
         for i, g in enumerate(guides))
     page("/guides/", "คู่มือเลือกโชว์มายากลสำหรับผู้จัดงาน",
          fit("รวมคู่มือเลือกการแสดงมายากลให้เหมาะกับงาน ทั้งงานบริษัท งานเปิดตัวสินค้า และงานเด็ก "
@@ -683,24 +688,28 @@ def build() -> None:
     for g in guides:
         crumbs, crumbs_ld = breadcrumb(site, [("คู่มือเลือกโชว์", "/guides/"), (g["title"], g["url"])])
         sections_html = "".join(
-            f'<section class="guide-section"><h2>{esc(sec["h"])}</h2>'
-            + "".join(f"<p>{esc(t)}</p>" for t in sec["ps"]) + "</section>" for sec in g["sections"])
+            f'<section class="guide-section"><h2>{esc(fill(sec["h"]))}</h2>'
+            + "".join(f"<p>{esc(fill(t))}</p>" for t in sec["ps"]) + "</section>" for sec in g["sections"])
+        guide_faq = [{"q": fill(f["q"]), "a": fill(f["a"])} for f in g.get("faq", [])]
+        if guide_faq:
+            sections_html += ('<section class="guide-section guide-faq"><h2>คำถามที่พบบ่อย</h2>'
+                              f'<div class="faq-list">{faq_html(guide_faq)}</div></section>')
         more = [x for x in guides if x is not g][:3]
         more_links = "".join(f'<li><a href="{x["url"]}">{esc(x["title"])}</a></li>' for x in more)
         more_links += "".join(f'<li><a href="{occ_by_slug[o]["url"]}">โชว์สำหรับ{esc(occ_by_slug[o]["label"])}</a></li>'
                               for o in g["relatedOccasions"])
         article = {
             "@context": "https://schema.org", "@type": "Article", "headline": g["title"],
-            "description": g["seoDescription"], "inLanguage": "th-TH",
+            "description": fill(g["seoDescription"]), "inLanguage": "th-TH",
             "author": {"@id": base + "/#business"}, "publisher": {"@id": base + "/#business"},
             "mainEntityOfPage": base + g["url"], "image": base + shows[0]["cover"].og("home"),
         }
-        page(g["url"], g["seoTitle"], fit(g["seoDescription"]),
+        page(g["url"], g["seoTitle"], fit(fill(g["seoDescription"])),
              fragment("page-guide", common, crumbs=crumbs, guide={
-                 **g, "sectionsHtml": sections_html, "moreLinks": more_links,
+                 **g, "intro": fill(g["intro"]), "sectionsHtml": sections_html, "moreLinks": more_links,
                  "showGrid": show_grid([show_by_slug[x] for x in g["relatedShows"]], "h3", rail=True)}),
              og_image=show_by_slug[g["relatedShows"][0]]["cover"].og("guide-" + g["slug"]),
-             ld=[article, crumbs_ld], body_class="has-dark-top",
+             ld=[article, crumbs_ld, *([faq_ld(guide_faq)] if guide_faq else [])], body_class="has-dark-top",
              images=[show_by_slug[x]["cover"] for x in g["relatedShows"]])
 
     # ── privacy, 404

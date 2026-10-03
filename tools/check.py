@@ -36,6 +36,7 @@ def check():
         if re.fullmatch(r'shows/[a-z-]+/index\.html', name):
             require(bool(re.search(r'฿\s*\d', text)), 'show page without a price')
         require('{{' not in text,'unresolved template token')
+        require(not re.search(r'\{(?:price:[a-z-]+|minPrice|showCount)\}', text), 'unresolved price/count token')
         title=re.search(r'<title>(.*?)</title>',text,re.S)
         require(bool(title),'missing title')
         if title: titles.append(title[1])
