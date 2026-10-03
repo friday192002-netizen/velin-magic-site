@@ -14,6 +14,13 @@
 - **untitledmagic.com ของเจ้าของเองติดอันดับอยู่แล้ว** ด้วย title
   "จ้างนักมายากล รับแสดงมายากล ราคาเริ่มต้น 3,000 บาท | Untitled Magic กรุงเทพ"
 
+## อัปเดต 3 ต.ค. 2026 — มีโดเมนแล้ว
+
+- จด **velinmagic.com** ผ่าน Vercel แล้ว (ต่ออายุอัตโนมัติ $11.25/ปี)
+- canonical, sitemap, robots.txt, ข้อมูลโครงสร้าง และภาพตอนแชร์ ใช้ https://velinmagic.com ทั้งหมด
+- www.velinmagic.com และ velin-magic-site.vercel.app พาไปโดเมนใหม่แบบถาวร (301/308)
+- ขั้นต่อไป: ยืนยันเว็บใน Google Search Console แบบ Domain property (ใส่ TXT record ใน Vercel DNS) แล้วส่ง https://velinmagic.com/sitemap.xml
+
 ## ปัญหาสำคัญ: สองเว็บของเจ้าของแย่งคีย์เวิร์ดกันเอง
 
 ถ้า Velin และ Untitled ยิงคำเดียวกันทั้งคู่ Google จะเลือกแสดงแค่เว็บเดียว และทั้งสองเว็บ

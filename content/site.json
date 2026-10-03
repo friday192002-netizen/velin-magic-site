@@ -2,7 +2,7 @@
   "_help": "ข้อมูลหลักของเว็บ: ชื่อแบรนด์ ช่องทางติดต่อ และข้อความ SEO พื้นฐาน | ใส่ {showCount} หรือ {minPrice} ในข้อความ ระบบจะแทนด้วยจำนวนโชว์และราคาต่ำสุดจริงให้ | แก้แล้วรัน update-site.cmd",
   "name": "Velin Magic",
   "shortName": "Velin",
-  "url": "https://velin-magic-site.vercel.app",
+  "url": "https://velinmagic.com",
   "locale": "th_TH",
   "tagline": "Magic, made personal.",
   "description": "รับแสดงมายากล จ้างนักมายากลมืออาชีพ งานบริษัท งานเปิดตัวสินค้า งานเด็ก และอีเวนต์ 7 รูปแบบ ราคาเริ่มต้น ฿8,000 ดูราคาและภาพงานจริงทุกโชว์",

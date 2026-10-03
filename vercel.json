@@ -37,6 +37,28 @@
   ],
   "redirects": [
     {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.velinmagic.com"
+        }
+      ],
+      "destination": "https://velinmagic.com/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "velin-magic-site.vercel.app"
+        }
+      ],
+      "destination": "https://velinmagic.com/:path*",
+      "permanent": true
+    },
+    {
       "source": "/occasions/wedding",
       "destination": "/occasions/party/",
       "permanent": true
