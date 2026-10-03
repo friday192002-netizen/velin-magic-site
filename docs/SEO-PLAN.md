@@ -19,7 +19,8 @@
 - จด **velinmagic.com** ผ่าน Vercel แล้ว (ต่ออายุอัตโนมัติ $11.25/ปี)
 - canonical, sitemap, robots.txt, ข้อมูลโครงสร้าง และภาพตอนแชร์ ใช้ https://velinmagic.com ทั้งหมด
 - www.velinmagic.com และ velin-magic-site.vercel.app พาไปโดเมนใหม่แบบถาวร (308) ตั้งไว้ที่ Vercel → Project → Settings → Domains
-- ขั้นต่อไป: ยืนยันเว็บใน Google Search Console แบบ Domain property (ใส่ TXT record ใน Vercel DNS) แล้วส่ง https://velinmagic.com/sitemap.xml
+- ยืนยัน Google Search Console แบบ Domain property สำเร็จ 3 ต.ค. 2026 ด้วย TXT record `google-site-verification=…` ใน Vercel DNS **ห้ามลบ record นี้** ไม่งั้นสิทธิ์ใน Search Console จะหลุด
+- ขั้นต่อไป: ส่ง sitemap.xml ใน Search Console และขอจัดทำดัชนีหน้าหลัก
 
 ## ปัญหาสำคัญ: สองเว็บของเจ้าของแย่งคีย์เวิร์ดกันเอง
 

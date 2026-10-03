@@ -76,5 +76,5 @@ Update content/site.json -> url when the canonical domain changes. SEO infrastru
 Finder/occasion -> show -> choose -> shortlist -> contact -> generate text -> copy/open LINE. localStorage stores show IDs only; customer form data remains on the page. Direct links remain usable without JavaScript.
 
 Production: https://velinmagic.com/
-Domain bought through Vercel on 3 October 2026 (auto-renew, DNS on Vercel). www.velinmagic.com and velin-magic-site.vercel.app redirect permanently (308) to it. These redirects are set on the domains in Vercel (Project → Settings → Domains), not in vercel.json — host-based rules in vercel.json did not fire.
+Domain bought through Vercel on 3 October 2026 (auto-renew, DNS on Vercel). www.velinmagic.com and velin-magic-site.vercel.app redirect permanently (308) to it. These redirects are set on the domains in Vercel (Project → Settings → Domains), not in vercel.json — host-based rules in vercel.json did not fire. Vercel DNS also holds the google-site-verification TXT record for Search Console; never remove it.
 Repository: https://github.com/friday192002-netizen/velin-magic-site
